@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\KDramaSystem.Application\KDramaSystem.Application.csproj" />
+  </ItemGroup>
+
 </Project>
