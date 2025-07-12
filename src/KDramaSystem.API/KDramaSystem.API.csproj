@@ -10,4 +10,9 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\KDramaSystem.Application\KDramaSystem.Application.csproj" />
+    <ProjectReference Include="..\KDramaSystem.Infrastructure\KDramaSystem.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
