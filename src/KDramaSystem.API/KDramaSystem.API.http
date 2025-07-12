@@ -1,0 +1,6 @@
+@KDramaSystem.API_HostAddress = http://localhost:5120
+
+GET {{KDramaSystem.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
