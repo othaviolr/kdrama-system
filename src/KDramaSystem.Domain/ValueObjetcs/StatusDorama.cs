@@ -1,12 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using KDramaSystem.Domain.Enums;
 
-namespace KDramaSystem.Domain.ValueObjetcs
+namespace KDramaSystem.Domain.ValueObjects
 {
-    internal class StatusDorama
+    public class StatusDorama
     {
+        public StatusDoramaEnum Valor { get; }
+
+        public StatusDorama(StatusDoramaEnum valor)
+        {
+            Valor = valor;
+        }
+
+        public bool EhFinalizado() =>
+            Valor == StatusDoramaEnum.Concluido || Valor == StatusDoramaEnum.Abandonado;
+
+        public override string ToString() => Valor.ToString();
+
+        public override bool Equals(object? obj)
+        {
+            return obj is StatusDorama outro && Valor == outro.Valor;
+        }
+
+        public override int GetHashCode() => Valor.GetHashCode();
     }
 }

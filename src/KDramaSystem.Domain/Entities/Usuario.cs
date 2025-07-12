@@ -27,11 +27,13 @@
         private readonly List<Atividade> _atividades = new();
         public IReadOnlyCollection<Atividade> Atividades => _atividades.AsReadOnly();
 
+        private Usuario() { } 
+
         public Usuario(Guid id, string nome, string nomeUsuario, string email, string? fotoUrl = null, string? bio = null)
         {
-            if (string.IsNullOrWhiteSpace(nome)) throw new ArgumentException("Nome é obrigatório.", nameof(nome));
-            if (string.IsNullOrWhiteSpace(nomeUsuario)) throw new ArgumentException("Nome de usuário é obrigatório", nameof(nomeUsuario));
-            if (string.IsNullOrWhiteSpace(email)) throw new ArgumentException("Email é obrigatório.", nameof(email));
+            if (string.IsNullOrWhiteSpace(nome)) throw new ArgumentException("Nome é obrigatório.");
+            if (string.IsNullOrWhiteSpace(nomeUsuario)) throw new ArgumentException("Nome de usuário é obrigatório.");
+            if (string.IsNullOrWhiteSpace(email)) throw new ArgumentException("Email é obrigatório.");
 
             Id = id;
             Nome = nome;
@@ -54,10 +56,48 @@
         {
             if (usuario == null) throw new ArgumentNullException(nameof(usuario));
             var seguidor = _seguidores.FirstOrDefault(u => u.Id == usuario.Id);
-            if (seguidor != null)
-            {
+            if (seguidor is not null)
                 _seguidores.Remove(seguidor);
-            }
-        } 
+        }
+
+        public void AdicionarAvaliacao(Avaliacao avaliacao)
+        {
+            if (avaliacao == null) throw new ArgumentNullException(nameof(avaliacao));
+            _avaliacoes.Add(avaliacao);
+        }
+
+        public void AdicionarProgresso(ProgressoTemporada progresso)
+        {
+            if (progresso == null) throw new ArgumentNullException(nameof(progresso));
+            _progresso.Add(progresso);
+        }
+
+        public void AdicionarComentario(Comentario comentario)
+        {
+            if (comentario == null) throw new ArgumentNullException(nameof(comentario));
+            _comentarios.Add(comentario);
+        }
+
+        public void AdicionarLista(ListaPrateleira lista)
+        {
+            if (lista == null) throw new ArgumentNullException(nameof(lista));
+            _listas.Add(lista);
+        }
+
+        public void RegistrarAtividade(Atividade atividade)
+        {
+            if (atividade == null) throw new ArgumentNullException(nameof(atividade));
+            _atividades.Add(atividade);
+        }
+
+        public void AtualizarBio(string? novaBio)
+        {
+            Bio = novaBio?.Trim();
+        }
+
+        public void AtualizarFoto(string? novaFotoUrl)
+        {
+            FotoUrl = novaFotoUrl?.Trim();
+        }
     }
 }
