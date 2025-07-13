@@ -19,8 +19,8 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<RegistrarUsuarioHandler>();
 builder.Services.AddScoped<LoginUsuarioHandler>();
 
-builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
-builder.Services.AddScoped<IUsuarioAutenticacaoRepository, UsuarioAutenticacaoRepository>();
+builder.Services.AddSingleton<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddSingleton<IUsuarioAutenticacaoRepository, UsuarioAutenticacaoRepository>();
 
 builder.Services.AddScoped<ICriptografiaService, CriptografiaService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
