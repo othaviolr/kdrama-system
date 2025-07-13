@@ -10,4 +10,8 @@
     <ProjectReference Include="..\KDramaSystem.Domain\KDramaSystem.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Service\" />
+  </ItemGroup>
+
 </Project>
