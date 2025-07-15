@@ -88,6 +88,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseMiddleware<WebApi.Middlewares.ExceptionHandlingMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 
