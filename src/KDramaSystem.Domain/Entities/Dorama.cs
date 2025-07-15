@@ -1,4 +1,6 @@
-﻿namespace KDramaSystem.Domain.Entities
+﻿using KDramaSystem.Domain.Enums;
+
+namespace KDramaSystem.Domain.Entities
 {
     public class Dorama
     {
@@ -9,6 +11,7 @@
         public int AnoLancamento { get; private set; }
         public bool EmExibicao { get; private set; }
         public string? Sinopse { get; private set; }
+        public PlataformaStreaming Plataforma { get; private set; }
 
         private readonly List<Genero> _generos = new();
         public IReadOnlyCollection<Genero> Generos => _generos.AsReadOnly();
@@ -19,11 +22,11 @@
         private readonly List<Temporada> _temporadas = new();
         public IReadOnlyCollection<Temporada> Temporadas => _temporadas.AsReadOnly();
 
-        public Dorama(Guid id, string titulo, string paisOrigem, int anoLancamento, bool emExibicao, string? sinopse = null, string? tituloOriginal = null)
+        public Dorama(Guid id, string titulo, string paisOrigem, int anoLancamento, bool emExibicao, PlataformaStreaming plataforma, string? sinopse = null, string? tituloOriginal = null)
         {
             if (string.IsNullOrWhiteSpace(titulo)) throw new ArgumentException("Título é obrigatório.");
             if (string.IsNullOrWhiteSpace(paisOrigem)) throw new ArgumentException("País de origem é obrigatório.");
-            if (anoLancamento <= 1900 || anoLancamento > DateTime.UtcNow.Year + 1) 
+            if (anoLancamento <= 1900 || anoLancamento > DateTime.UtcNow.Year + 1)
                 throw new ArgumentException("Ano de lançamento inválido.");
 
             Id = id;
@@ -32,6 +35,7 @@
             PaisOrigem = paisOrigem;
             AnoLancamento = anoLancamento;
             EmExibicao = emExibicao;
+            Plataforma = plataforma;
             Sinopse = sinopse;
         }
 

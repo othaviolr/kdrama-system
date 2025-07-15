@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace KDramaSystem.Domain.Enums;
 
-namespace KDramaSystem.Domain.Enums
+public enum TipoRelacionamentoAtorEnum
 {
-    internal class TipoRelacionamentoAtorEnum
-    {
-    }
+    Casamento,
+    Irmão,
+    PaiMae,
+    FilhoFilha,
+    Namoro,
+    ExNamorado,
+    Outro
 }
