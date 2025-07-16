@@ -22,5 +22,10 @@ namespace KDramaSystem.Infrastructure.Repositories
         {
             return Task.FromResult(_usuarios.FirstOrDefault(u => u.Id == id));
         }
+
+        public Task SalvarAsync(Usuario usuario)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

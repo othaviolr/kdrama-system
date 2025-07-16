@@ -1,9 +1,5 @@
-using KDramaSystem.Application.UseCases.Usuario.Login;
-using KDramaSystem.Application.UseCases.Usuario.Registrar;
-using KDramaSystem.Domain.Interfaces.Repositories;
-using KDramaSystem.Domain.Interfaces.Services;
-using KDramaSystem.Infrastructure.Repositories;
-using KDramaSystem.Infrastructure.Services;
+using KDramaSystem.Application;
+using KDramaSystem.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -16,14 +12,9 @@ var key = jwtSettings["Key"];
 
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<RegistrarUsuarioHandler>();
-builder.Services.AddScoped<LoginUsuarioHandler>();
-
-builder.Services.AddSingleton<IUsuarioRepository, UsuarioRepository>();
-builder.Services.AddSingleton<IUsuarioAutenticacaoRepository, UsuarioAutenticacaoRepository>();
-
-builder.Services.AddScoped<ICriptografiaService, CriptografiaService>();
-builder.Services.AddScoped<ITokenService, TokenService>();
+// dependecy injection
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -67,15 +58,12 @@ builder.Services.AddSwaggerGen(c =>
 
     var securityRequirement = new OpenApiSecurityRequirement
     {
-        {
-            securityScheme, new[] { "Bearer" }
-        }
+        { securityScheme, new[] { "Bearer" } }
     };
     c.AddSecurityRequirement(securityRequirement);
 });
 
 var app = builder.Build();
-
 
 if (app.Environment.IsDevelopment())
 {

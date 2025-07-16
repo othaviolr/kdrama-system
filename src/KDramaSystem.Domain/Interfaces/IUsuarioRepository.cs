@@ -7,5 +7,6 @@ namespace KDramaSystem.Domain.Interfaces.Repositories
         Task<Usuario?> ObterPorIdAsync(Guid id);
         Task<bool> NomeUsuarioExisteAsync(string nomeUsuario);
         Task AdicionarAsync(Usuario usuario);
+        Task SalvarAsync(Usuario usuario);
     }
 }
