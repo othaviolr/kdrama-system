@@ -99,5 +99,19 @@
         {
             FotoUrl = novaFotoUrl?.Trim();
         }
+
+        public void EditarPerfil(string nome, string nomeUsuario, string? fotoUrl, string? bio)
+        {
+            if (string.IsNullOrWhiteSpace(nome))
+                throw new ArgumentException("Nome é obrigatório.");
+
+            if (string.IsNullOrWhiteSpace(nomeUsuario))
+                throw new ArgumentException("Nome de usuário é obrigatório.");
+
+            Nome = nome;
+            NomeUsuario = nomeUsuario;
+            FotoUrl = fotoUrl;
+            Bio = bio;
+        }
     }
 }
