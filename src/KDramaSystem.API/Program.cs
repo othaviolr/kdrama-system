@@ -12,7 +12,6 @@ var key = jwtSettings["Key"];
 
 builder.Services.AddControllers();
 
-// dependecy injection
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
 
@@ -45,22 +44,27 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "KDramaSystem API", Version = "v1" });
 
-    var securityScheme = new OpenApiSecurityScheme
+    var jwtSecurityScheme = new OpenApiSecurityScheme
     {
+        Scheme = "bearer",
+        BearerFormat = "JWT",
         Name = "Authorization",
-        Description = "Insira o token JWT com Bearer",
         In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer",
-        BearerFormat = "JWT"
-    };
-    c.AddSecurityDefinition("Bearer", securityScheme);
+        Type = SecuritySchemeType.Http,
+        Description = "Insira o token no formato: **Bearer {seu_token}**",
 
-    var securityRequirement = new OpenApiSecurityRequirement
-    {
-        { securityScheme, new[] { "Bearer" } }
+        Reference = new OpenApiReference
+        {
+            Id = JwtBearerDefaults.AuthenticationScheme,
+            Type = ReferenceType.SecurityScheme
+        }
     };
-    c.AddSecurityRequirement(securityRequirement);
+
+    c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        { jwtSecurityScheme, Array.Empty<string>() }
+    });
 });
 
 var app = builder.Build();
@@ -77,6 +81,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseMiddleware<WebApi.Middlewares.ExceptionHandlingMiddleware>();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
