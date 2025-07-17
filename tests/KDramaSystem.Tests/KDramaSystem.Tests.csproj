@@ -16,8 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\KDramaSystem.API\KDramaSystem.API.csproj" />
     <ProjectReference Include="..\..\src\KDramaSystem.Application\KDramaSystem.Application.csproj" />
     <ProjectReference Include="..\..\src\KDramaSystem.Domain\KDramaSystem.Domain.csproj" />
+    <ProjectReference Include="..\..\src\KDramaSystem.Infrastructure\KDramaSystem.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
