@@ -1,4 +1,5 @@
 ﻿using KDramaSystem.Application.Interfaces;
+using KDramaSystem.Application.UseCases.Usuario.Deletar;
 using KDramaSystem.Application.UseCases.Usuario.Editar;
 using KDramaSystem.Application.UseCases.Usuario.Login;
 using KDramaSystem.Application.UseCases.Usuario.ObterPerfilCompleto;
@@ -15,6 +16,7 @@ namespace KDramaSystem.Application
             services.AddScoped<IEditarPerfilUseCase, EditarPerfilUseCase>();
             services.AddScoped<RegistrarUsuarioHandler>();
             services.AddScoped<LoginUsuarioHandler>();
+            services.AddScoped<IDeletarPerfilUseCase, DeletarPerfilUseCase>();
 
             return services;
         }

@@ -4,6 +4,7 @@ using KDramaSystem.Application.UseCases.Usuario.Registrar;
 using KDramaSystem.Application.UseCases.Usuario.Login;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using KDramaSystem.Application.UseCases.Usuario.Deletar;
 
 namespace KDramaSystem.API.Controllers
 {
@@ -15,17 +16,20 @@ namespace KDramaSystem.API.Controllers
         private readonly LoginUsuarioHandler _loginUsuarioHandler;
         private readonly IObterPerfilCompletoUseCase _obterPerfilCompletoUseCase;
         private readonly IEditarPerfilUseCase _editarPerfilUseCase;
+        private readonly IDeletarPerfilUseCase _deletarPerfilUseCase;
 
         public UsuarioController(
             RegistrarUsuarioHandler registrarUsuarioHandler,
             LoginUsuarioHandler loginUsuarioHandler,
             IObterPerfilCompletoUseCase obterPerfilCompletoUseCase,
-            IEditarPerfilUseCase editarPerfilUseCase)
+            IEditarPerfilUseCase editarPerfilUseCase,
+            IDeletarPerfilUseCase deletarPerfilUseCase)
         {
             _registrarUsuarioHandler = registrarUsuarioHandler;
             _loginUsuarioHandler = loginUsuarioHandler;
             _obterPerfilCompletoUseCase = obterPerfilCompletoUseCase;
             _editarPerfilUseCase = editarPerfilUseCase;
+            _deletarPerfilUseCase = deletarPerfilUseCase;
         }
 
         [HttpPost("registrar")]
@@ -78,6 +82,21 @@ namespace KDramaSystem.API.Controllers
             try
             {
                 await _editarPerfilUseCase.ExecutarAsync(request);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { erro = ex.Message });
+            }
+        }
+
+        [Authorize]
+        [HttpDelete("perfil")]
+        public async Task<IActionResult> DeletarPerfil()
+        {
+            try
+            {
+                await _deletarPerfilUseCase.ExecutarAsync();
                 return NoContent();
             }
             catch (Exception ex)
