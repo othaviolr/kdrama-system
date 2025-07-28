@@ -8,5 +8,6 @@ namespace KDramaSystem.Domain.Interfaces.Repositories
         Task<bool> NomeUsuarioExisteAsync(string nomeUsuario);
         Task AdicionarAsync(Usuario usuario);
         Task SalvarAsync(Usuario usuario);
+        Task RemoverAsync(Guid id);
     }
 }

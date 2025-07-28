@@ -27,5 +27,15 @@ namespace KDramaSystem.Infrastructure.Repositories
         {
             return Task.CompletedTask;
         }
+
+        public Task RemoverAsync(Guid id)
+        {
+            var usuario = _usuarios.FirstOrDefault(u => u.Id == id);
+            if (usuario != null)
+            {
+                _usuarios.Remove(usuario);
+            }
+            return Task.CompletedTask;
+        }
     }
 }
