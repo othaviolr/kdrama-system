@@ -1,4 +1,5 @@
 ﻿using KDramaSystem.Application.Interfaces;
+using KDramaSystem.Application.Interfaces.Repositories;
 using KDramaSystem.Domain.Interfaces.Repositories;
 using KDramaSystem.Domain.Interfaces.Services;
 using KDramaSystem.Infrastructure.Repositories;
@@ -13,6 +14,7 @@ namespace KDramaSystem.Infrastructure
         {
             services.AddSingleton<IUsuarioRepository, UsuarioRepository>();
             services.AddSingleton<IUsuarioAutenticacaoRepository, UsuarioAutenticacaoRepository>();
+            services.AddSingleton<IUsuarioRelacionamentoRepository, UsuarioRelacionamentoRepository>();
 
             services.AddScoped<ICriptografiaService, CriptografiaService>();
             services.AddScoped<ITokenService, TokenService>();

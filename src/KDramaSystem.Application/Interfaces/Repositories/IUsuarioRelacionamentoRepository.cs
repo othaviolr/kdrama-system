@@ -1,0 +1,10 @@
+﻿using KDramaSystem.Domain.Entities;
+
+namespace KDramaSystem.Application.Interfaces.Repositories;
+
+public interface IUsuarioRelacionamentoRepository
+{
+    Task<bool> ExisteRelacionamento(Guid seguidorId, Guid seguindoId);
+    Task CriarAsync(UsuarioRelacionamento relacionamento);
+    Task RemoverAsync(Guid seguidorId, Guid seguindoId);
+}
