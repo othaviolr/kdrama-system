@@ -7,7 +7,7 @@ public class UsuarioRelacionamentoRepository : IUsuarioRelacionamentoRepository
 {
     private static readonly List<UsuarioRelacionamento> _relacionamentos = new();
 
-    public Task<bool> ExisteRelacionamento(Guid seguidorId, Guid seguindoId)
+    public Task<bool> ExisteRelacionamentoAsync(Guid seguidorId, Guid seguindoId)
     {
         var existe = _relacionamentos.Any(r => r.SeguidorId == seguidorId && r.SeguindoId == seguindoId);
         return Task.FromResult(existe);
