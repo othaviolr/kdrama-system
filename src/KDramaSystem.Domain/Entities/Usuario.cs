@@ -12,6 +12,9 @@
         private readonly List<Usuario> _seguidores = new();
         public IReadOnlyCollection<Usuario> Seguidores => _seguidores.AsReadOnly();
 
+        private readonly List<Usuario> _seguindo = new();
+        public IReadOnlyCollection<Usuario> Seguindo => _seguindo.AsReadOnly();
+
         private readonly List<Avaliacao> _avaliacoes = new();
         public IReadOnlyCollection<Avaliacao> Avaliacoes => _avaliacoes.AsReadOnly();
 
@@ -47,17 +50,23 @@
         {
             if (usuario == null) throw new ArgumentNullException(nameof(usuario));
             if (usuario.Id == Id) throw new InvalidOperationException("Usuário não pode seguir a si mesmo.");
-            if (_seguidores.Any(u => u.Id == usuario.Id)) return;
+            if (_seguindo.Any(u => u.Id == usuario.Id)) return;
 
-            _seguidores.Add(usuario);
+            _seguindo.Add(usuario);
+            usuario._seguidores.Add(this);
         }
 
         public void DeixarDeSeguir(Usuario usuario)
         {
             if (usuario == null) throw new ArgumentNullException(nameof(usuario));
-            var seguidor = _seguidores.FirstOrDefault(u => u.Id == usuario.Id);
+
+            var seguindo = _seguindo.FirstOrDefault(u => u.Id == usuario.Id);
+            if (seguindo is not null)
+                _seguindo.Remove(seguindo);
+
+            var seguidor = usuario._seguidores.FirstOrDefault(u => u.Id == Id);
             if (seguidor is not null)
-                _seguidores.Remove(seguidor);
+                usuario._seguidores.Remove(seguidor);
         }
 
         public void AdicionarAvaliacao(Avaliacao avaliacao)
