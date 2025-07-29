@@ -5,6 +5,9 @@ using KDramaSystem.Application.UseCases.Usuario.Login;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using KDramaSystem.Application.UseCases.Usuario.Deletar;
+using KDramaSystem.Application.UseCases.Usuario;
+using KDramaSystem.Application.UseCases.Usuario.DeixarDeSeguir;
+using KDramaSystem.Application.UseCases.Usuario.Seguir;
 
 namespace KDramaSystem.API.Controllers
 {
@@ -17,19 +20,25 @@ namespace KDramaSystem.API.Controllers
         private readonly IObterPerfilCompletoUseCase _obterPerfilCompletoUseCase;
         private readonly IEditarPerfilUseCase _editarPerfilUseCase;
         private readonly IDeletarPerfilUseCase _deletarPerfilUseCase;
+        private readonly SeguirUsuarioUseCase _seguirUsuarioUseCase;
+        private readonly DeixarDeSeguirUsuarioUseCase _deixarDeSeguirUsuarioUseCase;
 
         public UsuarioController(
             RegistrarUsuarioHandler registrarUsuarioHandler,
             LoginUsuarioHandler loginUsuarioHandler,
             IObterPerfilCompletoUseCase obterPerfilCompletoUseCase,
             IEditarPerfilUseCase editarPerfilUseCase,
-            IDeletarPerfilUseCase deletarPerfilUseCase)
+            IDeletarPerfilUseCase deletarPerfilUseCase,
+            SeguirUsuarioUseCase seguirUsuarioUseCase,
+            DeixarDeSeguirUsuarioUseCase deixarDeSeguirUsuarioUseCase)
         {
             _registrarUsuarioHandler = registrarUsuarioHandler;
             _loginUsuarioHandler = loginUsuarioHandler;
             _obterPerfilCompletoUseCase = obterPerfilCompletoUseCase;
             _editarPerfilUseCase = editarPerfilUseCase;
             _deletarPerfilUseCase = deletarPerfilUseCase;
+            _seguirUsuarioUseCase = seguirUsuarioUseCase;
+            _deixarDeSeguirUsuarioUseCase = deixarDeSeguirUsuarioUseCase;
         }
 
         [HttpPost("registrar")]
@@ -97,6 +106,48 @@ namespace KDramaSystem.API.Controllers
             try
             {
                 await _deletarPerfilUseCase.ExecutarAsync();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { erro = ex.Message });
+            }
+        }
+
+        [Authorize]
+        [HttpPost("{id}/seguir")]
+        public async Task<IActionResult> SeguirUsuario(Guid id)
+        {
+            try
+            {
+                var usuarioLogadoId = Guid.Parse(User.FindFirst("sub")?.Value ?? throw new Exception("Usuário não autenticado"));
+                var request = new SeguirUsuarioRequest(id);
+                await _seguirUsuarioUseCase.ExecutarAsync(usuarioLogadoId, request);
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { erro = ex.Message });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { erro = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { erro = ex.Message });
+            }
+        }
+
+        [Authorize]
+        [HttpPost("{id}/deixar-de-seguir")]
+        public async Task<IActionResult> DeixarDeSeguirUsuario(Guid id)
+        {
+            try
+            {
+                var usuarioLogadoId = Guid.Parse(User.FindFirst("sub")?.Value ?? throw new Exception("Usuário não autenticado"));
+                var request = new DeixarDeSeguirUsuarioRequest(id);
+                await _deixarDeSeguirUsuarioUseCase.ExecutarAsync(usuarioLogadoId, request);
                 return NoContent();
             }
             catch (Exception ex)
