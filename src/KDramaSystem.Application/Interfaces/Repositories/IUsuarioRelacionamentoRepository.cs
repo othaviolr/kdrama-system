@@ -4,7 +4,7 @@ namespace KDramaSystem.Application.Interfaces.Repositories;
 
 public interface IUsuarioRelacionamentoRepository
 {
-    Task<bool> ExisteRelacionamento(Guid seguidorId, Guid seguindoId);
+    Task<bool> ExisteRelacionamentoAsync(Guid seguidorId, Guid seguindoId);
     Task CriarAsync(UsuarioRelacionamento relacionamento);
     Task RemoverAsync(Guid seguidorId, Guid seguindoId);
 }
