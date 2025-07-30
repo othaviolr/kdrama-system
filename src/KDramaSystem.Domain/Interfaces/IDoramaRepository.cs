@@ -7,4 +7,5 @@ public interface IDoramaRepository
     Task AdicionarAsync(Dorama dorama);
     Task<Dorama?> ObterPorIdAsync(Guid id);
     Task<bool> ExisteComTituloAsync(string titulo);
+    Task AtualizarAsync(Dorama dorama);
 }

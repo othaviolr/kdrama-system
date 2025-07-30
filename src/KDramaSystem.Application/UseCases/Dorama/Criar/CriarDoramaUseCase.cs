@@ -38,15 +38,16 @@ public class CriarDoramaUseCase
 
         var dorama = new KDramaSystem.Domain.Entities.Dorama(
             id: Guid.NewGuid(),
+            usuarioId: request.UsuarioCriadorId,
             titulo: request.Titulo,
             paisOrigem: request.PaisOrigem,
             anoLancamento: request.AnoLancamento,
             emExibicao: request.EmExibicao,
             plataforma: (PlataformaStreaming)request.Plataforma,
-            generos: generos,   
+            generos: generos,
+            imagemCapaUrl: request.ImagemCapaUrl,
             sinopse: request.Sinopse,
-            tituloOriginal: request.TituloOriginal,
-            imagemCapaUrl: request.ImagemCapaUrl
+            tituloOriginal: request.TituloOriginal
         );
 
         foreach (var genero in generos)
