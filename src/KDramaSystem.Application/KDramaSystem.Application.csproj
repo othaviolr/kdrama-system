@@ -18,9 +18,13 @@
 
   <ItemGroup>
     <Folder Include="Services\" />
+    <Folder Include="UseCases\Dorama\Editar\" />
+    <Folder Include="UseCases\Dorama\Excluir\" />
+    <Folder Include="UseCases\Dorama\Obter\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="12.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
   </ItemGroup>
 

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using KDramaSystem.Domain.Entities;
 
-namespace KDramaSystem.Domain.Interfaces
+namespace KDramaSystem.Domain.Interfaces;
+
+
+public interface IDoramaRepository
 {
-    internal interface IDoramaRepository
-    {
-    }
+    Task AdicionarAsync(Dorama dorama);
+    Task<Dorama?> ObterPorIdAsync(Guid id);
+    Task<bool> ExisteComTituloAsync(string titulo);
 }
