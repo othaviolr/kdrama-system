@@ -11,6 +11,7 @@ namespace KDramaSystem.Domain.Entities
         public int AnoLancamento { get; private set; }
         public bool EmExibicao { get; private set; }
         public string? Sinopse { get; private set; }
+        public string ImagemCapaUrl { get; private set; }
         public PlataformaStreaming Plataforma { get; private set; }
 
         private readonly List<Genero> _generos = new();
@@ -22,12 +23,14 @@ namespace KDramaSystem.Domain.Entities
         private readonly List<Temporada> _temporadas = new();
         public IReadOnlyCollection<Temporada> Temporadas => _temporadas.AsReadOnly();
 
-        public Dorama(Guid id, string titulo, string paisOrigem, int anoLancamento, bool emExibicao, PlataformaStreaming plataforma, string? sinopse = null, string? tituloOriginal = null)
+        public Dorama(Guid id, string titulo, string paisOrigem, int anoLancamento, bool emExibicao, PlataformaStreaming plataforma, List<Genero> generos, string? sinopse = null, string? tituloOriginal = null, string imagemCapaUrl = null)
         {
             if (string.IsNullOrWhiteSpace(titulo)) throw new ArgumentException("Título é obrigatório.");
             if (string.IsNullOrWhiteSpace(paisOrigem)) throw new ArgumentException("País de origem é obrigatório.");
             if (anoLancamento <= 1900 || anoLancamento > DateTime.UtcNow.Year + 1)
                 throw new ArgumentException("Ano de lançamento inválido.");
+
+            if (generos == null || !generos.Any()) throw new ArgumentException("Dorama deve ter ao menos um gênero.");
 
             Id = id;
             Titulo = titulo;
@@ -37,6 +40,22 @@ namespace KDramaSystem.Domain.Entities
             EmExibicao = emExibicao;
             Plataforma = plataforma;
             Sinopse = sinopse;
+            _generos = generos;
+            ImagemCapaUrl = imagemCapaUrl;
+        }
+        public void AtualizarSinopse(string? novaSinopse)
+        {
+            Sinopse = novaSinopse;
+        }
+
+        public void AlterarTituloOriginal(string? novoTituloOriginal)
+        {
+            TituloOriginal = novoTituloOriginal;
+        }
+
+        public void TrocarPlataforma(PlataformaStreaming novaPlataforma)
+        {
+            Plataforma = novaPlataforma;
         }
 
         public void AdicionarGenero(Genero genero)
