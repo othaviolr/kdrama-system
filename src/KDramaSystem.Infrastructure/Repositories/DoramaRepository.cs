@@ -35,4 +35,15 @@ public class DoramaRepository : IDoramaRepository
 
         return Task.CompletedTask;
     }
+
+    public Task ExcluirAsync(Guid id)
+    {
+        var dorama = _doramas.FirstOrDefault(d => d.Id == id);
+        if (dorama != null)
+        {
+            _doramas.Remove(dorama);
+        }
+
+        return Task.CompletedTask;
+    }
 }

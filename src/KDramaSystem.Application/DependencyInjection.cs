@@ -1,5 +1,7 @@
 ﻿using KDramaSystem.Application.Interfaces;
 using KDramaSystem.Application.UseCases.Dorama.Criar;
+using KDramaSystem.Application.UseCases.Dorama.Excluir;
+using KDramaSystem.Application.UseCases.Dorama.Obter;
 using KDramaSystem.Application.UseCases.Usuario;
 using KDramaSystem.Application.UseCases.Usuario.DeixarDeSeguir;
 using KDramaSystem.Application.UseCases.Usuario.Deletar;
@@ -23,6 +25,8 @@ namespace KDramaSystem.Application
             services.AddScoped<SeguirUsuarioUseCase>();
             services.AddScoped<DeixarDeSeguirUsuarioUseCase>();
             services.AddScoped<CriarDoramaUseCase>();
+            services.AddScoped<ExcluirDoramaUseCase>();
+            services.AddScoped<ObterDoramaUseCase>();
 
             return services;
         }

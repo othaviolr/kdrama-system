@@ -18,8 +18,6 @@
 
   <ItemGroup>
     <Folder Include="Services\" />
-    <Folder Include="UseCases\Dorama\Excluir\" />
-    <Folder Include="UseCases\Dorama\Obter\" />
   </ItemGroup>
 
   <ItemGroup>
