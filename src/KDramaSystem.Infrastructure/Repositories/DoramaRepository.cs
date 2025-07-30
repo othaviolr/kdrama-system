@@ -24,4 +24,15 @@ public class DoramaRepository : IDoramaRepository
         var exists = _doramas.Any(d => d.Titulo == titulo);
         return Task.FromResult(exists);
     }
+
+    public Task AtualizarAsync(Dorama dorama)
+    {
+        var index = _doramas.FindIndex(d => d.Id == dorama.Id);
+        if (index != -1)
+        {
+            _doramas[index] = dorama;
+        }
+
+        return Task.CompletedTask;
+    }
 }
