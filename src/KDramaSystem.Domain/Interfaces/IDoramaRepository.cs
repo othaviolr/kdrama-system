@@ -2,7 +2,6 @@
 
 namespace KDramaSystem.Domain.Interfaces;
 
-
 public interface IDoramaRepository
 {
     Task AdicionarAsync(Dorama dorama);
