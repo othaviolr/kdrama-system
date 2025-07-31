@@ -1,4 +1,5 @@
-﻿using KDramaSystem.Application.UseCases.Dorama.Editar;
+﻿using KDramaSystem.Application.Exceptions;
+using KDramaSystem.Application.UseCases.Dorama.Editar;
 using KDramaSystem.Domain.Entities;
 using KDramaSystem.Domain.Enums;
 using KDramaSystem.Domain.Interfaces;
@@ -22,15 +23,18 @@ public class EditarDoramaUseCase
         _generoRepository = generoRepository;
     }
 
-    public async Task ExecutarAsync(Guid doramaId, EditarDoramaRequest request)
+    public async Task ExecutarAsync(EditarDoramaRequest request)
     {
         var usuario = await _usuarioRepository.ObterPorIdAsync(request.UsuarioEditorId);
         if (usuario is null)
-            throw new Exception("Usuário não encontrado.");
+            throw new NotFoundException("Usuário não encontrado.");
 
-        var dorama = await _doramaRepository.ObterPorIdAsync(doramaId);
-        if (dorama is null || dorama.UsuarioId != request.UsuarioEditorId)
-            throw new Exception("Dorama não encontrado ou acesso negado.");
+        var dorama = await _doramaRepository.ObterPorIdAsync(request.DoramaId);
+        if (dorama is null)
+            throw new NotFoundException("Dorama não encontrado.");
+
+        if (dorama.UsuarioId != request.UsuarioEditorId)
+            throw new UnauthorizedAccessException("Acesso negado.");
 
         List<Genero> generos = dorama.Generos.ToList();
         if (request.GeneroIds != null && request.GeneroIds.Any())
@@ -41,18 +45,18 @@ public class EditarDoramaUseCase
             generos = generosConsultados;
         }
 
-        dorama.EditarDados(
-            titulo: request.Titulo ?? dorama.Titulo,
-            tituloOriginal: request.TituloOriginal ?? dorama.TituloOriginal,
-            paisOrigem: request.PaisOrigem ?? dorama.PaisOrigem,
-            anoLancamento: request.AnoLancamento ?? dorama.AnoLancamento,
-            emExibicao: request.EmExibicao ?? dorama.EmExibicao,
-            plataforma: request.Plataforma.HasValue
-                ? (PlataformaStreaming)request.Plataforma.Value
-                : dorama.Plataforma,
-            generos: generos,
-            sinopse: request.Sinopse ?? dorama.Sinopse,
-            imagemCapaUrl: request.ImagemCapaUrl ?? dorama.ImagemCapaUrl
+        dorama.AtualizarInformacoes(
+        titulo: request.Titulo ?? dorama.Titulo,
+        tituloOriginal: request.TituloOriginal ?? dorama.TituloOriginal,
+        paisOrigem: request.PaisOrigem ?? dorama.PaisOrigem,
+        anoLancamento: request.AnoLancamento ?? dorama.AnoLancamento,
+        emExibicao: request.EmExibicao ?? dorama.EmExibicao,
+        plataforma: request.Plataforma.HasValue
+        ? (PlataformaStreaming)request.Plataforma.Value
+        : dorama.Plataforma,
+        generos: generos,
+        imagemCapaUrl: request.ImagemCapaUrl ?? dorama.ImagemCapaUrl,
+        sinopse: request.Sinopse ?? dorama.Sinopse
         );
 
         await _doramaRepository.AtualizarAsync(dorama);

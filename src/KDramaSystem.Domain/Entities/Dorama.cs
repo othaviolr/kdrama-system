@@ -15,31 +15,32 @@ namespace KDramaSystem.Domain.Entities
         public string ImagemCapaUrl { get; private set; }
         public PlataformaStreaming Plataforma { get; private set; }
 
-        private List<Genero> _generos = new();
+        private readonly List<Genero> _generos = new();
         public IReadOnlyCollection<Genero> Generos => _generos.AsReadOnly();
 
-        private List<Ator> _atores = new();
+        private readonly List<Ator> _atores = new();
         public IReadOnlyCollection<Ator> Atores => _atores.AsReadOnly();
 
-        private List<Temporada> _temporadas = new();
+        private readonly List<Temporada> _temporadas = new();
         public IReadOnlyCollection<Temporada> Temporadas => _temporadas.AsReadOnly();
 
-        public Dorama(Guid id, Guid usuarioId, string titulo, string paisOrigem, int anoLancamento, bool emExibicao, PlataformaStreaming plataforma, List<Genero> generos, string imagemCapaUrl, string? sinopse = null, string? tituloOriginal = null)
+        public Dorama(
+            Guid id,
+            Guid usuarioId,
+            string titulo,
+            string paisOrigem,
+            int anoLancamento,
+            bool emExibicao,
+            PlataformaStreaming plataforma,
+            List<Genero> generos,
+            string imagemCapaUrl,
+            string? sinopse = null,
+            string? tituloOriginal = null)
         {
-            if (string.IsNullOrWhiteSpace(titulo))
-                throw new ArgumentException("Título é obrigatório.");
-
-            if (string.IsNullOrWhiteSpace(paisOrigem))
-                throw new ArgumentException("País de origem é obrigatório.");
-
-            if (anoLancamento <= 1900 || anoLancamento > DateTime.UtcNow.Year + 1)
-                throw new ArgumentException("Ano de lançamento inválido.");
+            ValidarDadosObrigatorios(titulo, paisOrigem, anoLancamento, imagemCapaUrl);
 
             if (generos == null || generos.Count == 0)
                 throw new ArgumentException("Dorama deve ter ao menos um gênero.");
-
-            if (string.IsNullOrWhiteSpace(imagemCapaUrl))
-                throw new ArgumentException("Imagem de capa é obrigatória.");
 
             Id = id;
             UsuarioId = usuarioId;
@@ -51,11 +52,25 @@ namespace KDramaSystem.Domain.Entities
             Plataforma = plataforma;
             Sinopse = sinopse;
             ImagemCapaUrl = imagemCapaUrl;
-            _generos = new List<Genero>(generos);
+            _generos.AddRange(generos);
         }
 
-        public void EditarDados(string titulo, string? tituloOriginal, string paisOrigem, int anoLancamento, bool emExibicao, PlataformaStreaming plataforma, List<Genero> generos, string? sinopse, string imagemCapaUrl)
+        public void AtualizarInformacoes(
+            string titulo,
+            string? tituloOriginal,
+            string paisOrigem,
+            int anoLancamento,
+            bool emExibicao,
+            PlataformaStreaming plataforma,
+            List<Genero> generos,
+            string imagemCapaUrl,
+            string? sinopse = null)
         {
+            ValidarDadosObrigatorios(titulo, paisOrigem, anoLancamento, imagemCapaUrl);
+
+            if (generos == null || generos.Count == 0)
+                throw new ArgumentException("Dorama deve ter ao menos um gênero.");
+
             Titulo = titulo;
             TituloOriginal = tituloOriginal;
             PaisOrigem = paisOrigem;
@@ -66,7 +81,22 @@ namespace KDramaSystem.Domain.Entities
             ImagemCapaUrl = imagemCapaUrl;
 
             _generos.Clear();
-            _generos.AddRange(generos ?? new List<Genero>());
+            _generos.AddRange(generos);
+        }
+
+        private void ValidarDadosObrigatorios(string titulo, string paisOrigem, int anoLancamento, string imagemCapaUrl)
+        {
+            if (string.IsNullOrWhiteSpace(titulo))
+                throw new ArgumentException("Título é obrigatório.");
+
+            if (string.IsNullOrWhiteSpace(paisOrigem))
+                throw new ArgumentException("País de origem é obrigatório.");
+
+            if (anoLancamento <= 1900 || anoLancamento > DateTime.UtcNow.Year + 1)
+                throw new ArgumentException("Ano de lançamento inválido.");
+
+            if (string.IsNullOrWhiteSpace(imagemCapaUrl))
+                throw new ArgumentException("Imagem de capa é obrigatória.");
         }
         public void AtualizarSinopse(string? novaSinopse)
         {
@@ -83,11 +113,25 @@ namespace KDramaSystem.Domain.Entities
             Plataforma = novaPlataforma;
         }
 
+        public void MarcarComoEncerrado()
+        {
+            EmExibicao = false;
+        }
+
         public void AdicionarGenero(Genero genero)
         {
             if (genero == null) throw new ArgumentNullException(nameof(genero));
             if (_generos.Any(g => g.Id == genero.Id)) return;
             _generos.Add(genero);
+        }
+
+        public void RemoverGenero(Guid generoId)
+        {
+            var genero = _generos.FirstOrDefault(g => g.Id == generoId);
+            if (genero != null)
+            {
+                _generos.Remove(genero);
+            }
         }
 
         public void AdicionarAtor(Ator ator)
@@ -97,6 +141,15 @@ namespace KDramaSystem.Domain.Entities
             _atores.Add(ator);
         }
 
+        public void RemoverAtor(Guid atorId)
+        {
+            var ator = _atores.FirstOrDefault(a => a.Id == atorId);
+            if (ator != null)
+            {
+                _atores.Remove(ator);
+            }
+        }
+
         public void AdicionarTemporada(Temporada temporada)
         {
             if (temporada == null) throw new ArgumentNullException(nameof(temporada));
@@ -104,33 +157,13 @@ namespace KDramaSystem.Domain.Entities
             _temporadas.Add(temporada);
         }
 
-        public void MarcarComoEncerrado()
+        public void RemoverTemporada(Guid temporadaId)
         {
-            EmExibicao = false;
-        }
-
-        public void EditarInformacoes(string novoTitulo, string novoPaisOrigem, int novoAnoLancamento, bool emExibicao, PlataformaStreaming novaPlataforma, string novaImagemCapaUrl, string? novoTituloOriginal = null, string? novaSinopse = null)
-        {
-            if (string.IsNullOrWhiteSpace(novoTitulo))
-                throw new ArgumentException("Título é obrigatório.");
-
-            if (string.IsNullOrWhiteSpace(novoPaisOrigem))
-                throw new ArgumentException("País de origem é obrigatório.");
-
-            if (novoAnoLancamento <= 1900 || novoAnoLancamento > DateTime.UtcNow.Year + 1)
-                throw new ArgumentException("Ano de lançamento inválido.");
-
-            if (string.IsNullOrWhiteSpace(novaImagemCapaUrl))
-                throw new ArgumentException("Imagem de capa é obrigatória.");
-
-            Titulo = novoTitulo;
-            PaisOrigem = novoPaisOrigem;
-            AnoLancamento = novoAnoLancamento;
-            EmExibicao = emExibicao;
-            Plataforma = novaPlataforma;
-            ImagemCapaUrl = novaImagemCapaUrl;
-            TituloOriginal = novoTituloOriginal;
-            Sinopse = novaSinopse;
+            var temporada = _temporadas.FirstOrDefault(t => t.Id == temporadaId);
+            if (temporada != null)
+            {
+                _temporadas.Remove(temporada);
+            }
         }
     }
 }
