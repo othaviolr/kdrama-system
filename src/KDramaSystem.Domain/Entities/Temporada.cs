@@ -51,13 +51,25 @@ public class Temporada
         EmExibicao = false;
     }
 
-    public void AtualizarSinopse(string? novaSinopse)
+    public void AtualizarSinopse(string? sinopse)
     {
-        Sinopse = novaSinopse?.Trim();
+        Sinopse = sinopse;
     }
 
-    public void AtualizarNome(string? novoNome)
+    public void AtualizarNome(string? nome)
     {
-        Nome = novoNome?.Trim();
+        Nome = nome;
+    }
+
+    public void AtualizarAnoLancamento(int ano)
+    {
+        if (ano <= 1900 || ano > DateTime.UtcNow.Year + 1)
+            throw new ArgumentException("Ano de lançamento inválido.");
+        AnoLancamento = ano;
+    }
+
+    public void ReabrirTemporada()
+    {
+        EmExibicao = true;
     }
 }
