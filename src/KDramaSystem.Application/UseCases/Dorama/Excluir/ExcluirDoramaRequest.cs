@@ -3,4 +3,5 @@
 public class ExcluirDoramaRequest
 {
     public Guid Id { get; set; }
+    public Guid UsuarioId { get; set; }
 }
