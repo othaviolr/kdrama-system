@@ -1,46 +1,63 @@
-﻿namespace KDramaSystem.Domain.Entities
+﻿namespace KDramaSystem.Domain.Entities;
+
+public class Temporada
 {
-    public class Temporada
+    public Guid Id { get; private set; }
+    public Guid DoramaId { get; private set; }
+    public int Numero { get; private set; }
+    public string? Nome { get; private set; }
+    public int AnoLancamento { get; private set; }
+    public bool EmExibicao { get; private set; }
+    public string? Sinopse { get; private set; }
+
+    private readonly List<Episodio> _episodios = new();
+    public IReadOnlyCollection<Episodio> Episodios => _episodios.AsReadOnly();
+
+    public int NumeroEpisodios => _episodios.Count;
+
+    protected Temporada() { }
+
+    public Temporada(Guid id, Guid doramaId, int numero, int anoLancamento, bool emExibicao, string? nome = null, string? sinopse = null)
     {
-        public Guid Id { get; private set; }
-        public Guid DoramaId { get; private set; }
-        public int Numero { get; private set; }
-        public string? Nome { get; private set; }
-        public int AnoLancamento { get; private set; }
-        public bool EmExibicao { get; private set; }
-        public int NumeroEpisodios => _episodios.Count;
-        public string? Sinopse { get; private set; }
+        if (numero <= 0)
+            throw new ArgumentNullException("Número da temporada deve ser maior que zero.");
 
-        private readonly List<Episodio> _episodios = new();
-        public IReadOnlyCollection<Episodio> Episodios => _episodios.AsReadOnly();
+        var anoAtual = DateTime.UtcNow.Year;
+        if (anoLancamento < 1950 || anoLancamento > anoAtual + 1)
+            throw new InvalidOperationException("Ano de lançamento inválido.");
 
-        public Temporada(Guid id, Guid doramaId, int numero, int anoLancamento, bool emExibicao, string? nome = null, string? sinopse = null)
-        {
-            if (numero <= 0) throw new ArgumentException("Número da temporada deve ser maior que zero.");
-            if (anoLancamento <= 1900 || anoLancamento > DateTime.UtcNow.Year + 1)
-                throw new ArgumentException("Ano de lançamento inválido.");
+        Id = id;
+        DoramaId = doramaId;
+        Numero = numero;
+        AnoLancamento = anoLancamento;
+        EmExibicao = emExibicao;
+        Nome = nome?.Trim();
+        Sinopse = sinopse?.Trim();
+    }
 
-            Id = id;
-            DoramaId = doramaId;
-            Numero = numero;
-            AnoLancamento = anoLancamento;
-            EmExibicao = emExibicao;
-            Nome = nome;
-            Sinopse = sinopse;
-        }
+    public void AdicionarEpisodio(Episodio episodio)
+    {
+        if (episodio is null)
+            throw new ArgumentNullException("Episódio não pode ser nulo.");
 
-        public void AdicionarEpisodio(Episodio episodio)
-        {
-            if (episodio == null) throw new ArgumentNullException(nameof(episodio));
-            if (_episodios.Any(e => e.Numero == episodio.Numero)) 
-                throw new InvalidOperationException($"Episódio {episodio.Numero} já existe nesta temporada");
+        if (_episodios.Any(e => e.Numero == episodio.Numero))
+            throw new InvalidOperationException($"Já existe um episódio número {episodio.Numero} nesta temporada.");
 
-            _episodios.Add(episodio);
-        }
+        _episodios.Add(episodio);
+    }
 
-        public void MarcarComoEncerrada()
-        {
-            EmExibicao = false;
-        }
+    public void MarcarComoEncerrada()
+    {
+        EmExibicao = false;
+    }
+
+    public void AtualizarSinopse(string? novaSinopse)
+    {
+        Sinopse = novaSinopse?.Trim();
+    }
+
+    public void AtualizarNome(string? novoNome)
+    {
+        Nome = novoNome?.Trim();
     }
 }
