@@ -47,11 +47,24 @@ Facilitar a vida de quem assiste doramas:
 - Feed de atividades (avaliações, comentários, listas, etc.)  
 - Comentários em avaliações e temporadas  
 
-### 🧩 Conteúdo Criado por Usuários
+### 🧠 **Conteúdo Interativo e Criado por Usuário**
 
-- **Quizzes personalizados**, com resultados compartilháveis  
-- **Enquetes, batalhas e apostas**  
-- **Tier lists** arrastáveis e listas colaborativas  
+## 🧩 Jogos e Desafios
+
+- Criar **quizzes personalizados**:
+    - Perguntas, respostas, imagens, título, descrição
+    - Compartilhamento de resultados
+    - Curtidas, comentários
+- Jogos de memória e desafios rápidos (ex: “complete o nome”, “associe a OST”)
+- Desafios e maratonas:
+    - Ex: “Assista 5 doramas históricos em 1 mês”
+    - Com progresso e compartilhamento de conquistas 
+
+
+### 🗞️ Notícias, Bastidores e Fofocas
+
+- Página de **notícias sobre doramas, atores, bastidores**
+- Área para **discussões e comentários**
 
 ---
 
