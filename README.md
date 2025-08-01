@@ -2,7 +2,7 @@
 
 **KDramaSystem** é uma plataforma completa para amantes de doramas. Com funcionalidades inspiradas no Skoob e redes sociais modernas, o sistema permite organizar, acompanhar, avaliar e descobrir doramas de forma personalizada e social.
 
-> Feito com arquitetura limpa, DDD, boas práticas de código e foco em escalabilidade — esse projeto é uma vitrine aplicada ao entretenimento.
+> Feito com arquitetura limpa, DDD, boas práticas de código e foco em escalabilidade > esse projeto é uma vitrine aplicada ao entretenimento.
 
 ---
 
