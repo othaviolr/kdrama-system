@@ -30,10 +30,10 @@ Facilitar a vida de quem assiste doramas:
 - Criar listas personalizadas (nome, descrição, imagem de capa)  ex: Meus Doramas de Romance fav <3
 - Controle de privacidade: público, privado ou com link para compartilhar
 
-  ### 🎭 Playlists Vínculadas
+### 🎭 Playlists Vínculadas
 
-  - Gostou das músicas tocadas do dorama ou OST's e abertura?
-  - Todo dorama vai ter anexado playlist completa ou OSTs de todas as plataformas!
+- Gostou das músicas tocadas do dorama ou OST's e abertura?
+- Todo dorama vai ter anexado playlist completa ou OSTs de todas as plataformas!
 
 ### 🔍 Exploração
 
