@@ -1,6 +1,5 @@
 ﻿using KDramaSystem.Application.Exceptions;
 using KDramaSystem.Application.UseCases.Dorama.Editar;
-using KDramaSystem.Domain.Entities;
 using KDramaSystem.Domain.Enums;
 using KDramaSystem.Domain.Interfaces;
 using KDramaSystem.Domain.Interfaces.Repositories;
@@ -36,7 +35,8 @@ public class EditarDoramaUseCase
         if (dorama.UsuarioId != request.UsuarioEditorId)
             throw new UnauthorizedAccessException("Acesso negado.");
 
-        List<Genero> generos = dorama.Generos.ToList();
+        List<KDramaSystem.Domain.Entities.Genero> generos = dorama.Generos.ToList();
+
         if (request.GeneroIds != null && request.GeneroIds.Any())
         {
             var generosConsultados = await _generoRepository.ObterPorIdsAsync(request.GeneroIds);
@@ -46,17 +46,17 @@ public class EditarDoramaUseCase
         }
 
         dorama.AtualizarInformacoes(
-        titulo: request.Titulo ?? dorama.Titulo,
-        tituloOriginal: request.TituloOriginal ?? dorama.TituloOriginal,
-        paisOrigem: request.PaisOrigem ?? dorama.PaisOrigem,
-        anoLancamento: request.AnoLancamento ?? dorama.AnoLancamento,
-        emExibicao: request.EmExibicao ?? dorama.EmExibicao,
-        plataforma: request.Plataforma.HasValue
-        ? (PlataformaStreaming)request.Plataforma.Value
-        : dorama.Plataforma,
-        generos: generos,
-        imagemCapaUrl: request.ImagemCapaUrl ?? dorama.ImagemCapaUrl,
-        sinopse: request.Sinopse ?? dorama.Sinopse
+            titulo: request.Titulo ?? dorama.Titulo,
+            tituloOriginal: request.TituloOriginal ?? dorama.TituloOriginal,
+            paisOrigem: request.PaisOrigem ?? dorama.PaisOrigem,
+            anoLancamento: request.AnoLancamento ?? dorama.AnoLancamento,
+            emExibicao: request.EmExibicao ?? dorama.EmExibicao,
+            plataforma: request.Plataforma.HasValue
+                ? (PlataformaStreaming)request.Plataforma.Value
+                : dorama.Plataforma,
+            generos: generos,
+            imagemCapaUrl: request.ImagemCapaUrl ?? dorama.ImagemCapaUrl,
+            sinopse: request.Sinopse ?? dorama.Sinopse
         );
 
         await _doramaRepository.AtualizarAsync(dorama);
