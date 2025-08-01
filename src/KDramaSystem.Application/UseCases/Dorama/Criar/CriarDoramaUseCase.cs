@@ -33,7 +33,8 @@ public class CriarDoramaUseCase
             throw new Exception("É necessário informar pelo menos um gênero.");
 
         var generos = await _generoRepository.ObterPorIdsAsync(request.GeneroIds);
-        if (generos.Count != request.GeneroIds.Count)
+
+        if (generos.Count != request.GeneroIds.Count())
             throw new Exception("Um ou mais gêneros informados são inválidos.");
 
         var dorama = new KDramaSystem.Domain.Entities.Dorama(
