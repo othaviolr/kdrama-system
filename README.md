@@ -32,7 +32,7 @@ Facilitar a vida de quem assiste doramas:
 
 ### 🎭 Playlists Vínculadas
 
-- Gostou das músicas tocadas do dorama ou OST's e abertura?
+- Gostou das músicas tocadas do dorama ou OSTs e abertura?
 - Todo dorama vai ter anexado playlist completa ou OSTs de todas as plataformas!
 
 ### 🔍 Exploração
@@ -47,9 +47,9 @@ Facilitar a vida de quem assiste doramas:
 - Feed de atividades (avaliações, comentários, listas, etc.)  
 - Comentários em avaliações e temporadas  
 
-### 🧠 **Conteúdo Interativo e Criado por Usuário**
+### 🧩 **Conteúdo Interativo e Criado por Usuário**
 
-## 🧩 Jogos e Desafios
+ Jogos e Desafios
 
 - Criar **quizzes personalizados**:
     - Perguntas, respostas, imagens, título, descrição
