@@ -1,7 +1,23 @@
-﻿using KDramaSystem.Application.Interfaces;
+﻿using KDramaSystem.Application.UseCases.Ator.Criar;
+using KDramaSystem.Application.UseCases.Ator.Editar;
+using KDramaSystem.Application.UseCases.Ator.Excluir;
+using KDramaSystem.Application.UseCases.Ator.Obter;
+using KDramaSystem.Application.UseCases.Dorama;
 using KDramaSystem.Application.UseCases.Dorama.Criar;
 using KDramaSystem.Application.UseCases.Dorama.Excluir;
 using KDramaSystem.Application.UseCases.Dorama.Obter;
+using KDramaSystem.Application.UseCases.Episodio.Criar;
+using KDramaSystem.Application.UseCases.Episodio.Editar;
+using KDramaSystem.Application.UseCases.Episodio.Excluir;
+using KDramaSystem.Application.UseCases.Episodio.Obter;
+using KDramaSystem.Application.UseCases.Genero.Criar;
+using KDramaSystem.Application.UseCases.Genero.Editar;
+using KDramaSystem.Application.UseCases.Genero.Excluir;
+using KDramaSystem.Application.UseCases.Genero.Obter;
+using KDramaSystem.Application.UseCases.Temporada.Criar;
+using KDramaSystem.Application.UseCases.Temporada.Editar;
+using KDramaSystem.Application.UseCases.Temporada.Excluir;
+using KDramaSystem.Application.UseCases.Temporada.Obter;
 using KDramaSystem.Application.UseCases.Usuario;
 using KDramaSystem.Application.UseCases.Usuario.DeixarDeSeguir;
 using KDramaSystem.Application.UseCases.Usuario.Deletar;
@@ -17,16 +33,44 @@ namespace KDramaSystem.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            services.AddScoped<IObterPerfilCompletoUseCase, ObterPerfilCompletoUseCase>();
-            services.AddScoped<IEditarPerfilUseCase, EditarPerfilUseCase>();
+            //Usuario
             services.AddScoped<RegistrarUsuarioHandler>();
             services.AddScoped<LoginUsuarioHandler>();
-            services.AddScoped<IDeletarPerfilUseCase, DeletarPerfilUseCase>();
             services.AddScoped<SeguirUsuarioUseCase>();
             services.AddScoped<DeixarDeSeguirUsuarioUseCase>();
+            services.AddScoped<IObterPerfilCompletoUseCase, ObterPerfilCompletoUseCase>();
+            services.AddScoped<IEditarPerfilUseCase, EditarPerfilUseCase>();
+            services.AddScoped<IDeletarPerfilUseCase, DeletarPerfilUseCase>();
+
+            //Ator
+            services.AddScoped<CriarAtorUseCase>();
+            services.AddScoped<EditarAtorUseCase>();
+            services.AddScoped<ExcluirAtorUseCase>();
+            services.AddScoped<ObterAtorUseCase>();
+
+            //Dorama
             services.AddScoped<CriarDoramaUseCase>();
+            services.AddScoped<EditarDoramaUseCase>();
             services.AddScoped<ExcluirDoramaUseCase>();
             services.AddScoped<ObterDoramaUseCase>();
+
+            //Episodio
+            services.AddScoped<CriarEpisodioUseCase>();
+            services.AddScoped<EditarEpisodioUseCase>();
+            services.AddScoped<ExcluirEpisodioUseCase>();
+            services.AddScoped<ObterEpisodioPorIdUseCase>();
+
+            //Genero
+            services.AddScoped<CriarGeneroUseCase>();
+            services.AddScoped<EditarGeneroUseCase>();
+            services.AddScoped<ExcluirGeneroUseCase>();
+            services.AddScoped<ObterGeneroPorIdUseCase>();
+
+            //Temporada
+            services.AddScoped<CriarTemporadaUseCase>();
+            services.AddScoped<EditarTemporadaUseCase>();
+            services.AddScoped<ExcluirTemporadaUseCase>();
+            services.AddScoped<ObterTemporadaPorIdUseCase>();
 
             return services;
         }

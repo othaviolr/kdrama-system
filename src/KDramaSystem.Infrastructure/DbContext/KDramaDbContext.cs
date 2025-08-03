@@ -14,6 +14,7 @@ public class KDramaDbContext : DbContext
     public DbSet<Genero> Generos { get; set; }
     public DbSet<Ator> Atores { get; set; }
     public DbSet<DoramaAtor> DoramaAtores { get; set; }
+    public DbSet<UsuarioRelacionamento> UsuarioRelacionamentos { get; set; }
     public DbSet<Avaliacao> Avaliacoes { get; set; }
     public DbSet<Comentario> Comentarios { get; set; }
     public DbSet<ListaPrateleira> ListasPrateleira { get; set; }

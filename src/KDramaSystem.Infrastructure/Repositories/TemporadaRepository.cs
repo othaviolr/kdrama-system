@@ -1,51 +1,66 @@
 ﻿using KDramaSystem.Domain.Entities;
 using KDramaSystem.Domain.Interfaces;
+using KDramaSystem.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace KDramaSystem.Infrastructure.Repositories;
 
 public class TemporadaRepository : ITemporadaRepository
 {
-    private readonly List<Temporada> _temporadas = new();
+    private readonly KDramaDbContext _context;
 
-    public Task AdicionarAsync(Temporada temporada)
+    public TemporadaRepository(KDramaDbContext context)
     {
-        _temporadas.Add(temporada);
-        return Task.CompletedTask;
+        _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public Task<IReadOnlyList<Temporada>> ObterPorDoramaIdAsync(Guid doramaId)
+    public async Task AdicionarAsync(Temporada temporada)
     {
-        var temporadas = _temporadas
-    .Where(t => t.DoramaId == doramaId)
-    .OrderBy(t => t.Numero)
-    .ToList();
+        if (temporada == null)
+            throw new ArgumentNullException(nameof(temporada));
 
-        return Task.FromResult<IReadOnlyList<Temporada>>(temporadas);
+        await _context.Temporadas.AddAsync(temporada);
+        await _context.SaveChangesAsync();
     }
 
-    public Task<Temporada?> ObterPorIdAsync(Guid id)
+    public async Task<IReadOnlyList<Temporada>> ObterPorDoramaIdAsync(Guid doramaId)
     {
-        var temporada = _temporadas.FirstOrDefault(t => t.Id == id);
-        return Task.FromResult(temporada);
+        if (doramaId == Guid.Empty)
+            throw new ArgumentException("Id do dorama inválido.", nameof(doramaId));
+
+        return await _context.Temporadas
+            .Where(t => t.DoramaId == doramaId)
+            .OrderBy(t => t.Numero)
+            .ToListAsync();
     }
 
-    public Task AtualizarAsync(Temporada temporada)
+    public async Task<Temporada?> ObterPorIdAsync(Guid id)
     {
-        var index = _temporadas.FindIndex(t => t.Id == temporada.Id);
-        if (index != -1)
-        {
-            _temporadas[index] = temporada;
-        }
-        return Task.CompletedTask;
+        if (id == Guid.Empty)
+            throw new ArgumentException("Id inválido.", nameof(id));
+
+        return await _context.Temporadas.FirstOrDefaultAsync(t => t.Id == id);
     }
 
-    public Task ExcluirAsync(Guid id)
+    public async Task AtualizarAsync(Temporada temporada)
     {
-        var temporada = _temporadas.FirstOrDefault(t => t.Id == id);
+        if (temporada == null)
+            throw new ArgumentNullException(nameof(temporada));
+
+        _context.Temporadas.Update(temporada);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task ExcluirAsync(Guid id)
+    {
+        if (id == Guid.Empty)
+            throw new ArgumentException("Id inválido.", nameof(id));
+
+        var temporada = await _context.Temporadas.FindAsync(id);
         if (temporada != null)
         {
-            _temporadas.Remove(temporada);
+            _context.Temporadas.Remove(temporada);
+            await _context.SaveChangesAsync();
         }
-        return Task.CompletedTask;
     }
 }

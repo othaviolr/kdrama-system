@@ -1,61 +1,79 @@
 ﻿using KDramaSystem.Domain.Entities;
 using KDramaSystem.Domain.Interfaces;
+using KDramaSystem.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
-namespace KDramaSystem.Infrastructure.Repositories
+namespace KDramaSystem.Infrastructure.Repositories;
+
+public class GeneroRepository : IGeneroRepository
 {
-    public class GeneroRepository : IGeneroRepository
+    private readonly KDramaDbContext _context;
+
+    public GeneroRepository(KDramaDbContext context)
     {
-        private readonly List<Genero> _generos = new();
+        _context = context ?? throw new ArgumentNullException(nameof(context));
+    }
 
-        public Task AdicionarAsync(Genero genero)
+    public async Task AdicionarAsync(Genero genero)
+    {
+        if (genero == null)
+            throw new ArgumentNullException(nameof(genero));
+
+        await _context.Generos.AddAsync(genero);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task AtualizarAsync(Genero genero)
+    {
+        if (genero == null)
+            throw new ArgumentNullException(nameof(genero));
+
+        _context.Generos.Update(genero);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task RemoverAsync(Guid generoId)
+    {
+        if (generoId == Guid.Empty)
+            throw new ArgumentException("Id inválido.", nameof(generoId));
+
+        var genero = await _context.Generos.FindAsync(generoId);
+        if (genero != null)
         {
-            _generos.Add(genero);
-            return Task.CompletedTask;
+            _context.Generos.Remove(genero);
+            await _context.SaveChangesAsync();
         }
+    }
 
-        public Task AtualizarAsync(Genero genero)
-        {
-            var index = _generos.FindIndex(g => g.Id == genero.Id);
-            if (index != -1)
-            {
-                _generos[index] = genero;
-            }
+    public async Task<Genero?> ObterPorIdAsync(Guid generoId)
+    {
+        if (generoId == Guid.Empty)
+            throw new ArgumentException("Id inválido.", nameof(generoId));
 
-            return Task.CompletedTask;
-        }
+        return await _context.Generos.FirstOrDefaultAsync(g => g.Id == generoId);
+    }
 
-        public Task RemoverAsync(Guid generoId)
-        {
-            var genero = _generos.FirstOrDefault(g => g.Id == generoId);
-            if (genero != null)
-            {
-                _generos.Remove(genero);
-            }
+    public async Task<List<Genero>> ListarAsync()
+    {
+        return await _context.Generos.ToListAsync();
+    }
 
-            return Task.CompletedTask;
-        }
+    public async Task<bool> ExisteComNomeAsync(string nome)
+    {
+        if (string.IsNullOrWhiteSpace(nome))
+            throw new ArgumentException("Nome deve ser informado.", nameof(nome));
 
-        public Task<Genero?> ObterPorIdAsync(Guid generoId)
-        {
-            var genero = _generos.FirstOrDefault(g => g.Id == generoId);
-            return Task.FromResult(genero);
-        }
+        return await _context.Generos
+            .AnyAsync(g => g.Nome.ToLower() == nome.Trim().ToLower());
+    }
 
-        public Task<List<Genero>> ListarAsync()
-        {
-            return Task.FromResult(_generos.ToList());
-        }
+    public async Task<List<Genero>> ObterPorIdsAsync(IEnumerable<Guid> ids)
+    {
+        if (ids == null || !ids.Any())
+            return new List<Genero>();
 
-        public Task<bool> ExisteComNomeAsync(string nome)
-        {
-            var exists = _generos.Any(g => g.Nome.Equals(nome, StringComparison.OrdinalIgnoreCase));
-            return Task.FromResult(exists);
-        }
-
-        public Task<List<Genero>> ObterPorIdsAsync(IEnumerable<Guid> ids)
-        {
-            var lista = _generos.Where(g => ids.Contains(g.Id)).ToList();
-            return Task.FromResult(lista);
-        }
+        return await _context.Generos
+            .Where(g => ids.Contains(g.Id))
+            .ToListAsync();
     }
 }

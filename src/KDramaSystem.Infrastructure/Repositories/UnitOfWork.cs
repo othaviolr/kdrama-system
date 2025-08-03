@@ -1,11 +1,26 @@
 ﻿using KDramaSystem.Domain.Interfaces;
+using KDramaSystem.Infrastructure.Persistence;
+using System;
+using System.Threading.Tasks;
 
 namespace KDramaSystem.Infrastructure.Repositories;
 
-public class UnitOfWork : IUnitOfWork
+public class UnitOfWork : IUnitOfWork, IDisposable
 {
-    public Task SalvarAlteracoesAsync()
+    private readonly KDramaDbContext _context;
+
+    public UnitOfWork(KDramaDbContext context)
     {
-        return Task.CompletedTask;
+        _context = context ?? throw new ArgumentNullException(nameof(context));
+    }
+
+    public async Task SalvarAlteracoesAsync()
+    {
+        await _context.SaveChangesAsync();
+    }
+
+    public void Dispose()
+    {
+        _context.Dispose();
     }
 }
