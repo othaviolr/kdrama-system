@@ -47,7 +47,7 @@ Facilitar a vida de quem assiste doramas:
 - Feed de atividades (avaliações, comentários, listas, etc.)  
 - Comentários em avaliações e temporadas  
 
-### 🧩 **Conteúdo Interativo e Criado por Usuário**
+### 🧩 **Conteúdo Interativo e Criado por Usuários**
 
  Jogos e Desafios
 
