@@ -18,11 +18,13 @@ namespace KDramaSystem.Infrastructure
             services.AddDbContext<KDramaDbContext>(options =>
             options.UseSqlite("Data Source=kdrama.db"));
 
-            services.AddSingleton<IUsuarioRepository, UsuarioRepository>();
-            services.AddSingleton<IUsuarioAutenticacaoRepository, UsuarioAutenticacaoRepository>();
-            services.AddSingleton<IUsuarioRelacionamentoRepository, UsuarioRelacionamentoRepository>();
-
-            services.AddSingleton<IDoramaRepository, DoramaRepository>();
+            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            services.AddScoped<IAtorRepository, AtorRepository>();
+            services.AddScoped<ITemporadaRepository, TemporadaRepository>();
+            services.AddScoped<IEpisodioRepository, EpisodioRepository>();
+            services.AddScoped<IUsuarioAutenticacaoRepository, UsuarioAutenticacaoRepository>();
+            services.AddScoped<IUsuarioRelacionamentoRepository, UsuarioRelacionamentoRepository>();
+            services.AddScoped<IDoramaRepository, DoramaRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IGeneroRepository, GeneroRepository>();
 
