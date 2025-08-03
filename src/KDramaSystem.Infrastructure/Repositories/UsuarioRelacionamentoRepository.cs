@@ -1,32 +1,55 @@
 ﻿using KDramaSystem.Application.Interfaces.Repositories;
 using KDramaSystem.Domain.Entities;
+using KDramaSystem.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace KDramaSystem.Infrastructure.Repositories;
 
 public class UsuarioRelacionamentoRepository : IUsuarioRelacionamentoRepository
 {
-    private static readonly List<UsuarioRelacionamento> _relacionamentos = new();
+    private readonly KDramaDbContext _context;
 
-    public Task<bool> ExisteRelacionamentoAsync(Guid seguidorId, Guid seguindoId)
+    public UsuarioRelacionamentoRepository(KDramaDbContext context)
     {
-        var existe = _relacionamentos.Any(r => r.SeguidorId == seguidorId && r.SeguindoId == seguindoId);
-        return Task.FromResult(existe);
+        _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public Task CriarAsync(UsuarioRelacionamento relacionamento)
+    public async Task<bool> ExisteRelacionamentoAsync(Guid seguidorId, Guid seguindoId)
     {
-        _relacionamentos.Add(relacionamento);
-        return Task.CompletedTask;
+        if (seguidorId == Guid.Empty)
+            throw new ArgumentException("Id do seguidor inválido.", nameof(seguidorId));
+
+        if (seguindoId == Guid.Empty)
+            throw new ArgumentException("Id do seguindo inválido.", nameof(seguindoId));
+
+        return await _context.UsuarioRelacionamentos
+            .AnyAsync(r => r.SeguidorId == seguidorId && r.SeguindoId == seguindoId);
     }
 
-    public Task RemoverAsync(Guid seguidorId, Guid seguindoId)
+    public async Task CriarAsync(UsuarioRelacionamento relacionamento)
     {
-        var existente = _relacionamentos.FirstOrDefault
-            (r => r.SeguidorId == seguidorId && r.SeguindoId == seguindoId);
+        if (relacionamento == null)
+            throw new ArgumentNullException(nameof(relacionamento));
 
-        if (existente is not null)
-            _relacionamentos.Remove(existente);
+        await _context.UsuarioRelacionamentos.AddAsync(relacionamento);
+        await _context.SaveChangesAsync();
+    }
 
-        return Task.CompletedTask;
+    public async Task RemoverAsync(Guid seguidorId, Guid seguindoId)
+    {
+        if (seguidorId == Guid.Empty)
+            throw new ArgumentException("Id do seguidor inválido.", nameof(seguidorId));
+
+        if (seguindoId == Guid.Empty)
+            throw new ArgumentException("Id do seguindo inválido.", nameof(seguindoId));
+
+        var existente = await _context.UsuarioRelacionamentos
+            .FirstOrDefaultAsync(r => r.SeguidorId == seguidorId && r.SeguindoId == seguindoId);
+
+        if (existente != null)
+        {
+            _context.UsuarioRelacionamentos.Remove(existente);
+            await _context.SaveChangesAsync();
+        }
     }
 }

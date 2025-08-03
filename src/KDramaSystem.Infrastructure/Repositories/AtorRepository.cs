@@ -1,54 +1,71 @@
 ﻿using KDramaSystem.Domain.Entities;
 using KDramaSystem.Domain.Interfaces;
+using KDramaSystem.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace KDramaSystem.Infrastructure.Repositories;
 
 public class AtorRepository : IAtorRepository
 {
-    private readonly List<Ator> _atores = new();
+    private readonly KDramaDbContext _context;
 
-    public Task AdicionarAsync(Ator ator)
+    public AtorRepository(KDramaDbContext context)
     {
-        _atores.Add(ator);
-        return Task.CompletedTask;
+        _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public Task<Ator?> ObterPorIdAsync(Guid id)
+    public async Task AdicionarAsync(Ator ator)
     {
-        var ator = _atores.FirstOrDefault(a => a.Id == id);
-        return Task.FromResult(ator);
+        if (ator == null)
+            throw new ArgumentNullException(nameof(ator));
+
+        await _context.Atores.AddAsync(ator);
+        await _context.SaveChangesAsync();
     }
 
-    public Task<List<Ator>> ObterTodosAsync()
+    public async Task<Ator?> ObterPorIdAsync(Guid id)
     {
-        return Task.FromResult(_atores.ToList());
+        if (id == Guid.Empty)
+            throw new ArgumentException("Id inválido.", nameof(id));
+
+        return await _context.Atores
+            .Include(a => a.Doramas)
+            .FirstOrDefaultAsync(a => a.Id == id);
     }
 
-    public Task AtualizarAsync(Ator ator)
+    public async Task<List<Ator>> ObterTodosAsync()
     {
-        var index = _atores.FindIndex(a => a.Id == ator.Id);
-        if (index != -1)
-        {
-            _atores[index] = ator;
-        }
-
-        return Task.CompletedTask;
+        return await _context.Atores.ToListAsync();
     }
 
-    public Task ExcluirAsync(Guid id)
+    public async Task AtualizarAsync(Ator ator)
     {
-        var ator = _atores.FirstOrDefault(a => a.Id == id);
+        if (ator == null)
+            throw new ArgumentNullException(nameof(ator));
+
+        _context.Atores.Update(ator);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task ExcluirAsync(Guid id)
+    {
+        if (id == Guid.Empty)
+            throw new ArgumentException("Id inválido.", nameof(id));
+
+        var ator = await _context.Atores.FindAsync(id);
         if (ator != null)
         {
-            _atores.Remove(ator);
+            _context.Atores.Remove(ator);
+            await _context.SaveChangesAsync();
         }
-
-        return Task.CompletedTask;
     }
 
-    public Task<bool> ExisteComNomeAsync(string nome)
+    public async Task<bool> ExisteComNomeAsync(string nome)
     {
-        var exists = _atores.Any(a => a.Nome.Equals(nome, StringComparison.OrdinalIgnoreCase));
-        return Task.FromResult(exists);
+        if (string.IsNullOrWhiteSpace(nome))
+            throw new ArgumentException("Nome deve ser informado.", nameof(nome));
+
+        return await _context.Atores
+            .AnyAsync(a => a.Nome.ToLower() == nome.Trim().ToLower());
     }
 }

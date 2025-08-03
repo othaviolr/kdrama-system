@@ -1,49 +1,67 @@
 ﻿using KDramaSystem.Domain.Entities;
 using KDramaSystem.Domain.Interfaces;
+using KDramaSystem.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace KDramaSystem.Infrastructure.Repositories;
 
 public class DoramaRepository : IDoramaRepository
 {
-    private readonly List<Dorama> _doramas = new();
+    private readonly KDramaDbContext _context;
 
-    public Task AdicionarAsync(Dorama dorama)
+    public DoramaRepository(KDramaDbContext context)
     {
-        _doramas.Add(dorama);
-        return Task.CompletedTask;
+        _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public Task<Dorama?> ObterPorIdAsync(Guid id)
+    public async Task AdicionarAsync(Dorama dorama)
     {
-        var dorama = _doramas.FirstOrDefault(d => d.Id == id);
-        return Task.FromResult(dorama);
+        if (dorama == null)
+            throw new ArgumentNullException(nameof(dorama));
+
+        await _context.Doramas.AddAsync(dorama);
+        await _context.SaveChangesAsync();
     }
 
-    public Task<bool> ExisteComTituloAsync(string titulo)
+    public async Task<Dorama?> ObterPorIdAsync(Guid id)
     {
-        var exists = _doramas.Any(d => d.Titulo == titulo);
-        return Task.FromResult(exists);
+        if (id == Guid.Empty)
+            throw new ArgumentException("Id inválido.", nameof(id));
+
+        return await _context.Doramas
+            .Include(d => d.Generos)
+            .Include(d => d.Temporadas)
+            .Include(d => d.Atores)
+            .FirstOrDefaultAsync(d => d.Id == id);
     }
 
-    public Task AtualizarAsync(Dorama dorama)
+    public async Task<bool> ExisteComTituloAsync(string titulo)
     {
-        var index = _doramas.FindIndex(d => d.Id == dorama.Id);
-        if (index != -1)
-        {
-            _doramas[index] = dorama;
-        }
+        if (string.IsNullOrWhiteSpace(titulo))
+            throw new ArgumentException("Título deve ser informado.", nameof(titulo));
 
-        return Task.CompletedTask;
+        return await _context.Doramas.AnyAsync(d => d.Titulo == titulo);
     }
 
-    public Task ExcluirAsync(Guid id)
+    public async Task AtualizarAsync(Dorama dorama)
     {
-        var dorama = _doramas.FirstOrDefault(d => d.Id == id);
+        if (dorama == null)
+            throw new ArgumentNullException(nameof(dorama));
+
+        _context.Doramas.Update(dorama);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task ExcluirAsync(Guid id)
+    {
+        if (id == Guid.Empty)
+            throw new ArgumentException("Id inválido.", nameof(id));
+
+        var dorama = await _context.Doramas.FindAsync(id);
         if (dorama != null)
         {
-            _doramas.Remove(dorama);
+            _context.Doramas.Remove(dorama);
+            await _context.SaveChangesAsync();
         }
-
-        return Task.CompletedTask;
     }
 }
