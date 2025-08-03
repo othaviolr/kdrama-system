@@ -18,11 +18,11 @@ namespace KDramaSystem.Domain.Entities
         private readonly List<Genero> _generos = new();
         public IReadOnlyCollection<Genero> Generos => _generos.AsReadOnly();
 
-        private readonly List<Ator> _atores = new();
-        public IReadOnlyCollection<Ator> Atores => _atores.AsReadOnly();
-
         private readonly List<Temporada> _temporadas = new();
         public IReadOnlyCollection<Temporada> Temporadas => _temporadas.AsReadOnly();
+
+        private readonly List<DoramaAtor> _atores = new();
+        public IReadOnlyCollection<DoramaAtor> Atores => _atores.AsReadOnly();
 
         public Dorama(
             Guid id,
@@ -98,25 +98,14 @@ namespace KDramaSystem.Domain.Entities
             if (string.IsNullOrWhiteSpace(imagemCapaUrl))
                 throw new ArgumentException("Imagem de capa é obrigatória.");
         }
-        public void AtualizarSinopse(string? novaSinopse)
-        {
-            Sinopse = novaSinopse;
-        }
 
-        public void AlterarTituloOriginal(string? novoTituloOriginal)
-        {
-            TituloOriginal = novoTituloOriginal;
-        }
+        public void AtualizarSinopse(string? novaSinopse) => Sinopse = novaSinopse;
 
-        public void TrocarPlataforma(PlataformaStreaming novaPlataforma)
-        {
-            Plataforma = novaPlataforma;
-        }
+        public void AlterarTituloOriginal(string? novoTituloOriginal) => TituloOriginal = novoTituloOriginal;
 
-        public void MarcarComoEncerrado()
-        {
-            EmExibicao = false;
-        }
+        public void TrocarPlataforma(PlataformaStreaming novaPlataforma) => Plataforma = novaPlataforma;
+
+        public void MarcarComoEncerrado() => EmExibicao = false;
 
         public void AdicionarGenero(Genero genero)
         {
@@ -128,26 +117,20 @@ namespace KDramaSystem.Domain.Entities
         public void RemoverGenero(Guid generoId)
         {
             var genero = _generos.FirstOrDefault(g => g.Id == generoId);
-            if (genero != null)
-            {
-                _generos.Remove(genero);
-            }
+            if (genero != null) _generos.Remove(genero);
         }
 
-        public void AdicionarAtor(Ator ator)
+        public void AdicionarAtor(DoramaAtor doramaAtor)
         {
-            if (ator == null) throw new ArgumentNullException(nameof(ator));
-            if (_atores.Any(a => a.Id == ator.Id)) return;
-            _atores.Add(ator);
+            if (doramaAtor == null) throw new ArgumentNullException(nameof(doramaAtor));
+            if (_atores.Any(a => a.AtorId == doramaAtor.AtorId)) return;
+            _atores.Add(doramaAtor);
         }
 
         public void RemoverAtor(Guid atorId)
         {
-            var ator = _atores.FirstOrDefault(a => a.Id == atorId);
-            if (ator != null)
-            {
-                _atores.Remove(ator);
-            }
+            var relacao = _atores.FirstOrDefault(a => a.AtorId == atorId);
+            if (relacao != null) _atores.Remove(relacao);
         }
 
         public void AdicionarTemporada(Temporada temporada)
@@ -160,10 +143,7 @@ namespace KDramaSystem.Domain.Entities
         public void RemoverTemporada(Guid temporadaId)
         {
             var temporada = _temporadas.FirstOrDefault(t => t.Id == temporadaId);
-            if (temporada != null)
-            {
-                _temporadas.Remove(temporada);
-            }
+            if (temporada != null) _temporadas.Remove(temporada);
         }
     }
 }
