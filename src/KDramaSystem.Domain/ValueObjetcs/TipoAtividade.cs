@@ -5,6 +5,7 @@ namespace KDramaSystem.Domain.ValueObjetcs
     public class TipoAtividade
     {
         public TipoAtividadeEnum Valor { get; }
+        private TipoAtividade() { }
 
         public TipoAtividade(TipoAtividadeEnum valor)
         {
