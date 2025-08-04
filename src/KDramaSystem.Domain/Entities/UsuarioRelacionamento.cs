@@ -1,4 +1,4 @@
-﻿namespace KDramaSystem.Domain.Entities;
+﻿using KDramaSystem.Domain.Entities;
 
 public class UsuarioRelacionamento
 {
@@ -6,6 +6,9 @@ public class UsuarioRelacionamento
     public Guid SeguidorId { get; private set; }
     public Guid SeguindoId { get; private set; }
     public DateTime Data { get; private set; }
+
+    public Usuario Seguidor { get; private set; }
+    public Usuario Seguindo { get; private set; }
 
     private UsuarioRelacionamento() { }
 
