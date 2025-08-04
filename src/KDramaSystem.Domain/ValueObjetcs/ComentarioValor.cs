@@ -6,6 +6,8 @@ namespace KDramaSystem.Domain.ValueObjects
     {
         public string Texto { get; }
 
+        private ComentarioValor() { }
+
         public ComentarioValor(string texto)
         {
             if (string.IsNullOrWhiteSpace(texto))

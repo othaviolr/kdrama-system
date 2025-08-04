@@ -6,6 +6,8 @@ namespace KDramaSystem.Domain.ValueObjects
     {
         public StatusDoramaEnum Valor { get; }
 
+        private StatusDorama() { }
+
         public StatusDorama(StatusDoramaEnum valor)
         {
             Valor = valor;

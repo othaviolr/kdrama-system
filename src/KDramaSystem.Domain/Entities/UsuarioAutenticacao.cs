@@ -2,9 +2,12 @@
 {
     public class UsuarioAutenticacao
     {
+        public Guid Id { get; private set; }
         public Guid UsuarioId { get; private set; }
         public string Email { get; private set; }
         public string SenhaHash { get; private set; }
+
+        private UsuarioAutenticacao() { }
 
         public UsuarioAutenticacao(Guid usuarioId, string email, string senhaHash)
         {

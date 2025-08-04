@@ -4,6 +4,8 @@
     {
         public int Valor { get; }
 
+        private Nota() { }
+
         public Nota(int valor)
         {
             if (valor < 1 || valor > 5)
