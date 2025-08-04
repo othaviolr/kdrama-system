@@ -15,8 +15,12 @@ namespace KDramaSystem.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
+            var basePath = AppDomain.CurrentDomain.BaseDirectory;
+            var infrastructurePath = Path.GetFullPath(Path.Combine(basePath, "..", "..", "..", "..", "KDramaSystem.Infrastructure"));
+            var dbPath = Path.Combine(infrastructurePath, "kdrama.db");
+
             services.AddDbContext<KDramaDbContext>(options =>
-            options.UseSqlite("Data Source=kdrama.db"));
+                options.UseSqlite($"Data Source={dbPath}"));
 
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IAtorRepository, AtorRepository>();
@@ -27,7 +31,6 @@ namespace KDramaSystem.Infrastructure
             services.AddScoped<IDoramaRepository, DoramaRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IGeneroRepository, GeneroRepository>();
-
 
             services.AddScoped<ICriptografiaService, CriptografiaService>();
             services.AddScoped<ITokenService, TokenService>();
