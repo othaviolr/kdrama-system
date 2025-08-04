@@ -9,11 +9,11 @@
         public string? FotoUrl { get; private set; }
         public string? Bio { get; private set; }
 
-        private readonly List<Usuario> _seguidores = new();
-        public IReadOnlyCollection<Usuario> Seguidores => _seguidores.AsReadOnly();
+        private readonly List<UsuarioRelacionamento> _seguidores = new();
+        public IReadOnlyCollection<UsuarioRelacionamento> Seguidores => _seguidores.AsReadOnly();
 
-        private readonly List<Usuario> _seguindo = new();
-        public IReadOnlyCollection<Usuario> Seguindo => _seguindo.AsReadOnly();
+        private readonly List<UsuarioRelacionamento> _seguindo = new();
+        public IReadOnlyCollection<UsuarioRelacionamento> Seguindo => _seguindo.AsReadOnly();
 
         private readonly List<Avaliacao> _avaliacoes = new();
         public IReadOnlyCollection<Avaliacao> Avaliacoes => _avaliacoes.AsReadOnly();
@@ -50,23 +50,26 @@
         {
             if (usuario == null) throw new ArgumentNullException(nameof(usuario));
             if (usuario.Id == Id) throw new InvalidOperationException("Usuário não pode seguir a si mesmo.");
-            if (_seguindo.Any(u => u.Id == usuario.Id)) return;
 
-            _seguindo.Add(usuario);
-            usuario._seguidores.Add(this);
+            if (_seguindo.Any(rel => rel.SeguindoId == usuario.Id)) return;
+
+            var relacionamento = new UsuarioRelacionamento(Id, usuario.Id);
+
+            _seguindo.Add(relacionamento);
+            usuario._seguidores.Add(relacionamento);
         }
 
         public void DeixarDeSeguir(Usuario usuario)
         {
             if (usuario == null) throw new ArgumentNullException(nameof(usuario));
 
-            var seguindo = _seguindo.FirstOrDefault(u => u.Id == usuario.Id);
-            if (seguindo is not null)
-                _seguindo.Remove(seguindo);
+            var relacionamento = _seguindo.FirstOrDefault(r => r.SeguindoId == usuario.Id);
+            if (relacionamento is not null)
+                _seguindo.Remove(relacionamento);
 
-            var seguidor = usuario._seguidores.FirstOrDefault(u => u.Id == Id);
-            if (seguidor is not null)
-                usuario._seguidores.Remove(seguidor);
+            var relacionamentoInverso = usuario._seguidores.FirstOrDefault(r => r.SeguidorId == Id);
+            if (relacionamentoInverso is not null)
+                usuario._seguidores.Remove(relacionamentoInverso);
         }
 
         public void AdicionarAvaliacao(Avaliacao avaliacao)
