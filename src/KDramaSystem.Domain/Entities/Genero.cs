@@ -5,6 +5,8 @@
         public Guid Id { get; private set; }
         public string Nome { get; private set; }
 
+        private Genero() { }
+
         public Genero(Guid id, string nome)
         {
             if (string.IsNullOrWhiteSpace(nome))

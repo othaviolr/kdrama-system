@@ -24,6 +24,8 @@ namespace KDramaSystem.Domain.Entities
         private readonly List<DoramaAtor> _atores = new();
         public IReadOnlyCollection<DoramaAtor> Atores => _atores.AsReadOnly();
 
+        private Dorama() { }
+
         public Dorama(
             Guid id,
             Guid usuarioId,

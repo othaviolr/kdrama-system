@@ -16,6 +16,16 @@ public class UsuarioConfiguration : IEntityTypeConfiguration<Usuario>
         builder.Property(u => u.FotoUrl);
         builder.Property(u => u.Bio);
 
+        builder.HasMany(u => u.Seguidores)
+            .WithOne()
+            .HasForeignKey(ur => ur.SeguindoId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(u => u.Seguindo)
+            .WithOne()
+            .HasForeignKey(ur => ur.SeguidorId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.Metadata.FindNavigation(nameof(Usuario.Seguidores))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
 
