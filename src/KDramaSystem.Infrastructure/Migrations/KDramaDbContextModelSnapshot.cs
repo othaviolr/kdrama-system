@@ -406,7 +406,7 @@ namespace KDramaSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UsuariosAutenticacao");
+                    b.ToTable("UsuariosAutenticacao", (string)null);
                 });
 
             modelBuilder.Entity("UsuarioRelacionamento", b =>
