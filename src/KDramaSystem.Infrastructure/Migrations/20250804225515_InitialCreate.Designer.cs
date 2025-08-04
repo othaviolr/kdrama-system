@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KDramaSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(KDramaDbContext))]
-    [Migration("20250804214156_InitialCreate")]
+    [Migration("20250804225515_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -409,7 +409,7 @@ namespace KDramaSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UsuariosAutenticacao");
+                    b.ToTable("UsuariosAutenticacao", (string)null);
                 });
 
             modelBuilder.Entity("UsuarioRelacionamento", b =>
