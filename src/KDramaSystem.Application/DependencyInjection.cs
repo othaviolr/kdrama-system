@@ -26,6 +26,8 @@ using KDramaSystem.Application.UseCases.Usuario.Login;
 using KDramaSystem.Application.UseCases.Usuario.ObterPerfilCompleto;
 using KDramaSystem.Application.UseCases.Usuario.Registrar;
 using Microsoft.Extensions.DependencyInjection;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 namespace KDramaSystem.Application
 {
@@ -33,7 +35,7 @@ namespace KDramaSystem.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            //Usuario
+            // Usuario
             services.AddScoped<RegistrarUsuarioHandler>();
             services.AddScoped<LoginUsuarioHandler>();
             services.AddScoped<SeguirUsuarioUseCase>();
@@ -42,35 +44,37 @@ namespace KDramaSystem.Application
             services.AddScoped<IEditarPerfilUseCase, EditarPerfilUseCase>();
             services.AddScoped<IDeletarPerfilUseCase, DeletarPerfilUseCase>();
 
-            //Ator
+            // Ator
             services.AddScoped<CriarAtorUseCase>();
             services.AddScoped<EditarAtorUseCase>();
             services.AddScoped<ExcluirAtorUseCase>();
             services.AddScoped<ObterAtorUseCase>();
 
-            //Dorama
+            // Dorama
             services.AddScoped<CriarDoramaUseCase>();
             services.AddScoped<EditarDoramaUseCase>();
             services.AddScoped<ExcluirDoramaUseCase>();
             services.AddScoped<ObterDoramaUseCase>();
 
-            //Episodio
+            // Episodio
             services.AddScoped<CriarEpisodioUseCase>();
             services.AddScoped<EditarEpisodioUseCase>();
             services.AddScoped<ExcluirEpisodioUseCase>();
             services.AddScoped<ObterEpisodioPorIdUseCase>();
 
-            //Genero
+            // Genero
             services.AddScoped<CriarGeneroUseCase>();
             services.AddScoped<EditarGeneroUseCase>();
             services.AddScoped<ExcluirGeneroUseCase>();
             services.AddScoped<ObterGeneroPorIdUseCase>();
 
-            //Temporada
+            // Temporada
             services.AddScoped<CriarTemporadaUseCase>();
             services.AddScoped<EditarTemporadaUseCase>();
             services.AddScoped<ExcluirTemporadaUseCase>();
             services.AddScoped<ObterTemporadaPorIdUseCase>();
+
+            services.AddValidatorsFromAssemblyContaining<CriarAtorValidator>();
 
             return services;
         }
