@@ -41,6 +41,8 @@
             Instagram = instagram;
         }
 
+        private Ator() { }
+
         public void AtualizarDados(string nome, string? nomeCompleto, int? anoNascimento, decimal? altura,
                                    string? pais, string? biografia, string? fotoUrl, string? instagram)
         {

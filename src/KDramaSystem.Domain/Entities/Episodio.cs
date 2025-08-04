@@ -12,6 +12,8 @@ namespace KDramaSystem.Domain.Entities
         public int DuracaoMinutos { get; private set; }
         public TipoEpisodio Tipo { get; private set; }
 
+        private Episodio() { }
+
         public Episodio(Guid id, Guid temporadaId, int numero, string titulo, int duracaoMinutos, TipoEpisodio tipo = TipoEpisodio.Regular, string? sinopse = null)
         {
             if (numero <= 0) throw new ArgumentException("Número do episódio deve ser maior que zero.");
