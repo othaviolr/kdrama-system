@@ -32,6 +32,7 @@ public class DoramaRepository : IDoramaRepository
             .Include(d => d.Generos)
             .Include(d => d.Temporadas)
             .Include(d => d.Atores)
+            .ThenInclude(da => da.Ator)
             .FirstOrDefaultAsync(d => d.Id == id);
     }
 
