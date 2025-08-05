@@ -1,8 +1,8 @@
 ﻿using KDramaSystem.Domain.Entities;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace KDramaSystem.Infrastructure.Configurations;
+namespace KDramaSystem.Infrastructure.Persistence.Configurations;
 
 public class DoramaAtorConfiguration : IEntityTypeConfiguration<DoramaAtor>
 {
@@ -10,15 +10,16 @@ public class DoramaAtorConfiguration : IEntityTypeConfiguration<DoramaAtor>
     {
         builder.HasKey(da => new { da.DoramaId, da.AtorId });
 
-        builder.Property(da => da.DoramaId).IsRequired();
-        builder.Property(da => da.AtorId).IsRequired();
-
-        builder.HasOne(da => da.Dorama)
+        builder
+            .HasOne(da => da.Dorama)
             .WithMany(d => d.Atores)
             .HasForeignKey(da => da.DoramaId);
 
-        builder.HasOne(da => da.Ator)
+        builder
+            .HasOne(da => da.Ator)
             .WithMany(a => a.Doramas)
             .HasForeignKey(da => da.AtorId);
+
+        builder.ToTable("DoramaAtores");
     }
 }

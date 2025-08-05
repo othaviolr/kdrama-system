@@ -4,23 +4,28 @@ using KDramaSystem.Domain.Enums;
 using KDramaSystem.Domain.Interfaces.Repositories;
 using KDramaSystem.Domain.Interfaces;
 
+namespace KDramaSystem.Application.UseCases.Dorama;
+
 public class CriarDoramaUseCase
 {
     private readonly IDoramaRepository _doramaRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly IGeneroRepository _generoRepository;
+    private readonly IAtorRepository _atorRepository;
 
     public CriarDoramaUseCase(
         IDoramaRepository doramaRepository,
         IUnitOfWork unitOfWork,
         IUsuarioRepository usuarioRepository,
-        IGeneroRepository generoRepository)
+        IGeneroRepository generoRepository,
+        IAtorRepository atorRepository)
     {
         _doramaRepository = doramaRepository;
         _unitOfWork = unitOfWork;
         _usuarioRepository = usuarioRepository;
         _generoRepository = generoRepository;
+        _atorRepository = atorRepository;
     }
 
     public async Task<Guid> ExecutarAsync(CriarDoramaRequest request)
@@ -39,7 +44,11 @@ public class CriarDoramaUseCase
         if (generos.Count != request.GeneroIds.Count())
             throw new Exception("Um ou mais gêneros informados são inválidos.");
 
-        var dorama = new Dorama(
+        var atores = await _atorRepository.ObterPorIdsAsync(request.AtorIds);
+        if (atores.Count != request.AtorIds.Count())
+            throw new Exception("Um ou mais atores informados são inválidos.");
+
+        var dorama = new KDramaSystem.Domain.Entities.Dorama(
             id: Guid.NewGuid(),
             usuarioId: request.UsuarioCriadorId,
             titulo: request.Titulo,
@@ -58,9 +67,9 @@ public class CriarDoramaUseCase
             dorama.AdicionarGenero(genero);
         }
 
-        foreach (var atorId in request.AtorIds)
+        foreach (var ator in atores)
         {
-            var doramaAtor = new DoramaAtor(dorama.Id, atorId);
+            var doramaAtor = new DoramaAtor(dorama.Id, ator.Id);
             dorama.AdicionarAtor(doramaAtor);
         }
 
