@@ -1,8 +1,8 @@
-﻿using KDramaSystem.Domain.Enums;
-using KDramaSystem.Domain.Interfaces;
+﻿using KDramaSystem.Application.UseCases.Dorama.Criar;
+using KDramaSystem.Domain.Entities;
+using KDramaSystem.Domain.Enums;
 using KDramaSystem.Domain.Interfaces.Repositories;
-
-namespace KDramaSystem.Application.UseCases.Dorama.Criar;
+using KDramaSystem.Domain.Interfaces;
 
 public class CriarDoramaUseCase
 {
@@ -32,12 +32,14 @@ public class CriarDoramaUseCase
         if (request.GeneroIds == null || !request.GeneroIds.Any())
             throw new Exception("É necessário informar pelo menos um gênero.");
 
-        var generos = await _generoRepository.ObterPorIdsAsync(request.GeneroIds);
+        if (request.AtorIds == null || !request.AtorIds.Any())
+            throw new Exception("É necessário informar pelo menos um ator.");
 
+        var generos = await _generoRepository.ObterPorIdsAsync(request.GeneroIds);
         if (generos.Count != request.GeneroIds.Count())
             throw new Exception("Um ou mais gêneros informados são inválidos.");
 
-        var dorama = new KDramaSystem.Domain.Entities.Dorama(
+        var dorama = new Dorama(
             id: Guid.NewGuid(),
             usuarioId: request.UsuarioCriadorId,
             titulo: request.Titulo,
@@ -54,6 +56,12 @@ public class CriarDoramaUseCase
         foreach (var genero in generos)
         {
             dorama.AdicionarGenero(genero);
+        }
+
+        foreach (var atorId in request.AtorIds)
+        {
+            var doramaAtor = new DoramaAtor(dorama.Id, atorId);
+            dorama.AdicionarAtor(doramaAtor);
         }
 
         await _doramaRepository.AdicionarAsync(dorama);
