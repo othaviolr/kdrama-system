@@ -68,4 +68,14 @@ public class AtorRepository : IAtorRepository
         return await _context.Atores
             .AnyAsync(a => a.Nome.ToLower() == nome.Trim().ToLower());
     }
+
+    public async Task<List<Ator>> ObterPorIdsAsync(IEnumerable<Guid> ids)
+    {
+        if (ids == null || !ids.Any())
+            return new List<Ator>();
+
+        return await _context.Atores
+            .Where(a => ids.Contains(a.Id))
+            .ToListAsync();
+    }
 }
