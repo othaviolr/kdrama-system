@@ -21,9 +21,4 @@
     <ProjectReference Include="..\KDramaSystem.Infrastructure\KDramaSystem.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Data\" />
-    <Folder Include="src\KDramaSystem.Infrastructure\" />
-  </ItemGroup>
-
 </Project>
