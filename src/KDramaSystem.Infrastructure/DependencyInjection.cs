@@ -15,9 +15,8 @@ namespace KDramaSystem.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
-            var basePath = AppDomain.CurrentDomain.BaseDirectory;
-            var infrastructurePath = Path.GetFullPath(Path.Combine(basePath, "..", "..", "..", "..", "KDramaSystem.Infrastructure"));
-            var dbPath = Path.Combine(infrastructurePath, "kdrama.db");
+            var solutionRoot = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", ".."));
+            var dbPath = @"C:\Users\othav\source\repos\KDramaSystem\KDramaSystem\src\KDramaSystem.Infrastructure\kdrama.db";
 
             services.AddDbContext<KDramaDbContext>(options =>
                 options.UseSqlite($"Data Source={dbPath}"));
