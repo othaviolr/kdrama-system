@@ -55,6 +55,7 @@ namespace KDramaSystem.Application
             services.AddScoped<EditarDoramaUseCase>();
             services.AddScoped<ExcluirDoramaUseCase>();
             services.AddScoped<ObterDoramaUseCase>();
+            services.AddScoped<ObterDoramaCompletoUseCase>();
 
             // Episodio
             services.AddScoped<CriarEpisodioUseCase>();
