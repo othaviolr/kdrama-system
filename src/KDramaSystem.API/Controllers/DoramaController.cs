@@ -16,17 +16,20 @@ namespace KDramaSystem.API.Controllers
         private readonly EditarDoramaUseCase _editarDoramaUseCase;
         private readonly ExcluirDoramaUseCase _excluirDoramaUseCase;
         private readonly ObterDoramaUseCase _obterDoramaUseCase;
+        private readonly ObterDoramaCompletoUseCase _obterDoramaCompletoUseCase;
 
         public DoramaController(
             CriarDoramaUseCase criarDoramaUseCase,
             EditarDoramaUseCase editarDoramaUseCase,
             ExcluirDoramaUseCase excluirDoramaUseCase,
-            ObterDoramaUseCase obterDoramaUseCase)
+            ObterDoramaUseCase obterDoramaUseCase,
+            ObterDoramaCompletoUseCase obterDoramaCompletoUseCase)
         {
             _criarDoramaUseCase = criarDoramaUseCase;
             _editarDoramaUseCase = editarDoramaUseCase;
             _excluirDoramaUseCase = excluirDoramaUseCase;
             _obterDoramaUseCase = obterDoramaUseCase;
+            _obterDoramaCompletoUseCase = obterDoramaCompletoUseCase;
         }
 
         [HttpPost]
@@ -124,6 +127,16 @@ namespace KDramaSystem.API.Controllers
             {
                 return StatusCode(500, new { erro = ex.Message, stackTrace = ex.StackTrace });
             }
+        }
+
+        [HttpGet("{id}/completo")]
+        public async Task<IActionResult> ObterDoramaCompleto(Guid id)
+        {
+            var dorama = await _obterDoramaCompletoUseCase.ExecutarAsync(id);
+            if (dorama == null)
+                return NotFound();
+
+            return Ok(dorama);
         }
     }
 }
