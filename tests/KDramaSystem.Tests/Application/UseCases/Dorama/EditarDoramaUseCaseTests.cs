@@ -81,7 +81,6 @@ public class EditarDoramaUseCaseTests
 
         doramaRepoMock.Verify(r => r.AtualizarAsync(It.IsAny<Dorama>()), Times.Once);
 
-        // Pode fazer asserts específicos aqui se quiser, tipo:
         Assert.Equal(request.Titulo, dorama.Titulo);
         Assert.Equal(request.PaisOrigem, dorama.PaisOrigem);
         Assert.Equal(request.AnoLancamento, dorama.AnoLancamento);
@@ -139,7 +138,7 @@ public class EditarDoramaUseCaseTests
     {
         var request = CriarRequestValido();
         var generos = CriarGeneros(request.GeneroIds!);
-        var dorama = CriarDorama(request.DoramaId, Guid.NewGuid(), generos); // dono diferente
+        var dorama = CriarDorama(request.DoramaId, Guid.NewGuid(), generos);
 
         var usuarioRepoMock = new Mock<IUsuarioRepository>();
         usuarioRepoMock.Setup(r => r.ObterPorIdAsync(request.UsuarioEditorId))
@@ -176,7 +175,7 @@ public class EditarDoramaUseCaseTests
 
         var generoRepoMock = new Mock<IGeneroRepository>();
         generoRepoMock.Setup(r => r.ObterPorIdsAsync(request.GeneroIds!))
-                      .ReturnsAsync(new List<Genero>()); // Retorna lista vazia = inválido
+                      .ReturnsAsync(new List<Genero>());
 
         var useCase = new EditarDoramaUseCase(
             doramaRepoMock.Object,
@@ -186,5 +185,44 @@ public class EditarDoramaUseCaseTests
 
         var ex = await Assert.ThrowsAsync<Exception>(() => useCase.ExecutarAsync(request));
         Assert.Equal("Um ou mais gêneros informados são inválidos.", ex.Message);
+    }
+
+    [Fact]
+    public async Task Deve_Manter_Valores_Originais_Quando_Campos_Nulos()
+    {
+        var request = CriarRequestValido();
+        request.Titulo = null;
+        request.PaisOrigem = null;
+        request.Sinopse = null;
+        request.Plataforma = null;
+
+        var generos = CriarGeneros(request.GeneroIds!);
+        var doramaOriginal = CriarDorama(request.DoramaId, request.UsuarioEditorId, generos);
+        var dorama = CriarDorama(request.DoramaId, request.UsuarioEditorId, generos);
+
+        var usuarioRepoMock = new Mock<IUsuarioRepository>();
+        usuarioRepoMock.Setup(r => r.ObterPorIdAsync(request.UsuarioEditorId))
+                       .ReturnsAsync(CriarUsuario(request.UsuarioEditorId));
+
+        var doramaRepoMock = new Mock<IDoramaRepository>();
+        doramaRepoMock.Setup(r => r.ObterPorIdAsync(request.DoramaId))
+                      .ReturnsAsync(dorama);
+
+        var generoRepoMock = new Mock<IGeneroRepository>();
+        generoRepoMock.Setup(r => r.ObterPorIdsAsync(request.GeneroIds!))
+                      .ReturnsAsync(generos);
+
+        var useCase = new EditarDoramaUseCase(
+            doramaRepoMock.Object,
+            usuarioRepoMock.Object,
+            generoRepoMock.Object
+        );
+
+        await useCase.ExecutarAsync(request);
+
+        Assert.Equal(doramaOriginal.Titulo, dorama.Titulo);
+        Assert.Equal(doramaOriginal.PaisOrigem, dorama.PaisOrigem);
+        Assert.Equal(doramaOriginal.Sinopse, dorama.Sinopse);
+        Assert.Equal(doramaOriginal.Plataforma, dorama.Plataforma);
     }
 }
