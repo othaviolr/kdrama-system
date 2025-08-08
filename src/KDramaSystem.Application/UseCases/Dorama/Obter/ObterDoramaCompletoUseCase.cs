@@ -74,18 +74,20 @@ public class ObterDoramaCompletoUseCase
                 Nome = g.Nome
             }).ToList(),
 
-            Atores = dorama.Atores.Select(da => new ObterAtorDto
-            {
-                Id = da.Ator.Id,
-                Nome = da.Ator.Nome,
-                NomeCompleto = da.Ator.NomeCompleto,
-                AnoNascimento = da.Ator.AnoNascimento,
-                Altura = da.Ator.Altura,
-                Pais = da.Ator.Pais,
-                Biografia = da.Ator.Biografia,
-                FotoUrl = da.Ator.FotoUrl,
-                Instagram = da.Ator.Instagram
-            }).ToList(),
+            Atores = dorama.Atores
+    .Where(da => da.Ator != null)
+    .Select(da => new ObterAtorDto
+    {
+        Id = da.Ator.Id,
+        Nome = da.Ator.Nome,
+        NomeCompleto = da.Ator.NomeCompleto,
+        AnoNascimento = da.Ator.AnoNascimento,
+        Altura = da.Ator.Altura,
+        Pais = da.Ator.Pais,
+        Biografia = da.Ator.Biografia,
+        FotoUrl = da.Ator.FotoUrl,
+        Instagram = da.Ator.Instagram
+    }).ToList(),
             Temporadas = temporadasDto
         };
     }
