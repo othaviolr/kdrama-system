@@ -1,9 +1,9 @@
-﻿using KDramaSystem.Application.UseCases.Ator.Criar;
+﻿using FluentValidation;
+using KDramaSystem.Application.UseCases.Ator.Criar;
 using KDramaSystem.Application.UseCases.Ator.Editar;
 using KDramaSystem.Application.UseCases.Ator.Excluir;
 using KDramaSystem.Application.UseCases.Ator.Obter;
 using KDramaSystem.Application.UseCases.Dorama;
-using KDramaSystem.Application.UseCases.Dorama.Criar;
 using KDramaSystem.Application.UseCases.Dorama.Excluir;
 using KDramaSystem.Application.UseCases.Dorama.Obter;
 using KDramaSystem.Application.UseCases.Episodio.Criar;
@@ -24,10 +24,9 @@ using KDramaSystem.Application.UseCases.Usuario.Deletar;
 using KDramaSystem.Application.UseCases.Usuario.Editar;
 using KDramaSystem.Application.UseCases.Usuario.Login;
 using KDramaSystem.Application.UseCases.Usuario.ObterPerfilCompleto;
+using KDramaSystem.Application.UseCases.Usuario.ObterPerfilPublico;
 using KDramaSystem.Application.UseCases.Usuario.Registrar;
 using Microsoft.Extensions.DependencyInjection;
-using FluentValidation;
-using FluentValidation.AspNetCore;
 
 namespace KDramaSystem.Application
 {
@@ -40,6 +39,7 @@ namespace KDramaSystem.Application
             services.AddScoped<LoginUsuarioHandler>();
             services.AddScoped<SeguirUsuarioUseCase>();
             services.AddScoped<DeixarDeSeguirUsuarioUseCase>();
+            services.AddScoped<IObterPerfilPublicoUseCase, ObterPerfilPublicoUseCase>();
             services.AddScoped<IObterPerfilCompletoUseCase, ObterPerfilCompletoUseCase>();
             services.AddScoped<IEditarPerfilUseCase, EditarPerfilUseCase>();
             services.AddScoped<IDeletarPerfilUseCase, DeletarPerfilUseCase>();

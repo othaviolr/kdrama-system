@@ -58,4 +58,10 @@ public class UsuarioRepository : IUsuarioRepository
             await _context.SaveChangesAsync();
         }
     }
+
+    public async Task<Usuario?> ObterPorNomeUsuarioAsync(string nomeUsuario)
+    {
+        return await _context.Usuarios
+            .FirstOrDefaultAsync(u => u.NomeUsuario.ToLower() == nomeUsuario.ToLower());
+    }
 }

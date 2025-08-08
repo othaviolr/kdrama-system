@@ -8,6 +8,7 @@ using KDramaSystem.Application.UseCases.Usuario.Deletar;
 using KDramaSystem.Application.UseCases.Usuario;
 using KDramaSystem.Application.UseCases.Usuario.DeixarDeSeguir;
 using KDramaSystem.Application.UseCases.Usuario.Seguir;
+using KDramaSystem.Application.UseCases.Usuario.ObterPerfilPublico;
 
 namespace KDramaSystem.API.Controllers
 {
@@ -22,6 +23,7 @@ namespace KDramaSystem.API.Controllers
         private readonly IDeletarPerfilUseCase _deletarPerfilUseCase;
         private readonly SeguirUsuarioUseCase _seguirUsuarioUseCase;
         private readonly DeixarDeSeguirUsuarioUseCase _deixarDeSeguirUsuarioUseCase;
+        private readonly IObterPerfilPublicoUseCase _obterPerfilPublicoUseCase;
 
         public UsuarioController(
             RegistrarUsuarioHandler registrarUsuarioHandler,
@@ -30,7 +32,8 @@ namespace KDramaSystem.API.Controllers
             IEditarPerfilUseCase editarPerfilUseCase,
             IDeletarPerfilUseCase deletarPerfilUseCase,
             SeguirUsuarioUseCase seguirUsuarioUseCase,
-            DeixarDeSeguirUsuarioUseCase deixarDeSeguirUsuarioUseCase)
+            DeixarDeSeguirUsuarioUseCase deixarDeSeguirUsuarioUseCase,
+            IObterPerfilPublicoUseCase obterPerfilPublicoUseCase)
         {
             _registrarUsuarioHandler = registrarUsuarioHandler;
             _loginUsuarioHandler = loginUsuarioHandler;
@@ -39,6 +42,7 @@ namespace KDramaSystem.API.Controllers
             _deletarPerfilUseCase = deletarPerfilUseCase;
             _seguirUsuarioUseCase = seguirUsuarioUseCase;
             _deixarDeSeguirUsuarioUseCase = deixarDeSeguirUsuarioUseCase;
+            _obterPerfilPublicoUseCase = obterPerfilPublicoUseCase;
         }
 
         [HttpPost("registrar")]
@@ -71,6 +75,27 @@ namespace KDramaSystem.API.Controllers
             {
                 return BadRequest(new { erro = ex.Message });
             }
+        }
+
+        [HttpGet("{nomeUsuario}")]
+        public async Task<IActionResult> ObterPerfilPublico(string nomeUsuario)
+        {
+            Guid? usuarioLogadoId = null;
+
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                var claimSub = User.FindFirst("sub")?.Value;
+
+                if (!string.IsNullOrWhiteSpace(claimSub) && Guid.TryParse(claimSub, out var guid))
+                {
+                    usuarioLogadoId = guid;
+                }
+            }
+
+            var perfil = await _obterPerfilPublicoUseCase.ExecutarAsync(nomeUsuario, usuarioLogadoId);
+            if (perfil == null) return NotFound();
+
+            return Ok(perfil);
         }
 
         [Authorize]
