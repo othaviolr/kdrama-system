@@ -24,8 +24,7 @@ public class AtualizarStatusTemporadaUseCase
         if (progresso == null)
         {
             progresso = new KDramaSystem.Domain.Entities.ProgressoTemporada(Guid.NewGuid(), usuarioId, request.TemporadaId, 0,
-                new StatusDorama(request.Status)
-            );
+                new StatusDorama(request.Status));
 
             await _progressoTemporadaRepository.CriarAsync(progresso);
         }

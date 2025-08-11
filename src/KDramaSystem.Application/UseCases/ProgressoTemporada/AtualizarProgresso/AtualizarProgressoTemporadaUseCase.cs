@@ -8,9 +8,7 @@ public class AtualizarProgressoTemporadaUseCase
     private readonly IProgressoTemporadaRepository _progressoTemporadaRepository;
     private readonly ITemporadaRepository _temporadaRepository;
 
-    public AtualizarProgressoTemporadaUseCase(
-        IProgressoTemporadaRepository progressoTemporadaRepository,
-        ITemporadaRepository temporadaRepository)
+    public AtualizarProgressoTemporadaUseCase(IProgressoTemporadaRepository progressoTemporadaRepository, ITemporadaRepository temporadaRepository)
     {
         _progressoTemporadaRepository = progressoTemporadaRepository;
         _temporadaRepository = temporadaRepository;
@@ -26,14 +24,12 @@ public class AtualizarProgressoTemporadaUseCase
         var progresso = await _progressoTemporadaRepository.ObterPorUsuarioETemporadaAsync(usuarioId, request.TemporadaId);
         var temporada = await _temporadaRepository.ObterPorIdAsync(request.TemporadaId);
 
-        if (temporada == null)
-            throw new Exception("Temporada não encontrada.");
+        if (temporada == null) throw new Exception("Temporada não encontrada.");
 
         if (progresso == null)
         {
             progresso = new KDramaSystem.Domain.Entities.ProgressoTemporada(Guid.NewGuid(), usuarioId, request.TemporadaId, 0,
-                new StatusDorama(Domain.Enums.StatusDoramaEnum.PlanejoAssistir)
-            );
+                new StatusDorama(Domain.Enums.StatusDoramaEnum.PlanejoAssistir));
 
             await _progressoTemporadaRepository.CriarAsync(progresso);
         }
