@@ -18,6 +18,8 @@
 
   <ItemGroup>
     <Folder Include="Services\" />
+    <Folder Include="UseCases\ProgressoTemporada\AtualizarProgresso\" />
+    <Folder Include="UseCases\ProgressoTemporada\ExcluirProgresso\" />
   </ItemGroup>
 
   <ItemGroup>

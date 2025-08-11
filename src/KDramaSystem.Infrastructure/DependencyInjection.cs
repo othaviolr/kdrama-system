@@ -30,6 +30,7 @@ namespace KDramaSystem.Infrastructure
             services.AddScoped<IDoramaRepository, DoramaRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IGeneroRepository, GeneroRepository>();
+            services.AddScoped<IProgressoTemporadaRepository, ProgressoTemporadaRepository>();
 
             services.AddScoped<ICriptografiaService, CriptografiaService>();
             services.AddScoped<ITokenService, TokenService>();
