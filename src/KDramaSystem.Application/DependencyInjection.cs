@@ -14,6 +14,9 @@ using KDramaSystem.Application.UseCases.Genero.Criar;
 using KDramaSystem.Application.UseCases.Genero.Editar;
 using KDramaSystem.Application.UseCases.Genero.Excluir;
 using KDramaSystem.Application.UseCases.Genero.Obter;
+using KDramaSystem.Application.UseCases.ProgressoTemporada.AtualizarProgresso;
+using KDramaSystem.Application.UseCases.ProgressoTemporada.AtualizarStatus;
+using KDramaSystem.Application.UseCases.ProgressoTemporada.ExcluirProgresso;
 using KDramaSystem.Application.UseCases.Temporada.Criar;
 using KDramaSystem.Application.UseCases.Temporada.Editar;
 using KDramaSystem.Application.UseCases.Temporada.Excluir;
@@ -74,6 +77,11 @@ namespace KDramaSystem.Application
             services.AddScoped<EditarTemporadaUseCase>();
             services.AddScoped<ExcluirTemporadaUseCase>();
             services.AddScoped<ObterTemporadaPorIdUseCase>();
+
+            // ProgressoTemporada
+            services.AddScoped<AtualizarProgressoTemporadaUseCase>();
+            services.AddScoped<AtualizarStatusTemporadaUseCase>();
+            services.AddScoped<ExcluirProgressoTemporadaUseCase>();
 
             services.AddValidatorsFromAssemblyContaining<CriarAtorValidator>();
 
