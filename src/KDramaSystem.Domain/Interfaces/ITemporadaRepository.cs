@@ -9,4 +9,5 @@ public interface ITemporadaRepository
     Task AdicionarAsync(Temporada temporada);
     Task AtualizarAsync(Temporada temporada);
     Task ExcluirAsync(Guid id);
+    Task<int> ContarEpisodiosAsync(Guid temporadaId);
 }

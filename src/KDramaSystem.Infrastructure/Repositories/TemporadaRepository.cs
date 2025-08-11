@@ -29,6 +29,7 @@ public class TemporadaRepository : ITemporadaRepository
             throw new ArgumentException("Id do dorama inválido.", nameof(doramaId));
 
         return await _context.Temporadas
+            .Include(t => t.Episodios)
             .Where(t => t.DoramaId == doramaId)
             .OrderBy(t => t.Numero)
             .ToListAsync();
@@ -39,7 +40,9 @@ public class TemporadaRepository : ITemporadaRepository
         if (id == Guid.Empty)
             throw new ArgumentException("Id inválido.", nameof(id));
 
-        return await _context.Temporadas.FirstOrDefaultAsync(t => t.Id == id);
+        return await _context.Temporadas
+            .Include(t => t.Episodios)
+            .FirstOrDefaultAsync(t => t.Id == id);
     }
 
     public async Task AtualizarAsync(Temporada temporada)
@@ -62,5 +65,10 @@ public class TemporadaRepository : ITemporadaRepository
             _context.Temporadas.Remove(temporada);
             await _context.SaveChangesAsync();
         }
+    }
+
+    public async Task<int> ContarEpisodiosAsync(Guid temporadaId)
+    {
+        return await _context.Episodios.CountAsync(e => e.TemporadaId == temporadaId);
     }
 }

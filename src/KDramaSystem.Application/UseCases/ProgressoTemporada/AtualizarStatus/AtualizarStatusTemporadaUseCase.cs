@@ -22,10 +22,17 @@ public class AtualizarStatusTemporadaUseCase
         var progresso = await _progressoTemporadaRepository.ObterPorUsuarioETemporadaAsync(usuarioId, request.TemporadaId);
 
         if (progresso == null)
-            throw new Exception("Progresso da temporada não encontrado.");
+        {
+            progresso = new KDramaSystem.Domain.Entities.ProgressoTemporada(Guid.NewGuid(), usuarioId, request.TemporadaId, 0,
+                new StatusDorama(request.Status)
+            );
 
-        progresso.AtualizarStatus(new StatusDorama(request.Status));
-
-        await _progressoTemporadaRepository.AtualizarAsync(progresso);
+            await _progressoTemporadaRepository.CriarAsync(progresso);
+        }
+        else
+        {
+            progresso.AtualizarStatus(new StatusDorama(request.Status));
+            await _progressoTemporadaRepository.AtualizarAsync(progresso);
+        }
     }
 }

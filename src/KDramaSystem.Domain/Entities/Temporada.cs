@@ -10,17 +10,16 @@ public class Temporada
     public bool EmExibicao { get; private set; }
     public string? Sinopse { get; private set; }
 
-    private readonly List<Episodio> _episodios = new();
-    public IReadOnlyCollection<Episodio> Episodios => _episodios.AsReadOnly();
+    public virtual ICollection<Episodio> Episodios { get; private set; } = new List<Episodio>();
 
-    public int NumeroEpisodios => _episodios.Count;
+    public int NumeroEpisodios => Episodios.Count;
 
     protected Temporada() { }
 
     public Temporada(Guid id, Guid doramaId, int numero, int anoLancamento, bool emExibicao, string? nome = null, string? sinopse = null)
     {
         if (numero <= 0)
-            throw new ArgumentNullException("Número da temporada deve ser maior que zero.");
+            throw new ArgumentNullException(nameof(numero), "Número da temporada deve ser maior que zero.");
 
         var anoAtual = DateTime.UtcNow.Year;
         if (anoLancamento < 1950 || anoLancamento > anoAtual + 1)
@@ -38,12 +37,12 @@ public class Temporada
     public void AdicionarEpisodio(Episodio episodio)
     {
         if (episodio is null)
-            throw new ArgumentNullException("Episódio não pode ser nulo.");
+            throw new ArgumentNullException(nameof(episodio), "Episódio não pode ser nulo.");
 
-        if (_episodios.Any(e => e.Numero == episodio.Numero))
+        if (Episodios.Any(e => e.Numero == episodio.Numero))
             throw new InvalidOperationException($"Já existe um episódio número {episodio.Numero} nesta temporada.");
 
-        _episodios.Add(episodio);
+        Episodios.Add(episodio);
     }
 
     public void MarcarComoEncerrada()
@@ -64,7 +63,7 @@ public class Temporada
     public void AtualizarAnoLancamento(int ano)
     {
         if (ano <= 1900 || ano > DateTime.UtcNow.Year + 1)
-            throw new ArgumentException("Ano de lançamento inválido.");
+            throw new ArgumentException("Ano de lançamento inválido.", nameof(ano));
         AnoLancamento = ano;
     }
 

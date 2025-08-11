@@ -21,5 +21,6 @@ public class ProgressoTemporadaConfiguration : IEntityTypeConfiguration<Progress
                 .HasColumnName("Status")
                 .IsRequired();
         });
+        builder.HasIndex(p => new { p.UsuarioId, p.TemporadaId }).IsUnique();
     }
 }
