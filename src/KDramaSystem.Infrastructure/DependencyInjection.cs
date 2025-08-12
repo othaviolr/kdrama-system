@@ -9,34 +9,34 @@ using KDramaSystem.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace KDramaSystem.Infrastructure
+namespace KDramaSystem.Infrastructure;
+
+public static class DependencyInjection
 {
-    public static class DependencyInjection
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services)
-        {
-            var solutionRoot = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", ".."));
-            var dbPath = @"C:\Users\othav\source\repos\KDramaSystem\KDramaSystem\src\KDramaSystem.Infrastructure\kdrama.db";
+        var solutionRoot = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", ".."));
+        var dbPath = @"C:\Users\othav\source\repos\KDramaSystem\KDramaSystem\src\KDramaSystem.Infrastructure\kdrama.db";
 
-            services.AddDbContext<KDramaDbContext>(options =>
-                options.UseSqlite($"Data Source={dbPath}"));
+        services.AddDbContext<KDramaDbContext>(options =>
+            options.UseSqlite($"Data Source={dbPath}"));
 
-            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
-            services.AddScoped<IAtorRepository, AtorRepository>();
-            services.AddScoped<ITemporadaRepository, TemporadaRepository>();
-            services.AddScoped<IEpisodioRepository, EpisodioRepository>();
-            services.AddScoped<IUsuarioAutenticacaoRepository, UsuarioAutenticacaoRepository>();
-            services.AddScoped<IUsuarioRelacionamentoRepository, UsuarioRelacionamentoRepository>();
-            services.AddScoped<IDoramaRepository, DoramaRepository>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IGeneroRepository, GeneroRepository>();
-            services.AddScoped<IProgressoTemporadaRepository, ProgressoTemporadaRepository>();
+        services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+        services.AddScoped<IAtorRepository, AtorRepository>();
+        services.AddScoped<ITemporadaRepository, TemporadaRepository>();
+        services.AddScoped<IEpisodioRepository, EpisodioRepository>();
+        services.AddScoped<IUsuarioAutenticacaoRepository, UsuarioAutenticacaoRepository>();
+        services.AddScoped<IUsuarioRelacionamentoRepository, UsuarioRelacionamentoRepository>();
+        services.AddScoped<IDoramaRepository, DoramaRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IGeneroRepository, GeneroRepository>();
+        services.AddScoped<IProgressoTemporadaRepository, ProgressoTemporadaRepository>();
+        services.AddScoped<IAvaliacaoRepository, AvaliacaoRepository>();
 
-            services.AddScoped<ICriptografiaService, CriptografiaService>();
-            services.AddScoped<ITokenService, TokenService>();
-            services.AddScoped<IUsuarioAutenticadoProvider, UsuarioAutenticadoProvider>();
-            services.AddHttpContextAccessor();
-            return services;
-        }
+        services.AddScoped<ICriptografiaService, CriptografiaService>();
+        services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IUsuarioAutenticadoProvider, UsuarioAutenticadoProvider>();
+        services.AddHttpContextAccessor();
+        return services;
     }
 }
