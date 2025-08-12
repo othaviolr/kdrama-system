@@ -3,6 +3,10 @@ using KDramaSystem.Application.UseCases.Ator.Criar;
 using KDramaSystem.Application.UseCases.Ator.Editar;
 using KDramaSystem.Application.UseCases.Ator.Excluir;
 using KDramaSystem.Application.UseCases.Ator.Obter;
+using KDramaSystem.Application.UseCases.Avaliacao.Criar;
+using KDramaSystem.Application.UseCases.Avaliacao.Editar;
+using KDramaSystem.Application.UseCases.Avaliacao.Excluir;
+using KDramaSystem.Application.UseCases.Avaliacao.Obter;
 using KDramaSystem.Application.UseCases.Dorama;
 using KDramaSystem.Application.UseCases.Dorama.Excluir;
 using KDramaSystem.Application.UseCases.Dorama.Obter;
@@ -31,61 +35,66 @@ using KDramaSystem.Application.UseCases.Usuario.ObterPerfilPublico;
 using KDramaSystem.Application.UseCases.Usuario.Registrar;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace KDramaSystem.Application
+namespace KDramaSystem.Application;
+
+public static class DependencyInjection
 {
-    public static class DependencyInjection
+    public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        public static IServiceCollection AddApplication(this IServiceCollection services)
-        {
-            // Usuario
-            services.AddScoped<RegistrarUsuarioHandler>();
-            services.AddScoped<LoginUsuarioHandler>();
-            services.AddScoped<SeguirUsuarioUseCase>();
-            services.AddScoped<DeixarDeSeguirUsuarioUseCase>();
-            services.AddScoped<IObterPerfilPublicoUseCase, ObterPerfilPublicoUseCase>();
-            services.AddScoped<IObterPerfilCompletoUseCase, ObterPerfilCompletoUseCase>();
-            services.AddScoped<IEditarPerfilUseCase, EditarPerfilUseCase>();
-            services.AddScoped<IDeletarPerfilUseCase, DeletarPerfilUseCase>();
+        // Usuario
+        services.AddScoped<RegistrarUsuarioHandler>();
+        services.AddScoped<LoginUsuarioHandler>();
+        services.AddScoped<SeguirUsuarioUseCase>();
+        services.AddScoped<DeixarDeSeguirUsuarioUseCase>();
+        services.AddScoped<IObterPerfilPublicoUseCase, ObterPerfilPublicoUseCase>();
+        services.AddScoped<IObterPerfilCompletoUseCase, ObterPerfilCompletoUseCase>();
+        services.AddScoped<IEditarPerfilUseCase, EditarPerfilUseCase>();
+        services.AddScoped<IDeletarPerfilUseCase, DeletarPerfilUseCase>();
 
-            // Ator
-            services.AddScoped<CriarAtorUseCase>();
-            services.AddScoped<EditarAtorUseCase>();
-            services.AddScoped<ExcluirAtorUseCase>();
-            services.AddScoped<ObterAtorUseCase>();
+        // Ator
+        services.AddScoped<CriarAtorUseCase>();
+        services.AddScoped<EditarAtorUseCase>();
+        services.AddScoped<ExcluirAtorUseCase>();
+        services.AddScoped<ObterAtorUseCase>();
 
-            // Dorama
-            services.AddScoped<CriarDoramaUseCase>();
-            services.AddScoped<EditarDoramaUseCase>();
-            services.AddScoped<ExcluirDoramaUseCase>();
-            services.AddScoped<ObterDoramaUseCase>();
-            services.AddScoped<ObterDoramaCompletoUseCase>();
+        // Dorama
+        services.AddScoped<CriarDoramaUseCase>();
+        services.AddScoped<EditarDoramaUseCase>();
+        services.AddScoped<ExcluirDoramaUseCase>();
+        services.AddScoped<ObterDoramaUseCase>();
+        services.AddScoped<ObterDoramaCompletoUseCase>();
 
-            // Episodio
-            services.AddScoped<CriarEpisodioUseCase>();
-            services.AddScoped<EditarEpisodioUseCase>();
-            services.AddScoped<ExcluirEpisodioUseCase>();
-            services.AddScoped<ObterEpisodioPorIdUseCase>();
+        // Episodio
+        services.AddScoped<CriarEpisodioUseCase>();
+        services.AddScoped<EditarEpisodioUseCase>();
+        services.AddScoped<ExcluirEpisodioUseCase>();
+        services.AddScoped<ObterEpisodioPorIdUseCase>();
 
-            // Genero
-            services.AddScoped<CriarGeneroUseCase>();
-            services.AddScoped<EditarGeneroUseCase>();
-            services.AddScoped<ExcluirGeneroUseCase>();
-            services.AddScoped<ObterGeneroPorIdUseCase>();
+        // Genero
+        services.AddScoped<CriarGeneroUseCase>();
+        services.AddScoped<EditarGeneroUseCase>();
+        services.AddScoped<ExcluirGeneroUseCase>();
+        services.AddScoped<ObterGeneroPorIdUseCase>();
 
-            // Temporada
-            services.AddScoped<CriarTemporadaUseCase>();
-            services.AddScoped<EditarTemporadaUseCase>();
-            services.AddScoped<ExcluirTemporadaUseCase>();
-            services.AddScoped<ObterTemporadaPorIdUseCase>();
+        // Temporada
+        services.AddScoped<CriarTemporadaUseCase>();
+        services.AddScoped<EditarTemporadaUseCase>();
+        services.AddScoped<ExcluirTemporadaUseCase>();
+        services.AddScoped<ObterTemporadaPorIdUseCase>();
 
-            // ProgressoTemporada
-            services.AddScoped<AtualizarProgressoTemporadaUseCase>();
-            services.AddScoped<AtualizarStatusTemporadaUseCase>();
-            services.AddScoped<ExcluirProgressoTemporadaUseCase>();
+        // ProgressoTemporada
+        services.AddScoped<AtualizarProgressoTemporadaUseCase>();
+        services.AddScoped<AtualizarStatusTemporadaUseCase>();
+        services.AddScoped<ExcluirProgressoTemporadaUseCase>();
 
-            services.AddValidatorsFromAssemblyContaining<CriarAtorValidator>();
+        // Avaliacao
+        services.AddScoped<CriarAvaliacaoUseCase>();
+        services.AddScoped<EditarAvaliacaoUseCase>();
+        services.AddScoped<ExcluirAvaliacaoUseCase>();
+        services.AddScoped<ObterAvaliacaoUseCase>();
 
-            return services;
-        }
+        services.AddValidatorsFromAssemblyContaining<CriarAtorValidator>();
+
+        return services;
     }
 }
