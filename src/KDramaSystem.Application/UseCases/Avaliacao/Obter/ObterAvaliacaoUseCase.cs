@@ -1,8 +1,7 @@
-﻿using KDramaSystem.Application.DTOs.Avaliacao;
+﻿using System.Security.Claims;
+using KDramaSystem.Application.DTOs.Avaliacao;
 using KDramaSystem.Domain.Interfaces;
-using KDramaSystem.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
 
 namespace KDramaSystem.Application.UseCases.Avaliacao.Obter;
 
