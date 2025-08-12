@@ -39,4 +39,9 @@ public class AvaliacaoRepository : IAvaliacaoRepository
         _context.Avaliacoes.Update(avaliacao);
         await _context.SaveChangesAsync();
     }
+    public async Task RemoverAsync(Avaliacao avaliacao)
+    {
+        _context.Avaliacoes.Remove(avaliacao);
+        await _context.SaveChangesAsync();
+    }
 }

@@ -8,4 +8,5 @@ public interface IAvaliacaoRepository
     Task<bool> ExisteAvaliacaoAsync(Guid usuarioId, Guid temporadaId);
     Task AdicionarAsync(Avaliacao avaliacao);
     Task AtualizarAsync(Avaliacao avaliacao);
+    Task RemoverAsync(Avaliacao avaliacao);
 }
