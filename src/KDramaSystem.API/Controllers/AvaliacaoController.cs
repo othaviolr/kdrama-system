@@ -20,8 +20,7 @@ public class AvaliacaoController : ControllerBase
     private readonly ObterAvaliacaoUseCase _obterAvaliacaoUseCase;
     private readonly IUsuarioAutenticadoProvider _usuarioAutenticadoProvider;
 
-    public AvaliacaoController(
-        CriarAvaliacaoUseCase criarAvaliacaoUseCase,
+    public AvaliacaoController(CriarAvaliacaoUseCase criarAvaliacaoUseCase,
         EditarAvaliacaoUseCase editarAvaliacaoUseCase,
         ExcluirAvaliacaoUseCase excluirAvaliacaoUseCase,
         ObterAvaliacaoUseCase obterAvaliacaoUseCase,
