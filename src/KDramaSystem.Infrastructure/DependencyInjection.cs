@@ -1,5 +1,6 @@
 ﻿using KDramaSystem.Application.Interfaces;
 using KDramaSystem.Application.Interfaces.Repositories;
+using KDramaSystem.Domain.Entities;
 using KDramaSystem.Domain.Interfaces;
 using KDramaSystem.Domain.Interfaces.Repositories;
 using KDramaSystem.Domain.Interfaces.Services;
@@ -32,6 +33,7 @@ public static class DependencyInjection
         services.AddScoped<IGeneroRepository, GeneroRepository>();
         services.AddScoped<IProgressoTemporadaRepository, ProgressoTemporadaRepository>();
         services.AddScoped<IAvaliacaoRepository, AvaliacaoRepository>();
+        services.AddScoped<IListaPrateleiraRepository, ListaPrateleiraRepository>();
 
         services.AddScoped<ICriptografiaService, CriptografiaService>();
         services.AddScoped<ITokenService, TokenService>();

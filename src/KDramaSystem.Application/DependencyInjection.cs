@@ -18,6 +18,10 @@ using KDramaSystem.Application.UseCases.Genero.Criar;
 using KDramaSystem.Application.UseCases.Genero.Editar;
 using KDramaSystem.Application.UseCases.Genero.Excluir;
 using KDramaSystem.Application.UseCases.Genero.Obter;
+using KDramaSystem.Application.UseCases.ListaPrateleira.Criar;
+using KDramaSystem.Application.UseCases.ListaPrateleira.Editar;
+using KDramaSystem.Application.UseCases.ListaPrateleira.Excluir;
+using KDramaSystem.Application.UseCases.ListaPrateleira.Obter;
 using KDramaSystem.Application.UseCases.ProgressoTemporada.AtualizarProgresso;
 using KDramaSystem.Application.UseCases.ProgressoTemporada.AtualizarStatus;
 using KDramaSystem.Application.UseCases.ProgressoTemporada.ExcluirProgresso;
@@ -92,6 +96,12 @@ public static class DependencyInjection
         services.AddScoped<EditarAvaliacaoUseCase>();
         services.AddScoped<ExcluirAvaliacaoUseCase>();
         services.AddScoped<ObterAvaliacaoUseCase>();
+
+        // Lista Prateleira
+        services.AddScoped<CriarListaPrateleiraUseCase>();
+        services.AddScoped<EditarListaPrateleiraUseCase>();
+        services.AddScoped<ExcluirListaPrateleiraUseCase>();
+        services.AddScoped<ObterListaPrateleiraUseCase>();
 
         services.AddValidatorsFromAssemblyContaining<CriarAtorValidator>();
 
