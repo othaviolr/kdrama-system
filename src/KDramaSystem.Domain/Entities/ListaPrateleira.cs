@@ -1,4 +1,6 @@
-﻿namespace KDramaSystem.Domain.Entities
+﻿using KDramaSystem.Domain.Enums;
+
+namespace KDramaSystem.Domain.Entities
 {
     public class ListaPrateleira
     {
@@ -6,22 +8,45 @@
         public Guid UsuarioId { get; private set; }
         public string Nome { get; private set; }
         public string? Descricao { get; private set; }
+        public string? ImagemCapaUrl { get; private set; }
+        public ListaPrivacidade Privacidade { get; private set; }
+        public string? ShareToken { get; private set; }
         public List<DoramaLista> Doramas { get; private set; } = new();
         public DateTime DataCriacao { get; private set; }
 
         private ListaPrateleira() { }
 
-        public ListaPrateleira(Guid id, Guid usuarioId, string nome, string? descricao = null)
+        public ListaPrateleira(Guid id, Guid usuarioId, string nome, ListaPrivacidade privacidade, string? descricao = null, string? imagemCapaUrl = null)
         {
-
-            if (string.IsNullOrEmpty(nome))
+            if (string.IsNullOrWhiteSpace(nome))
                 throw new ArgumentException("Nome da lista é obrigatório");
 
             Id = id;
             UsuarioId = usuarioId;
             Nome = nome.Trim();
             Descricao = descricao?.Trim();
+            ImagemCapaUrl = imagemCapaUrl?.Trim();
+            Privacidade = privacidade;
             DataCriacao = DateTime.UtcNow;
+
+            if (privacidade == ListaPrivacidade.CompartilhadoLink)
+                ShareToken = Guid.NewGuid().ToString("N");
+        }
+
+        public void AlterarPrivacidade(ListaPrivacidade novaPrivacidade)
+        {
+            Privacidade = novaPrivacidade;
+
+            if (novaPrivacidade == ListaPrivacidade.CompartilhadoLink && string.IsNullOrEmpty(ShareToken))
+                ShareToken = Guid.NewGuid().ToString("N");
+
+            if (novaPrivacidade != ListaPrivacidade.CompartilhadoLink)
+                ShareToken = null;
+        }
+
+        public void AlterarImagemCapa(string? novaUrl)
+        {
+            ImagemCapaUrl = novaUrl?.Trim();
         }
 
         public void AdicionarDorama(Guid doramaId)
@@ -46,8 +71,8 @@
 
         public void AtualizarNome(string novoNome)
         {
-            if (string.IsNullOrEmpty(novoNome))
-                throw new ArgumentException("Nome da lista não pode ser vazia.");
+            if (string.IsNullOrWhiteSpace(novoNome))
+                throw new ArgumentException("Nome da lista não pode ser vazio.");
 
             Nome = novoNome.Trim();
         }
