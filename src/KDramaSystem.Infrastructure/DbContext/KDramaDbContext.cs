@@ -19,6 +19,7 @@ public class KDramaDbContext : DbContext
     public DbSet<Avaliacao> Avaliacoes { get; set; }
     public DbSet<Comentario> Comentarios { get; set; }
     public DbSet<ListaPrateleira> ListasPrateleira { get; set; }
+    public DbSet<DoramaLista> DoramasLista { get; set; }
     public DbSet<ProgressoTemporada> ProgressoTemporadas { get; set; }
     public DbSet<Atividade> Atividades { get; set; }
 
