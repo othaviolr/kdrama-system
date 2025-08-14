@@ -35,43 +35,30 @@ public class ListaPrateleiraController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Criar([FromBody] CriarListaPrateleiraDto dto)
+    public async Task<IActionResult> Criar([FromBody] CriarListaPrateleiraRequestDto dto)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
+        var usuarioId = _usuarioAutenticadoProvider.ObterUsuarioId();
 
-        try
+        var request = new CriarListaPrateleiraRequest
         {
-            var usuarioId = _usuarioAutenticadoProvider.ObterUsuarioId();
+            Nome = dto.Nome,
+            Descricao = dto.Descricao,
+            ImagemCapaUrl = dto.ImagemCapaUrl,
+            Privacidade = dto.Privacidade,
+            UsuarioId = usuarioId
+        };
 
-            var request = new CriarListaPrateleiraRequest
-            {
-                Nome = dto.Nome,
-                Descricao = dto.Descricao,
-                ImagemCapaUrl = dto.ImagemCapaUrl,
-                Privacidade = dto.Privacidade,
-                UsuarioId = usuarioId
-            };
+        var lista = await _criarUseCase.ExecuteAsync(request);
 
-            var lista = await _criarUseCase.ExecuteAsync(request);
-
-            return Ok(new CriarListaPrateleiraDto
-            {
-                Id = lista.Id,
-                Nome = lista.Nome,
-                Descricao = lista.Descricao,
-                ImagemCapaUrl = lista.ImagemCapaUrl,
-                ShareToken = lista.ShareToken
-            });
-        }
-        catch (ArgumentException ex)
+        return Ok(new CriarListaPrateleiraDto
         {
-            return BadRequest(new { erro = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { erro = ex.Message });
-        }
+            Id = lista.Id,
+            Nome = lista.Nome,
+            Descricao = lista.Descricao,
+            ImagemCapaUrl = lista.ImagemCapaUrl,
+            ShareToken = lista.ShareToken,
+            Privacidade = lista.Privacidade
+        });
     }
 
     [HttpPut("{listaId:guid}")]
