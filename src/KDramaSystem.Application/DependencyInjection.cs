@@ -10,6 +10,8 @@ using KDramaSystem.Application.UseCases.Avaliacao.Obter;
 using KDramaSystem.Application.UseCases.Dorama;
 using KDramaSystem.Application.UseCases.Dorama.Excluir;
 using KDramaSystem.Application.UseCases.Dorama.Obter;
+using KDramaSystem.Application.UseCases.DoramaLista.Adicionar;
+using KDramaSystem.Application.UseCases.DoramaLista.Remover;
 using KDramaSystem.Application.UseCases.Episodio.Criar;
 using KDramaSystem.Application.UseCases.Episodio.Editar;
 using KDramaSystem.Application.UseCases.Episodio.Excluir;
@@ -102,6 +104,10 @@ public static class DependencyInjection
         services.AddScoped<EditarListaPrateleiraUseCase>();
         services.AddScoped<ExcluirListaPrateleiraUseCase>();
         services.AddScoped<ObterListaPrateleiraUseCase>();
+
+        // Dorama Lista
+        services.AddScoped<AdicionarDoramaListaUseCase>();
+        services.AddScoped<RemoverDoramaListaUseCase>();
 
         services.AddValidatorsFromAssemblyContaining<CriarAtorValidator>();
 
