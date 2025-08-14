@@ -1,4 +1,6 @@
-﻿namespace KDramaSystem.Application.DTOs.ListaPrateleira;
+﻿using KDramaSystem.Domain.Enums;
+
+namespace KDramaSystem.Application.DTOs.ListaPrateleira;
 
 public class CriarListaPrateleiraDto
 {
@@ -7,4 +9,5 @@ public class CriarListaPrateleiraDto
     public string? Descricao { get; set; }
     public string? ImagemCapaUrl { get; set; }
     public string? ShareToken { get; set; }
+    public ListaPrivacidade Privacidade { get; set; }
 }
