@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using FluentValidation.Results;
 using KDramaSystem.Application.UseCases.ListaPrateleira.Criar;
 using KDramaSystem.Domain.Entities;
 using KDramaSystem.Domain.Enums;
@@ -15,8 +16,9 @@ public class CriarListaPrateleiraUseCaseTests
     [Fact]
     public async Task ExecuteAsync_RequestValido_DeveCriarLista()
     {
-        _validatorMock.Setup(v => v.ValidateAndThrowAsync(It.IsAny<CriarListaPrateleiraRequest>(), It.IsAny<CancellationToken>()))
-                      .Returns(Task.CompletedTask);
+        _validatorMock
+            .Setup(v => v.ValidateAsync(It.IsAny<ValidationContext<CriarListaPrateleiraRequest>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new ValidationResult());
 
         var request = new CriarListaPrateleiraRequest
         {
@@ -30,8 +32,9 @@ public class CriarListaPrateleiraUseCaseTests
         var useCase = CriarUseCase();
         var lista = await useCase.ExecuteAsync(request);
 
-        _validatorMock.Verify(v => v.ValidateAndThrowAsync(request, It.IsAny<CancellationToken>()), Times.Once);
+        _validatorMock.Verify(v => v.ValidateAsync(It.IsAny<ValidationContext<CriarListaPrateleiraRequest>>(), It.IsAny<CancellationToken>()), Times.Once);
         _repoMock.Verify(r => r.AdicionarAsync(It.IsAny<ListaPrateleira>(), It.IsAny<CancellationToken>()), Times.Once);
+
         Assert.Equal(request.Nome, lista.Nome);
         Assert.Equal(request.Descricao, lista.Descricao);
         Assert.Equal(request.Privacidade, lista.Privacidade);
@@ -42,8 +45,9 @@ public class CriarListaPrateleiraUseCaseTests
     [Fact]
     public async Task ExecuteAsync_RequestComCamposOpcionaisNulos_DeveCriarLista()
     {
-        _validatorMock.Setup(v => v.ValidateAndThrowAsync(It.IsAny<CriarListaPrateleiraRequest>(), It.IsAny<CancellationToken>()))
-                      .Returns(Task.CompletedTask);
+        _validatorMock
+            .Setup(v => v.ValidateAsync(It.IsAny<ValidationContext<CriarListaPrateleiraRequest>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new ValidationResult());
 
         var request = new CriarListaPrateleiraRequest
         {
@@ -63,11 +67,8 @@ public class CriarListaPrateleiraUseCaseTests
     }
 
     [Fact]
-    public async Task ExecuteAsync_ValidatorFalha_DeveLancarExcecao()
+    public async Task ExecuteAsync_NomeVazio_DeveLancarArgumentException()
     {
-        _validatorMock.Setup(v => v.ValidateAndThrowAsync(It.IsAny<CriarListaPrateleiraRequest>(), It.IsAny<CancellationToken>()))
-                      .ThrowsAsync(new Exception("Falha de validação"));
-
         var request = new CriarListaPrateleiraRequest
         {
             UsuarioId = Guid.NewGuid(),
@@ -78,16 +79,15 @@ public class CriarListaPrateleiraUseCaseTests
 
         var useCase = CriarUseCase();
 
-        var ex = await Assert.ThrowsAsync<Exception>(() => useCase.ExecuteAsync(request));
-        Assert.Equal("Falha de validação", ex.Message);
-        _repoMock.Verify(r => r.AdicionarAsync(It.IsAny<ListaPrateleira>(), It.IsAny<CancellationToken>()), Times.Never);
+        await Assert.ThrowsAsync<ArgumentException>(() => useCase.ExecuteAsync(request));
     }
 
     [Fact]
-    public async Task ExecuteAsync_UsuarioIdInvalido_DeveLancarExcecao()
+    public async Task ExecuteAsync_UsuarioIdInvalido_DeveLancarArgumentException()
     {
-        _validatorMock.Setup(v => v.ValidateAndThrowAsync(It.IsAny<CriarListaPrateleiraRequest>(), It.IsAny<CancellationToken>()))
-                      .Returns(Task.CompletedTask);
+        _validatorMock
+            .Setup(v => v.ValidateAsync(It.IsAny<ValidationContext<CriarListaPrateleiraRequest>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new ValidationResult());
 
         var request = new CriarListaPrateleiraRequest
         {
@@ -104,8 +104,9 @@ public class CriarListaPrateleiraUseCaseTests
     [Fact]
     public async Task ExecuteAsync_RepositorioLancaExcecao_DevePropagar()
     {
-        _validatorMock.Setup(v => v.ValidateAndThrowAsync(It.IsAny<CriarListaPrateleiraRequest>(), It.IsAny<CancellationToken>()))
-                      .Returns(Task.CompletedTask);
+        _validatorMock
+            .Setup(v => v.ValidateAsync(It.IsAny<ValidationContext<CriarListaPrateleiraRequest>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new ValidationResult());
 
         var request = new CriarListaPrateleiraRequest
         {

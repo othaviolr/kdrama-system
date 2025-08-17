@@ -16,6 +16,9 @@ public class CriarListaPrateleiraUseCase
 
     public async Task<Domain.Entities.ListaPrateleira> ExecuteAsync(CriarListaPrateleiraRequest request, CancellationToken cancellationToken = default)
     {
+        if (request.UsuarioId == Guid.Empty)
+            throw new ArgumentException("UsuarioId inválido.", nameof(request.UsuarioId));
+
         await _validator.ValidateAndThrowAsync(request, cancellationToken);
 
         var lista = new Domain.Entities.ListaPrateleira(
