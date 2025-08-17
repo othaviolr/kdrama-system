@@ -13,6 +13,12 @@ public class RemoverDoramaListaUseCase
 
     public async Task ExecuteAsync(Guid listaId, Guid doramaId)
     {
+        if (listaId == Guid.Empty)
+            throw new ArgumentException("Id da lista inválido.", nameof(listaId));
+
+        if (doramaId == Guid.Empty)
+            throw new ArgumentException("Id do dorama inválido.", nameof(doramaId));
+
         await _repository.RemoverAsync(listaId, doramaId);
     }
 }
