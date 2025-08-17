@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
+using FluentValidation.Results;
 using KDramaSystem.Application.UseCases.ListaPrateleira.Editar;
+using KDramaSystem.Domain.Entities;
 using KDramaSystem.Domain.Enums;
 using KDramaSystem.Domain.Interfaces.Repositories;
 using Moq;
@@ -9,15 +11,12 @@ public class EditarListaPrateleiraUseCaseTests
     private readonly Mock<IListaPrateleiraRepository> _repoMock = new();
     private readonly Mock<IValidator<EditarListaPrateleiraRequest>> _validatorMock = new();
 
-    private EditarListaPrateleiraUseCase CriarUseCase()
-    {
-        return new EditarListaPrateleiraUseCase(_repoMock.Object, _validatorMock.Object);
-    }
+    private EditarListaPrateleiraUseCase CriarUseCase() => new(_repoMock.Object, _validatorMock.Object);
 
     [Fact]
     public async Task ExecuteAsync_RequestValido_DeveAtualizarCampos()
     {
-        var lista = new KDramaSystem.Domain.Entities.ListaPrateleira(
+        var lista = new ListaPrateleira(
             Guid.NewGuid(),
             Guid.NewGuid(),
             "Lista Original",
@@ -27,11 +26,10 @@ public class EditarListaPrateleiraUseCaseTests
         );
 
         _repoMock.Setup(r => r.ObterPorIdAsync(lista.Id, It.IsAny<CancellationToken>())).ReturnsAsync(lista);
-        _validatorMock.Setup(v => v.ValidateAndThrowAsync(It.IsAny<EditarListaPrateleiraRequest>(), It.IsAny<CancellationToken>()))
-                      .Returns(Task.CompletedTask);
+        _validatorMock.Setup(v => v.ValidateAsync(It.IsAny<EditarListaPrateleiraRequest>(), It.IsAny<CancellationToken>()))
+                      .ReturnsAsync(new ValidationResult());
 
         var useCase = CriarUseCase();
-
         var request = new EditarListaPrateleiraRequest
         {
             ListaId = lista.Id,
@@ -44,7 +42,7 @@ public class EditarListaPrateleiraUseCaseTests
 
         var listaAtualizada = await useCase.ExecuteAsync(request);
 
-        _validatorMock.Verify(v => v.ValidateAndThrowAsync(request, It.IsAny<CancellationToken>()), Times.Once);
+        _validatorMock.Verify(v => v.ValidateAsync(request, It.IsAny<CancellationToken>()), Times.Once);
         _repoMock.Verify(r => r.AtualizarAsync(lista, It.IsAny<CancellationToken>()), Times.Once);
 
         Assert.Equal(request.Nome, listaAtualizada.Nome);
@@ -57,7 +55,12 @@ public class EditarListaPrateleiraUseCaseTests
     public async Task ExecuteAsync_ListaNaoEncontrada_DeveLancarExcecao()
     {
         var listaId = Guid.NewGuid();
-        _repoMock.Setup(r => r.ObterPorIdAsync(listaId, It.IsAny<CancellationToken>())).ReturnsAsync((KDramaSystem.Domain.Entities.ListaPrateleira?)null);
+
+        _repoMock.Setup(r => r.ObterPorIdAsync(listaId, It.IsAny<CancellationToken>()))
+                 .ReturnsAsync((ListaPrateleira?)null);
+
+        _validatorMock.Setup(v => v.ValidateAsync(It.IsAny<EditarListaPrateleiraRequest>(), It.IsAny<CancellationToken>()))
+                      .ReturnsAsync(new ValidationResult());
 
         var useCase = CriarUseCase();
         var request = new EditarListaPrateleiraRequest
@@ -68,25 +71,34 @@ public class EditarListaPrateleiraUseCaseTests
         };
 
         var ex = await Assert.ThrowsAsync<Exception>(() => useCase.ExecuteAsync(request));
-        Assert.Equal("Lista não encontrada ou usuário não autorizado.", ex.Message);
-        _repoMock.Verify(r => r.AtualizarAsync(It.IsAny<KDramaSystem.Domain.Entities.ListaPrateleira>(), It.IsAny<CancellationToken>()), Times.Never);
+        Assert.Equal("Lista não encontrada.", ex.Message);
+
+        _repoMock.Verify(r => r.AtualizarAsync(It.IsAny<ListaPrateleira>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Fact]
     public async Task ExecuteAsync_UsuarioNaoAutorizado_DeveLancarExcecao()
     {
-        var lista = new KDramaSystem.Domain.Entities.ListaPrateleira(
+        var donoListaId = Guid.NewGuid();
+        var lista = new ListaPrateleira(
             Guid.NewGuid(),
-            Guid.NewGuid(),
+            donoListaId,
             "Lista Original",
             ListaPrivacidade.Publico,
             "Descricao Original",
             "url_original"
         );
 
-        _repoMock.Setup(r => r.ObterPorIdAsync(lista.Id, It.IsAny<CancellationToken>())).ReturnsAsync(lista);
+        _repoMock
+            .Setup(r => r.ObterPorIdAsync(lista.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(lista);
+
+        _validatorMock
+            .Setup(v => v.ValidateAsync(It.IsAny<EditarListaPrateleiraRequest>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new ValidationResult());
 
         var useCase = CriarUseCase();
+
         var request = new EditarListaPrateleiraRequest
         {
             ListaId = lista.Id,
@@ -95,14 +107,18 @@ public class EditarListaPrateleiraUseCaseTests
         };
 
         var ex = await Assert.ThrowsAsync<Exception>(() => useCase.ExecuteAsync(request));
-        Assert.Equal("Lista não encontrada ou usuário não autorizado.", ex.Message);
-        _repoMock.Verify(r => r.AtualizarAsync(It.IsAny<KDramaSystem.Domain.Entities.ListaPrateleira>(), It.IsAny<CancellationToken>()), Times.Never);
+        Assert.Equal("Usuário não autorizado.", ex.Message);
+
+        _repoMock.Verify(
+            r => r.AtualizarAsync(It.IsAny<ListaPrateleira>(), It.IsAny<CancellationToken>()),
+            Times.Never
+        );
     }
 
     [Fact]
-    public async Task ExecuteAsync_ValidatorFalha_DeveLancarExcecao()
+    public async Task ExecuteAsync_ValidatorFalha_DeveLancarValidationException()
     {
-        var lista = new KDramaSystem.Domain.Entities.ListaPrateleira(
+        var lista = new ListaPrateleira(
             Guid.NewGuid(),
             Guid.NewGuid(),
             "Lista Original",
@@ -112,8 +128,9 @@ public class EditarListaPrateleiraUseCaseTests
         );
 
         _repoMock.Setup(r => r.ObterPorIdAsync(lista.Id, It.IsAny<CancellationToken>())).ReturnsAsync(lista);
-        _validatorMock.Setup(v => v.ValidateAndThrowAsync(It.IsAny<EditarListaPrateleiraRequest>(), It.IsAny<CancellationToken>()))
-                      .ThrowsAsync(new Exception("Falha de validação"));
+
+        _validatorMock.Setup(v => v.ValidateAsync(It.IsAny<EditarListaPrateleiraRequest>(), It.IsAny<CancellationToken>()))
+                      .ReturnsAsync(new ValidationResult(new[] { new ValidationFailure("Nome", "Nome obrigatório") }));
 
         var useCase = CriarUseCase();
         var request = new EditarListaPrateleiraRequest
@@ -123,8 +140,9 @@ public class EditarListaPrateleiraUseCaseTests
             Nome = ""
         };
 
-        var ex = await Assert.ThrowsAsync<Exception>(() => useCase.ExecuteAsync(request));
-        Assert.Equal("Falha de validação", ex.Message);
-        _repoMock.Verify(r => r.AtualizarAsync(It.IsAny<KDramaSystem.Domain.Entities.ListaPrateleira>(), It.IsAny<CancellationToken>()), Times.Never);
+        var ex = await Assert.ThrowsAsync<ValidationException>(() => useCase.ExecuteAsync(request));
+        Assert.Contains("Nome obrigatório", ex.Message);
+
+        _repoMock.Verify(r => r.AtualizarAsync(It.IsAny<ListaPrateleira>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 }
