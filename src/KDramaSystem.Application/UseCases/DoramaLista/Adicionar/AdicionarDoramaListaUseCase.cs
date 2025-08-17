@@ -13,6 +13,12 @@ public class AdicionarDoramaListaUseCase
 
     public async Task ExecuteAsync(Guid listaId, Guid doramaId)
     {
+        if (listaId == Guid.Empty)
+            throw new ArgumentException("ListaId inválido.", nameof(listaId));
+
+        if (doramaId == Guid.Empty)
+            throw new ArgumentException("DoramaId inválido.", nameof(doramaId));
+
         var item = new Domain.Entities.DoramaLista(Guid.NewGuid(), listaId, doramaId);
         await _repository.AdicionarAsync(item);
     }
