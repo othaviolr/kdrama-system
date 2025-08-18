@@ -1,4 +1,5 @@
-﻿using KDramaSystem.Domain.Interfaces;
+﻿using KDramaSystem.Application.DTOs.Atividade;
+using KDramaSystem.Domain.Interfaces;
 
 namespace KDramaSystem.Application.UseCases.Atividade.Obter;
 
