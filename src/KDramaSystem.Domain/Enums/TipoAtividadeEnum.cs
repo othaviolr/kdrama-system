@@ -1,11 +1,15 @@
-﻿namespace KDramaSystem.Domain.Enums
+﻿namespace KDramaSystem.Domain.Enums;
+
+public enum TipoAtividadeEnum
 {
-    public enum TipoAtividadeEnum
-    {
-        Avaliou,
-        AtualizouProgresso,
-        CriouLista,
-        Comentou,
-        SeguiuUsuario
-    }
+    AvaliouDorama,        
+    AtualizouStatusDorama,
+    AtualizouProgresso,   
+
+    CriouListaPrateleira, 
+    AdicionouDoramaLista, 
+    RemoveuDoramaLista,   
+
+    ComentouDorama,       
+    SeguiuUsuario,        
 }

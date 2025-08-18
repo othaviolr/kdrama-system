@@ -1,6 +1,6 @@
 ﻿using KDramaSystem.Domain.Enums;
 
-namespace KDramaSystem.Domain.ValueObjetcs
+namespace KDramaSystem.Domain.ValueObjects
 {
     public class TipoAtividade
     {
@@ -21,5 +21,8 @@ namespace KDramaSystem.Domain.ValueObjetcs
         }
 
         public override int GetHashCode() => Valor.GetHashCode();
+
+        public static implicit operator TipoAtividadeEnum(TipoAtividade tipo) => tipo.Valor;
+        public static implicit operator TipoAtividade(TipoAtividadeEnum valor) => new(valor);
     }
 }
