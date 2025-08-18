@@ -1,6 +1,6 @@
 ﻿using KDramaSystem.Domain.Entities;
 
-namespace KDramaSystem.Infrastructure.Repositories;
+namespace KDramaSystem.Domain.Interfaces;
 
 public interface IAtividadeRepository
 {
