@@ -1,6 +1,7 @@
 ﻿using KDramaSystem.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using KDramaSystem.Infrastructure.Persistence;
+using KDramaSystem.Domain.Interfaces;
 
 namespace KDramaSystem.Infrastructure.Repositories;
 
