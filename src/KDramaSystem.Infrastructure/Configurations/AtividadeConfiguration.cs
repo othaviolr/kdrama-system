@@ -8,6 +8,8 @@ namespace KDramaSystem.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<Atividade> builder)
         {
+            builder.ToTable("Atividades");
+
             builder.HasKey(a => a.Id);
 
             builder.Property(a => a.UsuarioId)
@@ -22,8 +24,10 @@ namespace KDramaSystem.Infrastructure.Configurations
             builder.OwnsOne(a => a.Tipo, tipo =>
             {
                 tipo.Property(t => t.Valor)
-                    .HasColumnName("TipoAtividade") 
+                    .HasColumnName("TipoAtividade")
                     .IsRequired();
+
+                tipo.HasIndex(t => t.Valor);
             });
         }
     }
