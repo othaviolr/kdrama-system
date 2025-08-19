@@ -2,14 +2,7 @@
 
 public enum TipoAtividadeEnum
 {
-    AvaliouDorama,        
-    AtualizouStatusDorama,
-    AtualizouProgresso,   
-
-    CriouListaPrateleira, 
-    AdicionouDoramaLista, 
-    RemoveuDoramaLista,   
-
-    ComentouDorama,       
-    SeguiuUsuario,        
+    ProgressoTemporada, 
+    Avaliacao,        
+    Prateleira            
 }
