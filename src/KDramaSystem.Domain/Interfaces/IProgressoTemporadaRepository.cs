@@ -8,4 +8,6 @@ public interface IProgressoTemporadaRepository
     Task CriarAsync(ProgressoTemporada progressoTemporada);
     Task AtualizarAsync(ProgressoTemporada progressoTemporada);
     Task ExcluirAsync (Guid progressoId);
+    Task<IEnumerable<ProgressoTemporada>> ObterPorUsuarioAsync(Guid usuarioId);
+    Task<IEnumerable<ProgressoTemporada>> ObterTodosAsync();
 }

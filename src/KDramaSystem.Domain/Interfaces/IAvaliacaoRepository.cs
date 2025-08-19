@@ -9,4 +9,6 @@ public interface IAvaliacaoRepository
     Task AdicionarAsync(Avaliacao avaliacao);
     Task AtualizarAsync(Avaliacao avaliacao);
     Task RemoverAsync(Avaliacao avaliacao);
+    Task<IEnumerable<Avaliacao>> ObterPorUsuarioAsync(Guid usuarioId);
+    Task<IEnumerable<Avaliacao>> ObterTodasAsync();
 }

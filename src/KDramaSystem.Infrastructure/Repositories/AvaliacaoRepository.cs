@@ -44,4 +44,16 @@ public class AvaliacaoRepository : IAvaliacaoRepository
         _context.Avaliacoes.Remove(avaliacao);
         await _context.SaveChangesAsync();
     }
+    public async Task<IEnumerable<Avaliacao>> ObterPorUsuarioAsync(Guid usuarioId)
+    {
+        return await _context.Avaliacoes
+            .Where(a => a.UsuarioId == usuarioId)
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Avaliacao>> ObterTodasAsync()
+    {
+        return await _context.Avaliacoes
+            .ToListAsync();
+    }
 }
