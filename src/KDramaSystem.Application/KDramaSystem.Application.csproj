@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <Folder Include="Services\" />
+    <Folder Include="UseCases\Atividade\Obter\" />
   </ItemGroup>
 
 </Project>
