@@ -41,4 +41,20 @@ public class ProgressoTemporadaRepository : IProgressoTemporadaRepository
             await _context.SaveChangesAsync();
         }
     }
+    public async Task<IEnumerable<ProgressoTemporada>> ObterPorUsuarioAsync(Guid usuarioId)
+    {
+        return await _context.ProgressoTemporadas
+            .Include(p => p.Temporada)
+                .ThenInclude(t => t.Dorama)
+            .Where(p => p.UsuarioId == usuarioId)
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<ProgressoTemporada>> ObterTodosAsync()
+    {
+        return await _context.ProgressoTemporadas
+            .Include(p => p.Temporada)
+                .ThenInclude(t => t.Dorama)
+            .ToListAsync();
+    }
 }

@@ -9,6 +9,7 @@ public class Temporada
     public int AnoLancamento { get; private set; }
     public bool EmExibicao { get; private set; }
     public string? Sinopse { get; private set; }
+    public Dorama Dorama { get; private set; }
 
     public virtual ICollection<Episodio> Episodios { get; private set; } = new List<Episodio>();
 

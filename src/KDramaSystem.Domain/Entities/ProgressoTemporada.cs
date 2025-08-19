@@ -10,6 +10,7 @@ namespace KDramaSystem.Domain.Entities
         public int EpisodiosAssistidos { get; private set; }
         public StatusDorama Status { get; private set; }
         public DateTime DataAtualizacao { get; private set; }
+        public Temporada Temporada { get; private set; }
 
         private ProgressoTemporada() { } 
 
