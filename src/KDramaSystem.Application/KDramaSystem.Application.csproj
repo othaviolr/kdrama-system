@@ -8,8 +8,11 @@
 
   <ItemGroup>
     <Compile Remove="Service\**" />
+    <Compile Remove="UseCases\Atividade\Obter\**" />
     <EmbeddedResource Remove="Service\**" />
+    <EmbeddedResource Remove="UseCases\Atividade\Obter\**" />
     <None Remove="Service\**" />
+    <None Remove="UseCases\Atividade\Obter\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,11 +22,6 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="12.0.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\" />
-    <Folder Include="UseCases\Atividade\Obter\" />
   </ItemGroup>
 
 </Project>
