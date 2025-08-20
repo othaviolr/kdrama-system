@@ -71,6 +71,7 @@ public static class DependencyInjection
         services.AddScoped<ExcluirDoramaUseCase>();
         services.AddScoped<ObterDoramaUseCase>();
         services.AddScoped<ObterDoramaCompletoUseCase>();
+        services.AddScoped<ObterTodosDoramasCompletosUseCase>();
 
         // Episodio
         services.AddScoped<CriarEpisodioUseCase>();
