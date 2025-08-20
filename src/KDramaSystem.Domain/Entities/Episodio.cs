@@ -11,6 +11,7 @@ namespace KDramaSystem.Domain.Entities
         public string? Sinopse { get; private set; }
         public int DuracaoMinutos { get; private set; }
         public TipoEpisodio Tipo { get; private set; }
+        public virtual Temporada Temporada { get; private set; }
 
         private Episodio() { }
 

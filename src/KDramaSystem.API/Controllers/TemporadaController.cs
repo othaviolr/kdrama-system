@@ -54,7 +54,11 @@ public class TemporadaController : ControllerBase
     public async Task<IActionResult> ObterPorId(Guid id)
     {
         var request = new ObterTemporadaPorIdRequest { Id = id };
-        var temporada = await _obterUseCase.ExecutarAsync(request);
-        return Ok(temporada);
+        var temporadaDto = await _obterUseCase.ExecutarAsync(request);
+
+        if (temporadaDto == null)
+            return NotFound();
+
+        return Ok(temporadaDto);
     }
 }
