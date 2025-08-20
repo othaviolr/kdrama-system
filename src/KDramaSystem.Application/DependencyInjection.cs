@@ -1,4 +1,6 @@
 ﻿using FluentValidation;
+using KDramaSystem.Application.Interfaces.Services;
+using KDramaSystem.Application.Services;
 using KDramaSystem.Application.UseCases.Ator.Criar;
 using KDramaSystem.Application.UseCases.Ator.Editar;
 using KDramaSystem.Application.UseCases.Ator.Excluir;
@@ -108,6 +110,9 @@ public static class DependencyInjection
         // Dorama Lista
         services.AddScoped<AdicionarDoramaListaUseCase>();
         services.AddScoped<RemoverDoramaListaUseCase>();
+
+        // Atividade
+        services.AddScoped<IAtividadeService, AtividadeService>();
 
         services.AddValidatorsFromAssemblyContaining<CriarAtorValidator>();
 
