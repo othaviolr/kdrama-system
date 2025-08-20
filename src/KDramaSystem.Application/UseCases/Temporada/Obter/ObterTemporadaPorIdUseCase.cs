@@ -1,4 +1,7 @@
-﻿using KDramaSystem.Domain.Interfaces;
+﻿using KDramaSystem.Application.DTOs.Temporada;
+using KDramaSystem.Application.DTOs.Dorama;
+using KDramaSystem.Application.DTOs.Episodio;
+using KDramaSystem.Domain.Interfaces;
 
 namespace KDramaSystem.Application.UseCases.Temporada.Obter;
 
@@ -11,8 +14,64 @@ public class ObterTemporadaPorIdUseCase
         _temporadaRepository = temporadaRepository;
     }
 
-    public async Task<KDramaSystem.Domain.Entities.Temporada?> ExecutarAsync(ObterTemporadaPorIdRequest request)
+    public async Task<ObterTemporadaDto?> ExecutarAsync(ObterTemporadaPorIdRequest request)
     {
-        return await _temporadaRepository.ObterPorIdAsync(request.Id);
+        var temporada = await _temporadaRepository.ObterPorIdAsync(request.Id);
+        if (temporada == null)
+            return null;
+
+        ObterDoramaDto? doramaDto = null;
+        if (temporada.Dorama != null)
+        {
+            doramaDto = new ObterDoramaDto
+            {
+                DoramaId = temporada.Dorama.Id,
+                Titulo = temporada.Dorama.Titulo,
+                TituloOriginal = temporada.Dorama.TituloOriginal,
+                Sinopse = temporada.Dorama.Sinopse,
+                CapaUrl = temporada.Dorama.ImagemCapaUrl,
+                AnoLancamento = temporada.Dorama.AnoLancamento,
+                PaisOrigem = temporada.Dorama.PaisOrigem,
+                EmExibicao = temporada.Dorama.EmExibicao,
+                Plataforma = temporada.Dorama.Plataforma,
+                Generos = temporada.Dorama.Generos
+                    .Select(g => new ObterDoramaDto.GeneroDto
+                    {
+                        Id = g.Id,
+                        Nome = g.Nome
+                    }).ToList(),
+                Atores = temporada.Dorama.Atores
+                    .Where(da => da.Ator != null)
+                    .Select(da => new ObterDoramaDto.AtorDto
+                    {
+                        Id = da.Ator.Id,
+                        Nome = da.Ator.Nome
+                    }).ToList()
+            };
+        }
+
+        var episodiosDto = temporada.Episodios
+            .OrderBy(e => e.Numero)
+            .Select(e => new ObterEpisodioDto
+            {
+                Id = e.Id,
+                TemporadaId = e.TemporadaId,
+                Numero = e.Numero,
+                Titulo = e.Titulo,
+                DuracaoMinutos = e.DuracaoMinutos,
+                Sinopse = e.Sinopse
+            }).ToList();
+
+        return new ObterTemporadaDto
+        {
+            Id = temporada.Id,
+            Nome = temporada.Nome,
+            Ordem = temporada.Numero,
+            DoramaId = temporada.DoramaId,
+            DataEstreia = new DateTime(temporada.AnoLancamento, 1, 1),
+            DataFim = temporada.EmExibicao ? (DateTime?)null : DateTime.Now,
+            Dorama = doramaDto,
+            Episodios = episodiosDto,
+        };
     }
 }

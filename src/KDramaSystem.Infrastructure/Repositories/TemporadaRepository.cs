@@ -41,7 +41,13 @@ public class TemporadaRepository : ITemporadaRepository
             throw new ArgumentException("Id inválido.", nameof(id));
 
         return await _context.Temporadas
-            .Include(t => t.Episodios)
+            .Include(t => t.Dorama)
+                .ThenInclude(d => d.Generos)
+            .Include(t => t.Dorama)
+                .ThenInclude(d => d.Atores)
+                    .ThenInclude(da => da.Ator)
+            .Include(t => t.Episodios) 
+            .AsNoTracking()
             .FirstOrDefaultAsync(t => t.Id == id);
     }
 
