@@ -13,7 +13,7 @@ var key = jwtSettings["Key"];
 builder.Services.AddControllers();
 
 builder.Services.AddApplication();
-builder.Services.AddInfrastructure();
+builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddAuthentication(options =>
 {
