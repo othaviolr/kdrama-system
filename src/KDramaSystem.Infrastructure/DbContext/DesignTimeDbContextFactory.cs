@@ -8,7 +8,11 @@ namespace KDramaSystem.Infrastructure.Persistence
         public KDramaDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<KDramaDbContext>();
-            optionsBuilder.UseSqlite("Data Source=kdrama.db");
+
+            optionsBuilder.UseNpgsql(
+                "Host=localhost;Port=5432;Database=kdrama_dev;Username=kdrama;Password=othaviogamex10",
+                b => b.MigrationsAssembly(typeof(KDramaDbContext).Assembly.FullName)
+            );
 
             return new KDramaDbContext(optionsBuilder.Options);
         }
