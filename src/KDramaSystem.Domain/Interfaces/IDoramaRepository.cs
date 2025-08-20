@@ -9,4 +9,5 @@ public interface IDoramaRepository
     Task<bool> ExisteComTituloAsync(string titulo);
     Task AtualizarAsync(Dorama dorama);
     Task ExcluirAsync(Guid id);
+    Task<List<Dorama>> ObterTodosAsync();
 }

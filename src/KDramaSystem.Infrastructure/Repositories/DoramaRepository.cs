@@ -65,4 +65,13 @@ public class DoramaRepository : IDoramaRepository
             await _context.SaveChangesAsync();
         }
     }
+    public async Task<List<Dorama>> ObterTodosAsync()
+    {
+        return await _context.Doramas
+            .Include(d => d.Generos)
+            .Include(d => d.Temporadas)
+            .Include(d => d.Atores)
+                .ThenInclude(da => da.Ator)
+            .ToListAsync();
+    }
 }
