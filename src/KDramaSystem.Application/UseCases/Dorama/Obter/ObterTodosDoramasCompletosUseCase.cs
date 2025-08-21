@@ -55,8 +55,8 @@ public class ObterTodosDoramasCompletosUseCase
                     Ordem = temporada.Numero,
                     DoramaId = temporada.DoramaId,
                     DataEstreia = new DateTime(temporada.AnoLancamento, 1, 1),
-                    DataFim = temporada.EmExibicao ? (DateTime?)null : DateTime.Now,
-                    Episodios = episodiosDto
+                    Episodios = episodiosDto,
+                    NumeroEpisodios = episodiosDto.Count
                 });
             }
 
