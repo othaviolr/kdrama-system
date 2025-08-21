@@ -44,13 +44,13 @@ public class ObterTemporadaPorIdUseCase
                     .Where(da => da.Ator != null)
                     .Select(da => new ObterDoramaDto.AtorDto
                     {
-                        Id = da.Ator.Id,
+                        Id = da.Ator!.Id,
                         Nome = da.Ator.Nome
                     }).ToList()
             };
         }
 
-        var episodiosDto = temporada.Episodios
+        var episodiosDto = (temporada.Episodios ?? Enumerable.Empty<Domain.Entities.Episodio>())
             .OrderBy(e => e.Numero)
             .Select(e => new ObterEpisodioDto
             {
@@ -68,9 +68,8 @@ public class ObterTemporadaPorIdUseCase
             Nome = temporada.Nome,
             Ordem = temporada.Numero,
             DoramaId = temporada.DoramaId,
-            DataEstreia = new DateTime(temporada.AnoLancamento, 1, 1),
-            DataFim = temporada.EmExibicao ? (DateTime?)null : DateTime.Now,
             Dorama = doramaDto,
+            DataEstreia = new DateTime(temporada.AnoLancamento, 1, 1), 
             Episodios = episodiosDto,
         };
     }
