@@ -11,31 +11,21 @@ public class TemporadaConfiguration : IEntityTypeConfiguration<Temporada>
         builder.HasKey(t => t.Id);
 
         builder.Property(t => t.DoramaId).IsRequired();
+        builder.Property(t => t.Numero).IsRequired();
+        builder.Property(t => t.AnoLancamento).IsRequired();
+        builder.Property(t => t.EmExibicao).IsRequired();
+        builder.Property(t => t.Nome).HasMaxLength(200);
+        builder.Property(t => t.Sinopse).HasMaxLength(1000);
 
-        builder.Property(t => t.Numero)
-            .IsRequired();
+        builder.Ignore(t => t.NumeroEpisodios);
 
-        builder.Property(t => t.AnoLancamento)
-            .IsRequired();
-
-        builder.Property(t => t.EmExibicao)
-            .IsRequired();
-
-        builder.Property(t => t.Nome)
-            .HasMaxLength(200); 
-
-        builder.Property(t => t.Sinopse)
-            .HasMaxLength(1000);
-
-        builder.Ignore(t => t.NumeroEpisodios); 
-
-        builder.HasMany(typeof(Episodio)) 
-            .WithOne()
-            .HasForeignKey("TemporadaId")
-            .OnDelete(DeleteBehavior.Cascade);
+        builder.HasMany(t => t.Episodios)
+               .WithOne(e => e.Temporada)
+               .HasForeignKey(e => e.TemporadaId)
+               .OnDelete(DeleteBehavior.Cascade);
 
         builder.Metadata
-            .FindNavigation(nameof(Temporada.Episodios))!
-            .SetPropertyAccessMode(PropertyAccessMode.Field);
+               .FindNavigation(nameof(Temporada.Episodios))!
+               .SetPropertyAccessMode(PropertyAccessMode.Field);
     }
 }

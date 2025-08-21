@@ -238,9 +238,6 @@ namespace KDramaSystem.Infrastructure.Migrations
                     b.Property<Guid>("TemporadaId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("TemporadaId1")
-                        .HasColumnType("uuid");
-
                     b.Property<int>("Tipo")
                         .HasColumnType("integer");
 
@@ -252,8 +249,6 @@ namespace KDramaSystem.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("TemporadaId");
-
-                    b.HasIndex("TemporadaId1");
 
                     b.ToTable("Episodios");
                 });
@@ -597,15 +592,13 @@ namespace KDramaSystem.Infrastructure.Migrations
 
             modelBuilder.Entity("KDramaSystem.Domain.Entities.Episodio", b =>
                 {
-                    b.HasOne("KDramaSystem.Domain.Entities.Temporada", null)
-                        .WithMany()
+                    b.HasOne("KDramaSystem.Domain.Entities.Temporada", "Temporada")
+                        .WithMany("Episodios")
                         .HasForeignKey("TemporadaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("KDramaSystem.Domain.Entities.Temporada", null)
-                        .WithMany("Episodios")
-                        .HasForeignKey("TemporadaId1");
+                    b.Navigation("Temporada");
                 });
 
             modelBuilder.Entity("KDramaSystem.Domain.Entities.Genero", b =>
