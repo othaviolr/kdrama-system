@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace KDramaSystem.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialPostgres : Migration
+    public partial class Inicial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -272,8 +272,7 @@ namespace KDramaSystem.Infrastructure.Migrations
                     Titulo = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     Sinopse = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
                     DuracaoMinutos = table.Column<int>(type: "integer", nullable: false),
-                    Tipo = table.Column<int>(type: "integer", nullable: false),
-                    TemporadaId1 = table.Column<Guid>(type: "uuid", nullable: true)
+                    Tipo = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -284,11 +283,6 @@ namespace KDramaSystem.Infrastructure.Migrations
                         principalTable: "Temporadas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Episodios_Temporadas_TemporadaId1",
-                        column: x => x.TemporadaId1,
-                        principalTable: "Temporadas",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -373,11 +367,6 @@ namespace KDramaSystem.Infrastructure.Migrations
                 name: "IX_Episodios_TemporadaId",
                 table: "Episodios",
                 column: "TemporadaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Episodios_TemporadaId1",
-                table: "Episodios",
-                column: "TemporadaId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Generos_DoramaId",

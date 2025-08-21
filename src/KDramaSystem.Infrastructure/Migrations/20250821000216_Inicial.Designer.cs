@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace KDramaSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(KDramaDbContext))]
-    [Migration("20250820204818_InitialPostgres")]
-    partial class InitialPostgres
+    [Migration("20250821000216_Inicial")]
+    partial class Inicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -241,9 +241,6 @@ namespace KDramaSystem.Infrastructure.Migrations
                     b.Property<Guid>("TemporadaId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("TemporadaId1")
-                        .HasColumnType("uuid");
-
                     b.Property<int>("Tipo")
                         .HasColumnType("integer");
 
@@ -255,8 +252,6 @@ namespace KDramaSystem.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("TemporadaId");
-
-                    b.HasIndex("TemporadaId1");
 
                     b.ToTable("Episodios");
                 });
@@ -600,15 +595,13 @@ namespace KDramaSystem.Infrastructure.Migrations
 
             modelBuilder.Entity("KDramaSystem.Domain.Entities.Episodio", b =>
                 {
-                    b.HasOne("KDramaSystem.Domain.Entities.Temporada", null)
-                        .WithMany()
+                    b.HasOne("KDramaSystem.Domain.Entities.Temporada", "Temporada")
+                        .WithMany("Episodios")
                         .HasForeignKey("TemporadaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("KDramaSystem.Domain.Entities.Temporada", null)
-                        .WithMany("Episodios")
-                        .HasForeignKey("TemporadaId1");
+                    b.Navigation("Temporada");
                 });
 
             modelBuilder.Entity("KDramaSystem.Domain.Entities.Genero", b =>
