@@ -68,7 +68,6 @@ public class ObterTemporadaPorIdUseCase
             Nome = temporada.Nome,
             Ordem = temporada.Numero,
             DoramaId = temporada.DoramaId,
-            Dorama = doramaDto,
             DataEstreia = new DateTime(temporada.AnoLancamento, 1, 1), 
             Episodios = episodiosDto,
         };
