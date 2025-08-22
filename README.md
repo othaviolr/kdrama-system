@@ -82,7 +82,7 @@ Facilitar a vida de quem assiste doramas:
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## 🛠️ Tecnologias Utilizadas e Padrões
 
 - **Backend**: .NET 8, Clean Architecture, DDD / PostgreSQL  
 - **Frontend**: React + TypeScript, Tailwind CSS  
