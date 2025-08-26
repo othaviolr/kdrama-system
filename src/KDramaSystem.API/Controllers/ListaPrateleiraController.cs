@@ -1,5 +1,6 @@
 ﻿using KDramaSystem.Application.DTOs.ListaPrateleira;
 using KDramaSystem.Application.Interfaces;
+using KDramaSystem.Application.UseCases.ListaPrateleira.Compartilhar;
 using KDramaSystem.Application.UseCases.ListaPrateleira.Criar;
 using KDramaSystem.Application.UseCases.ListaPrateleira.Editar;
 using KDramaSystem.Application.UseCases.ListaPrateleira.Excluir;
@@ -18,6 +19,7 @@ public class ListaPrateleiraController : ControllerBase
     private readonly EditarListaPrateleiraUseCase _editarUseCase;
     private readonly ExcluirListaPrateleiraUseCase _excluirUseCase;
     private readonly ObterListaPrateleiraUseCase _obterUseCase;
+    private readonly CompartilharListaPrateleiraUseCase _compartilharUseCase;
     private readonly IUsuarioAutenticadoProvider _usuarioAutenticadoProvider;
 
     public ListaPrateleiraController(
@@ -25,13 +27,15 @@ public class ListaPrateleiraController : ControllerBase
         EditarListaPrateleiraUseCase editarUseCase,
         ExcluirListaPrateleiraUseCase excluirUseCase,
         ObterListaPrateleiraUseCase obterUseCase,
-        IUsuarioAutenticadoProvider usuarioAutenticadoProvider)
+        IUsuarioAutenticadoProvider usuarioAutenticadoProvider,
+        CompartilharListaPrateleiraUseCase compartilharUseCase)
     {
         _criarUseCase = criarUseCase;
         _editarUseCase = editarUseCase;
         _excluirUseCase = excluirUseCase;
         _obterUseCase = obterUseCase;
         _usuarioAutenticadoProvider = usuarioAutenticadoProvider;
+        _compartilharUseCase = compartilharUseCase;
     }
 
     [HttpPost]
@@ -261,6 +265,27 @@ public class ListaPrateleiraController : ControllerBase
             }).ToList();
 
             return Ok(listasDto);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { erro = ex.Message });
+        }
+    }
+
+    [HttpPost("{listaId:guid}/compartilhar")]
+    public async Task<IActionResult> Compartilhar(Guid listaId)
+    {
+        try
+        {
+            var usuarioId = _usuarioAutenticadoProvider.ObterUsuarioId();
+
+            var token = await _compartilharUseCase.ExecuteAsync(new CompartilharListaPrateleiraRequest
+            {
+                ListaId = listaId,
+                UsuarioId = usuarioId
+            });
+
+            return Ok(new { shareToken = token });
         }
         catch (Exception ex)
         {

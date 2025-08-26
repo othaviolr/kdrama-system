@@ -44,6 +44,12 @@ namespace KDramaSystem.Domain.Entities
                 ShareToken = null;
         }
 
+        public void GerarShareToken()
+        {
+            if (string.IsNullOrEmpty(ShareToken))
+                ShareToken = Guid.NewGuid().ToString("N");
+        }
+
         public void AlterarImagemCapa(string? novaUrl)
         {
             ImagemCapaUrl = novaUrl?.Trim();

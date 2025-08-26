@@ -22,6 +22,7 @@ using KDramaSystem.Application.UseCases.Genero.Criar;
 using KDramaSystem.Application.UseCases.Genero.Editar;
 using KDramaSystem.Application.UseCases.Genero.Excluir;
 using KDramaSystem.Application.UseCases.Genero.Obter;
+using KDramaSystem.Application.UseCases.ListaPrateleira.Compartilhar;
 using KDramaSystem.Application.UseCases.ListaPrateleira.Criar;
 using KDramaSystem.Application.UseCases.ListaPrateleira.Editar;
 using KDramaSystem.Application.UseCases.ListaPrateleira.Excluir;
@@ -107,6 +108,7 @@ public static class DependencyInjection
         services.AddScoped<EditarListaPrateleiraUseCase>();
         services.AddScoped<ExcluirListaPrateleiraUseCase>();
         services.AddScoped<ObterListaPrateleiraUseCase>();
+        services.AddScoped<CompartilharListaPrateleiraUseCase>();
 
         // Dorama Lista
         services.AddScoped<AdicionarDoramaListaUseCase>();
