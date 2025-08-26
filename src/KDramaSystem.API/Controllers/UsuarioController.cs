@@ -9,6 +9,7 @@ using KDramaSystem.Application.UseCases.Usuario;
 using KDramaSystem.Application.UseCases.Usuario.DeixarDeSeguir;
 using KDramaSystem.Application.UseCases.Usuario.Seguir;
 using KDramaSystem.Application.UseCases.Usuario.ObterPerfilPublico;
+using System.Security.Claims;
 
 namespace KDramaSystem.API.Controllers
 {
@@ -145,7 +146,15 @@ namespace KDramaSystem.API.Controllers
         {
             try
             {
-                var usuarioLogadoId = Guid.Parse(User.FindFirst("sub")?.Value ?? throw new Exception("Usuário não autenticado"));
+                var usuarioLogadoIdClaim =
+                    User.FindFirstValue(ClaimTypes.NameIdentifier) ??
+                    User.FindFirst("sub")?.Value;
+
+                if (usuarioLogadoIdClaim is null)
+                    throw new Exception("Usuário não autenticado");
+
+                var usuarioLogadoId = Guid.Parse(usuarioLogadoIdClaim);
+
                 var request = new SeguirUsuarioRequest(id);
                 await _seguirUsuarioUseCase.ExecutarAsync(usuarioLogadoId, request);
                 return NoContent();
@@ -170,7 +179,15 @@ namespace KDramaSystem.API.Controllers
         {
             try
             {
-                var usuarioLogadoId = Guid.Parse(User.FindFirst("sub")?.Value ?? throw new Exception("Usuário não autenticado"));
+                var usuarioLogadoIdClaim =
+                    User.FindFirstValue(ClaimTypes.NameIdentifier) ??
+                    User.FindFirst("sub")?.Value;
+
+                if (usuarioLogadoIdClaim is null)
+                    throw new Exception("Usuário não autenticado");
+
+                var usuarioLogadoId = Guid.Parse(usuarioLogadoIdClaim);
+
                 var request = new DeixarDeSeguirUsuarioRequest(id);
                 await _deixarDeSeguirUsuarioUseCase.ExecutarAsync(usuarioLogadoId, request);
                 return NoContent();
