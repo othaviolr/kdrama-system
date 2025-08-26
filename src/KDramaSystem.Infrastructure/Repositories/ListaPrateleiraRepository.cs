@@ -71,4 +71,12 @@ public class ListaPrateleiraRepository : IListaPrateleiraRepository
                         && l.UsuarioId != usuarioIdIgnorado)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<IEnumerable<ListaPrateleira>> ObterMinhasAsync(Guid usuarioId, CancellationToken cancellationToken = default)
+    {
+        return await _context.ListasPrateleira
+            .Include(l => l.Doramas)
+            .Where(l => l.UsuarioId == usuarioId)
+            .ToListAsync(cancellationToken);
+    }
 }
