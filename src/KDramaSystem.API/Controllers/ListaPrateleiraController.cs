@@ -227,4 +227,44 @@ public class ListaPrateleiraController : ControllerBase
             return StatusCode(500, new { erro = ex.Message });
         }
     }
+
+    [HttpGet("minhas")]
+    public async Task<IActionResult> ObterMinhas()
+    {
+        try
+        {
+            var usuarioId = _usuarioAutenticadoProvider.ObterUsuarioId();
+
+            var request = new ObterListaPrateleiraRequest
+            {
+                UsuarioLogadoId = usuarioId,
+                ApenasDoUsuario = true
+            };
+
+            var listas = await _obterUseCase.ExecuteAsync(request);
+
+            var listasDto = listas.Select(lista => new ObterListaPrateleiraDto
+            {
+                Id = lista.Id,
+                Nome = lista.Nome,
+                Descricao = lista.Descricao,
+                ImagemCapaUrl = lista.ImagemCapaUrl,
+                Privacidade = lista.Privacidade,
+                ShareToken = lista.ShareToken,
+                UsuarioId = lista.UsuarioId,
+                DataCriacao = lista.DataCriacao,
+                Doramas = lista.Doramas.Select(d => new DoramaListaDto
+                {
+                    DoramaId = d.DoramaId,
+                    DataAdicao = d.DataAdicao
+                }).ToList()
+            }).ToList();
+
+            return Ok(listasDto);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { erro = ex.Message });
+        }
+    }
 }

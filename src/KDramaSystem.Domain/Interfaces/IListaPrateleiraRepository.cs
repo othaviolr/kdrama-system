@@ -12,4 +12,5 @@ public interface IListaPrateleiraRepository
     Task<ListaPrateleira?> ObterPorTokenAsync(string shareToken, CancellationToken cancellationToken = default);
     Task<IEnumerable<ListaPrateleira>> ObterPorUsuarioAsync(Guid usuarioId, CancellationToken cancellationToken = default);
     Task<IEnumerable<ListaPrateleira>> ObterPublicasAsync(Guid usuarioIdIgnorado, CancellationToken cancellationToken = default);
+    Task<IEnumerable<ListaPrateleira>> ObterMinhasAsync(Guid usuarioId, CancellationToken cancellationToken = default);
 }

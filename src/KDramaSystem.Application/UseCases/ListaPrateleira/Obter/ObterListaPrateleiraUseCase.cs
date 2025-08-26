@@ -19,6 +19,7 @@ public class ObterListaPrateleiraUseCase
             var lista = await _repository.ObterPorTokenAsync(request.ShareToken, cancellationToken);
             if (lista == null)
                 throw new Exception("Lista não encontrada ou não compartilhada.");
+
             return new[] { lista };
         }
 
@@ -28,8 +29,9 @@ public class ObterListaPrateleiraUseCase
             if (lista == null)
                 throw new Exception("Lista não encontrada.");
 
-            if (request.UsuarioLogadoId.HasValue && lista.UsuarioId != request.UsuarioLogadoId.Value &&
-                lista.Privacidade != ListaPrivacidade.Publico)
+            if (request.UsuarioLogadoId.HasValue
+                && lista.UsuarioId != request.UsuarioLogadoId.Value
+                && lista.Privacidade != ListaPrivacidade.Publico)
             {
                 throw new Exception("Usuário não autorizado a acessar essa lista.");
             }
@@ -40,6 +42,12 @@ public class ObterListaPrateleiraUseCase
         if (request.UsuarioId.HasValue)
         {
             var listas = await _repository.ObterPorUsuarioAsync(request.UsuarioId.Value, cancellationToken);
+            return listas;
+        }
+
+        if (request.UsuarioLogadoId.HasValue && request.ApenasDoUsuario)
+        {
+            var listas = await _repository.ObterMinhasAsync(request.UsuarioLogadoId.Value, cancellationToken);
             return listas;
         }
 
