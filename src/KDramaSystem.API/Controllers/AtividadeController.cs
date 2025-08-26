@@ -1,4 +1,5 @@
-﻿using KDramaSystem.Application.Interfaces.Services;
+﻿using KDramaSystem.Application.Interfaces;
+using KDramaSystem.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -6,10 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 public class AtividadeController : ControllerBase
 {
     private readonly IAtividadeService _atividadeService;
+    private readonly IUsuarioAutenticadoProvider _usuarioAutenticadoProvider;
 
-    public AtividadeController(IAtividadeService atividadeService)
+    public AtividadeController(IAtividadeService atividadeService, IUsuarioAutenticadoProvider usuarioAutenticadoProvider)
     {
         _atividadeService = atividadeService;
+        _usuarioAutenticadoProvider = usuarioAutenticadoProvider;
     }
 
     [HttpGet("feed/{quantidade}")]
@@ -24,5 +27,20 @@ public class AtividadeController : ControllerBase
     {
         var atividades = await _atividadeService.ObterAtividadesUsuarioAsync(usuarioId);
         return Ok(atividades);
+    }
+
+    [HttpGet("minhas")]
+    public async Task<IActionResult> ObterMinhas()
+    {
+        try
+        {
+            var usuarioId = _usuarioAutenticadoProvider.ObterUsuarioId();
+            var atividades = await _atividadeService.ObterAtividadesUsuarioAsync(usuarioId);
+            return Ok(atividades);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { erro = ex.Message });
+        }
     }
 }

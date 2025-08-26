@@ -4,6 +4,7 @@ using KDramaSystem.Application.UseCases.Avaliacao.Criar;
 using KDramaSystem.Application.UseCases.Avaliacao.Editar;
 using KDramaSystem.Application.UseCases.Avaliacao.Excluir;
 using KDramaSystem.Application.UseCases.Avaliacao.Obter;
+using KDramaSystem.Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,12 +19,14 @@ public class AvaliacaoController : ControllerBase
     private readonly EditarAvaliacaoUseCase _editarAvaliacaoUseCase;
     private readonly ExcluirAvaliacaoUseCase _excluirAvaliacaoUseCase;
     private readonly ObterAvaliacaoUseCase _obterAvaliacaoUseCase;
+    private readonly IAvaliacaoRepository _avaliacaoRepository;
     private readonly IUsuarioAutenticadoProvider _usuarioAutenticadoProvider;
 
     public AvaliacaoController(CriarAvaliacaoUseCase criarAvaliacaoUseCase,
         EditarAvaliacaoUseCase editarAvaliacaoUseCase,
         ExcluirAvaliacaoUseCase excluirAvaliacaoUseCase,
         ObterAvaliacaoUseCase obterAvaliacaoUseCase,
+        IAvaliacaoRepository avaliacaoRepository,
         IUsuarioAutenticadoProvider usuarioAutenticadoProvider)
     {
         _criarAvaliacaoUseCase = criarAvaliacaoUseCase;
@@ -31,6 +34,7 @@ public class AvaliacaoController : ControllerBase
         _excluirAvaliacaoUseCase = excluirAvaliacaoUseCase;
         _obterAvaliacaoUseCase = obterAvaliacaoUseCase;
         _usuarioAutenticadoProvider = usuarioAutenticadoProvider;
+        _avaliacaoRepository = avaliacaoRepository;
     }
 
     [HttpPost]
@@ -164,6 +168,34 @@ public class AvaliacaoController : ControllerBase
         catch (UnauthorizedAccessException ex)
         {
             return Unauthorized(new { erro = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { erro = ex.Message });
+        }
+    }
+
+    [HttpGet("minhas")]
+    public async Task<IActionResult> ObterMinhas()
+    {
+        try
+        {
+            var usuarioId = _usuarioAutenticadoProvider.ObterUsuarioId();
+
+            var avaliacoes = await _avaliacaoRepository.ObterPorUsuarioAsync(usuarioId);
+
+            var avaliacoesDto = avaliacoes.Select(av => new ObterAvaliacaoDto
+            {
+                Id = av.Id,
+                TemporadaId = av.TemporadaId,
+                Nota = av.Nota.Valor,
+                Comentario = av.Comentario?.Texto,
+                RecomendadoPorUsuarioId = av.RecomendadoPorUsuarioId,
+                RecomendadoPorNomeLivre = av.RecomendadoPorNomeLivre,
+                DataAvaliacao = av.DataAvaliacao
+            }).ToList();
+
+            return Ok(avaliacoesDto);
         }
         catch (Exception ex)
         {
