@@ -57,6 +57,8 @@ public static class DependencyInjection
         services.AddScoped<DeixarDeSeguirUsuarioUseCase>();
         services.AddScoped<IObterPerfilPublicoUseCase, ObterPerfilPublicoUseCase>();
         services.AddScoped<IObterPerfilCompletoUseCase, ObterPerfilCompletoUseCase>();
+        services.AddScoped<ObterSeguindoUseCase>();
+        services.AddScoped<ObterSeguidoresUseCase>();
         services.AddScoped<IEditarPerfilUseCase, EditarPerfilUseCase>();
         services.AddScoped<IDeletarPerfilUseCase, DeletarPerfilUseCase>();
 
