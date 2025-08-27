@@ -10,6 +10,7 @@ using KDramaSystem.Application.UseCases.Usuario.DeixarDeSeguir;
 using KDramaSystem.Application.UseCases.Usuario.Seguir;
 using KDramaSystem.Application.UseCases.Usuario.ObterPerfilPublico;
 using System.Security.Claims;
+using KDramaSystem.Application.DTOs.Usuario;
 
 namespace KDramaSystem.API.Controllers
 {
@@ -25,6 +26,8 @@ namespace KDramaSystem.API.Controllers
         private readonly SeguirUsuarioUseCase _seguirUsuarioUseCase;
         private readonly DeixarDeSeguirUsuarioUseCase _deixarDeSeguirUsuarioUseCase;
         private readonly IObterPerfilPublicoUseCase _obterPerfilPublicoUseCase;
+        private readonly ObterSeguidoresUseCase _obterSeguidoresUseCase;
+        private readonly ObterSeguindoUseCase _obterSeguindoUseCase;
 
         public UsuarioController(
             RegistrarUsuarioHandler registrarUsuarioHandler,
@@ -34,7 +37,9 @@ namespace KDramaSystem.API.Controllers
             IDeletarPerfilUseCase deletarPerfilUseCase,
             SeguirUsuarioUseCase seguirUsuarioUseCase,
             DeixarDeSeguirUsuarioUseCase deixarDeSeguirUsuarioUseCase,
-            IObterPerfilPublicoUseCase obterPerfilPublicoUseCase)
+            IObterPerfilPublicoUseCase obterPerfilPublicoUseCase,
+            ObterSeguidoresUseCase obterSeguidoresUseCase,
+            ObterSeguindoUseCase obterSeguindoUseCase)
         {
             _registrarUsuarioHandler = registrarUsuarioHandler;
             _loginUsuarioHandler = loginUsuarioHandler;
@@ -44,6 +49,8 @@ namespace KDramaSystem.API.Controllers
             _seguirUsuarioUseCase = seguirUsuarioUseCase;
             _deixarDeSeguirUsuarioUseCase = deixarDeSeguirUsuarioUseCase;
             _obterPerfilPublicoUseCase = obterPerfilPublicoUseCase;
+            _obterSeguidoresUseCase = obterSeguidoresUseCase;
+            _obterSeguindoUseCase = obterSeguindoUseCase;
         }
 
         [HttpPost("registrar")]
@@ -196,6 +203,46 @@ namespace KDramaSystem.API.Controllers
             {
                 return BadRequest(new { erro = ex.Message });
             }
+        }
+
+        [HttpGet("{usuarioId}/seguidores")]
+        public async Task<IActionResult> ObterSeguidores(Guid usuarioId)
+        {
+            var result = await _obterSeguidoresUseCase.ExecutarAsync(usuarioId);
+            return Ok(result);
+        }
+
+        [HttpGet("{usuarioId}/seguindo")]
+        public async Task<IActionResult> ObterSeguindo(Guid usuarioId)
+        {
+            var result = await _obterSeguindoUseCase.ExecutarAsync(usuarioId);
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpGet("seguidores")]
+        public async Task<IActionResult> ObterMeusSeguidores()
+        {
+            var usuarioLogadoId = Guid.Parse(
+                User.FindFirstValue(ClaimTypes.NameIdentifier) ??
+                User.FindFirst("sub")?.Value ?? throw new Exception("Usuário não autenticado")
+            );
+
+            var result = await _obterSeguidoresUseCase.ExecutarAsync(usuarioLogadoId);
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpGet("seguindo")]
+        public async Task<IActionResult> ObterMeusSeguindo()
+        {
+            var usuarioLogadoId = Guid.Parse(
+                User.FindFirstValue(ClaimTypes.NameIdentifier) ??
+                User.FindFirst("sub")?.Value ?? throw new Exception("Usuário não autenticado")
+            );
+
+            var result = await _obterSeguindoUseCase.ExecutarAsync(usuarioLogadoId);
+            return Ok(result);
         }
     }
 }
