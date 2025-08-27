@@ -52,4 +52,20 @@ public class UsuarioRelacionamentoRepository : IUsuarioRelacionamentoRepository
             await _context.SaveChangesAsync();
         }
     }
+
+    public async Task<List<Usuario>> ObterSeguidoresAsync(Guid usuarioId)
+    {
+        return await _context.UsuarioRelacionamentos
+            .Where(r => r.SeguindoId == usuarioId) 
+            .Select(r => r.Seguidor) 
+            .ToListAsync();
+    }
+
+    public async Task<List<Usuario>> ObterSeguindoAsync(Guid usuarioId)
+    {
+        return await _context.UsuarioRelacionamentos
+            .Where(r => r.SeguidorId == usuarioId) 
+            .Select(r => r.Seguindo) 
+            .ToListAsync();
+    }
 }
