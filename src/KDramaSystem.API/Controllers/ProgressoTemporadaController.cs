@@ -3,6 +3,7 @@ using KDramaSystem.Application.Interfaces;
 using KDramaSystem.Application.UseCases.ProgressoTemporada.AtualizarProgresso;
 using KDramaSystem.Application.UseCases.ProgressoTemporada.AtualizarStatus;
 using KDramaSystem.Application.UseCases.ProgressoTemporada.ExcluirProgresso;
+using KDramaSystem.Application.UseCases.ProgressoTemporada.ObterProgresso;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,17 +17,23 @@ namespace KDramaSystem.API.Controllers
         private readonly AtualizarProgressoTemporadaUseCase _atualizarProgressoUseCase;
         private readonly AtualizarStatusTemporadaUseCase _atualizarStatusUseCase;
         private readonly ExcluirProgressoTemporadaUseCase _excluirProgressoUseCase;
+        private readonly ObterProgressoUsuarioUseCase _obterProgressoUsuarioUseCase;
+        private readonly ObterProgressoPorUsuarioIdUseCase _obterProgressoPorUsuarioIdUseCase;
         private readonly IUsuarioAutenticadoProvider _usuarioAutenticadoProvider;
 
         public ProgressoTemporadaController(
             AtualizarProgressoTemporadaUseCase atualizarProgressoUseCase,
             AtualizarStatusTemporadaUseCase atualizarStatusUseCase,
             ExcluirProgressoTemporadaUseCase excluirProgressoUseCase,
+            ObterProgressoUsuarioUseCase obterProgressoUsuarioUseCase,
+            ObterProgressoPorUsuarioIdUseCase obterProgressoPorUsuarioIdUseCase,
             IUsuarioAutenticadoProvider usuarioAutenticadoProvider)
         {
             _atualizarProgressoUseCase = atualizarProgressoUseCase;
             _atualizarStatusUseCase = atualizarStatusUseCase;
             _excluirProgressoUseCase = excluirProgressoUseCase;
+            _obterProgressoUsuarioUseCase = obterProgressoUsuarioUseCase;
+            _obterProgressoPorUsuarioIdUseCase = obterProgressoPorUsuarioIdUseCase;
             _usuarioAutenticadoProvider = usuarioAutenticadoProvider;
         }
 
@@ -124,6 +131,39 @@ namespace KDramaSystem.API.Controllers
             catch (UnauthorizedAccessException ex)
             {
                 return Unauthorized(new { erro = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { erro = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ObterProgressoUsuarioId()
+        {
+            try
+            {
+                var usuarioId = _usuarioAutenticadoProvider.ObterUsuarioId();
+                var progressos = await _obterProgressoPorUsuarioIdUseCase.ExecuteAsync(usuarioId);
+                return Ok(progressos);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { erro = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { erro = ex.Message });
+            }
+        }
+
+        [HttpGet("usuario/{usuarioId:guid}")]
+        public async Task<IActionResult> ObterMeuProgresso(Guid usuarioId)
+        {
+            try
+            {
+                var progressos = await _obterProgressoUsuarioUseCase.ExecuteAsync(usuarioId);
+                return Ok(progressos);
             }
             catch (Exception ex)
             {
