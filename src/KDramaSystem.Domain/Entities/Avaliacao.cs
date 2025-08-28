@@ -8,11 +8,14 @@ namespace KDramaSystem.Domain.Entities
         public Guid Id { get; private set; }
         public Guid UsuarioId { get; private set; }
         public Guid TemporadaId { get; private set; }
+        public Temporada Temporada { get; private set; }
         public Nota Nota { get; private set; }
         public ComentarioValor? Comentario { get; private set; }
         public Guid? RecomendadoPorUsuarioId { get; private set; }
         public string? RecomendadoPorNomeLivre { get; private set; }
         public DateTime DataAvaliacao { get; private set; }
+
+        public Usuario Usuario { get; private set; }
 
         private Avaliacao() { }
 

@@ -56,4 +56,14 @@ public class AvaliacaoRepository : IAvaliacaoRepository
         return await _context.Avaliacoes
             .ToListAsync();
     }
+
+    public async Task<IEnumerable<Avaliacao>> ObterPorDoramaAsync(Guid doramaId)
+    {
+        return await _context.Avaliacoes
+            .Include(a => a.Temporada)
+            .Include(a => a.Usuario)
+            .Where(a => a.Temporada.DoramaId == doramaId)
+            .AsNoTracking()
+            .ToListAsync();
+    }
 }
