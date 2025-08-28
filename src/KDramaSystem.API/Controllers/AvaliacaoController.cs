@@ -202,4 +202,28 @@ public class AvaliacaoController : ControllerBase
             return StatusCode(500, new { erro = ex.Message });
         }
     }
+
+    [HttpGet("dorama/{doramaId:guid}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> ObterPorDorama(Guid doramaId)
+    {
+        if (doramaId == Guid.Empty)
+            return BadRequest(new { erro = "DoramaId inválido." });
+
+        try
+        {
+            var useCase = new ObterAvaliacoesPorDoramaUseCase(_avaliacaoRepository);
+            var avaliacoes = await useCase.ExecutarAsync(doramaId);
+
+            return Ok(avaliacoes);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { erro = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { erro = ex.Message });
+        }
+    }
 }
