@@ -30,6 +30,7 @@ using KDramaSystem.Application.UseCases.ListaPrateleira.Obter;
 using KDramaSystem.Application.UseCases.ProgressoTemporada.AtualizarProgresso;
 using KDramaSystem.Application.UseCases.ProgressoTemporada.AtualizarStatus;
 using KDramaSystem.Application.UseCases.ProgressoTemporada.ExcluirProgresso;
+using KDramaSystem.Application.UseCases.ProgressoTemporada.ObterProgresso;
 using KDramaSystem.Application.UseCases.Temporada.Criar;
 using KDramaSystem.Application.UseCases.Temporada.Editar;
 using KDramaSystem.Application.UseCases.Temporada.Excluir;
@@ -98,6 +99,8 @@ public static class DependencyInjection
         services.AddScoped<AtualizarProgressoTemporadaUseCase>();
         services.AddScoped<AtualizarStatusTemporadaUseCase>();
         services.AddScoped<ExcluirProgressoTemporadaUseCase>();
+        services.AddScoped<ObterProgressoUsuarioUseCase>();
+        services.AddScoped<ObterProgressoPorUsuarioIdUseCase>();
 
         // Avaliacao
         services.AddScoped<CriarAvaliacaoUseCase>();
