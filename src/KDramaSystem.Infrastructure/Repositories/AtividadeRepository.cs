@@ -33,6 +33,7 @@ public class AtividadeRepository : IAtividadeRepository
         var usuariosIds = seguindoIds.Append(usuarioId);
         return await _context.Atividades
             .Where(a => usuariosIds.Contains(a.UsuarioId))
+            .Include(a => a.Usuario)
             .OrderByDescending(a => a.Data)
             .ToListAsync();
     }

@@ -27,6 +27,12 @@ public class KDramaDbContext : DbContext
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(KDramaDbContext).Assembly);
 
+        modelBuilder.Entity<Atividade>()
+            .HasOne(a => a.Usuario)
+            .WithMany(u => u.Atividades)
+            .HasForeignKey(a => a.UsuarioId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         base.OnModelCreating(modelBuilder);
     }
 }
