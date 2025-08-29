@@ -42,6 +42,7 @@ public class AtividadeService : IAtividadeService
             {
                 UsuarioId = p.UsuarioId,
                 UsuarioNome = usuario?.NomeUsuario ?? "Desconhecido",
+                UsuarioAvatarUrl = usuario?.FotoUrl,
                 TipoAtividade = TipoAtividadeEnum.ProgressoTemporada,
                 DoramaId = temporada?.DoramaId ?? Guid.Empty,
                 DoramaTitulo = temporada?.Dorama.Titulo ?? "Desconhecido",
@@ -60,6 +61,7 @@ public class AtividadeService : IAtividadeService
             {
                 UsuarioId = a.UsuarioId,
                 UsuarioNome = usuario?.NomeUsuario ?? "Desconhecido",
+                UsuarioAvatarUrl = usuario?.FotoUrl,
                 TipoAtividade = TipoAtividadeEnum.Avaliacao,
                 DoramaId = temporada?.DoramaId ?? Guid.Empty,
                 DoramaTitulo = temporada?.Dorama.Titulo ?? "Desconhecido",
@@ -79,6 +81,7 @@ public class AtividadeService : IAtividadeService
             {
                 UsuarioId = l.UsuarioId,
                 UsuarioNome = usuario?.NomeUsuario ?? "Desconhecido",
+                UsuarioAvatarUrl = usuario?.FotoUrl,
                 TipoAtividade = TipoAtividadeEnum.Prateleira,
                 PrateleiraId = l.Id,
                 PrateleiraNome = l.Nome,
@@ -107,6 +110,7 @@ public class AtividadeService : IAtividadeService
             {
                 UsuarioId = usuarioId,
                 UsuarioNome = nomeUsuario,
+                UsuarioAvatarUrl = usuario?.FotoUrl,
                 TipoAtividade = TipoAtividadeEnum.ProgressoTemporada,
                 DoramaId = temporada?.DoramaId ?? Guid.Empty,
                 DoramaTitulo = temporada?.Dorama.Titulo ?? "Desconhecido",
@@ -124,6 +128,7 @@ public class AtividadeService : IAtividadeService
             {
                 UsuarioId = usuarioId,
                 UsuarioNome = nomeUsuario,
+                UsuarioAvatarUrl = usuario?.FotoUrl,
                 TipoAtividade = TipoAtividadeEnum.Avaliacao,
                 DoramaId = temporada?.DoramaId ?? Guid.Empty,
                 DoramaTitulo = temporada?.Dorama.Titulo ?? "Desconhecido",
@@ -141,6 +146,7 @@ public class AtividadeService : IAtividadeService
             {
                 UsuarioId = usuarioId,
                 UsuarioNome = nomeUsuario,
+                UsuarioAvatarUrl = usuario?.FotoUrl,
                 TipoAtividade = TipoAtividadeEnum.Prateleira,
                 PrateleiraId = l.Id,
                 PrateleiraNome = l.Nome,

@@ -9,6 +9,7 @@ public class Atividade
     public TipoAtividade Tipo { get; private set; }
     public Guid ReferenciaId { get; private set; }
     public DateTime Data { get; private set; }
+    public Usuario Usuario { get; set; } = null!;
 
     private Atividade() { }
 
