@@ -19,6 +19,7 @@ public class ObterPerfilPublicoUseCase : IObterPerfilPublicoUseCase
 
         return new PerfilPublicoDto
         {
+            UsuarioId = usuario.Id,
             Nome = usuario.Nome,
             NomeUsuario = usuario.NomeUsuario,
             FotoUrl = usuario.FotoUrl,
