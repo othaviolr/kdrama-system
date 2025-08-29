@@ -2,6 +2,7 @@
 
 public class PerfilPublicoDto
 {
+    public Guid UsuarioId { get; set; }
     public string Nome { get; set; } = null!;
     public string NomeUsuario { get; set; } = null!;
     public string? FotoUrl { get; set; }
