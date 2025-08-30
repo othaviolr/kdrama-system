@@ -115,6 +115,7 @@ public static class DependencyInjection
         services.AddScoped<EditarListaPrateleiraUseCase>();
         services.AddScoped<ExcluirListaPrateleiraUseCase>();
         services.AddScoped<ObterListaPrateleiraUseCase>();
+        services.AddScoped<ObterListasPorUsuarioUseCase>();
         services.AddScoped<CompartilharListaPrateleiraUseCase>();
 
         // Dorama Lista
