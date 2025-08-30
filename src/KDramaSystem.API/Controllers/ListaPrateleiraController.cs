@@ -19,6 +19,7 @@ public class ListaPrateleiraController : ControllerBase
     private readonly EditarListaPrateleiraUseCase _editarUseCase;
     private readonly ExcluirListaPrateleiraUseCase _excluirUseCase;
     private readonly ObterListaPrateleiraUseCase _obterUseCase;
+    private readonly ObterListasPorUsuarioUseCase _obterListasPorUsuarioUseCase;
     private readonly CompartilharListaPrateleiraUseCase _compartilharUseCase;
     private readonly IUsuarioAutenticadoProvider _usuarioAutenticadoProvider;
 
@@ -27,6 +28,7 @@ public class ListaPrateleiraController : ControllerBase
         EditarListaPrateleiraUseCase editarUseCase,
         ExcluirListaPrateleiraUseCase excluirUseCase,
         ObterListaPrateleiraUseCase obterUseCase,
+        ObterListasPorUsuarioUseCase obterListasPorUsuarioUseCase,
         IUsuarioAutenticadoProvider usuarioAutenticadoProvider,
         CompartilharListaPrateleiraUseCase compartilharUseCase)
     {
@@ -34,6 +36,7 @@ public class ListaPrateleiraController : ControllerBase
         _editarUseCase = editarUseCase;
         _excluirUseCase = excluirUseCase;
         _obterUseCase = obterUseCase;
+        _obterListasPorUsuarioUseCase = obterListasPorUsuarioUseCase;
         _usuarioAutenticadoProvider = usuarioAutenticadoProvider;
         _compartilharUseCase = compartilharUseCase;
     }
@@ -291,5 +294,12 @@ public class ListaPrateleiraController : ControllerBase
         {
             return StatusCode(500, new { erro = ex.Message });
         }
+    }
+
+    [HttpGet("usuario/{usuarioId}")]
+    public async Task<IActionResult> ObterPorUsuario(Guid usuarioId)
+    {
+        var result = await _obterListasPorUsuarioUseCase.ExecutarAsync(usuarioId);
+        return Ok(result);
     }
 }
