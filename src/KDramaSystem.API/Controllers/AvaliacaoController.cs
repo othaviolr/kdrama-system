@@ -19,12 +19,14 @@ public class AvaliacaoController : ControllerBase
     private readonly EditarAvaliacaoUseCase _editarAvaliacaoUseCase;
     private readonly ExcluirAvaliacaoUseCase _excluirAvaliacaoUseCase;
     private readonly ObterAvaliacaoUseCase _obterAvaliacaoUseCase;
+    private readonly ObterAvaliacoesPorUsuarioUseCase _obterAvaliacoesPorUsuarioUseCase;
     private readonly IAvaliacaoRepository _avaliacaoRepository;
     private readonly IUsuarioAutenticadoProvider _usuarioAutenticadoProvider;
 
     public AvaliacaoController(CriarAvaliacaoUseCase criarAvaliacaoUseCase,
         EditarAvaliacaoUseCase editarAvaliacaoUseCase,
         ExcluirAvaliacaoUseCase excluirAvaliacaoUseCase,
+        ObterAvaliacoesPorUsuarioUseCase obterAvaliacoesPorUsuarioUseCase,
         ObterAvaliacaoUseCase obterAvaliacaoUseCase,
         IAvaliacaoRepository avaliacaoRepository,
         IUsuarioAutenticadoProvider usuarioAutenticadoProvider)
@@ -32,6 +34,7 @@ public class AvaliacaoController : ControllerBase
         _criarAvaliacaoUseCase = criarAvaliacaoUseCase;
         _editarAvaliacaoUseCase = editarAvaliacaoUseCase;
         _excluirAvaliacaoUseCase = excluirAvaliacaoUseCase;
+        _obterAvaliacoesPorUsuarioUseCase = obterAvaliacoesPorUsuarioUseCase;
         _obterAvaliacaoUseCase = obterAvaliacaoUseCase;
         _usuarioAutenticadoProvider = usuarioAutenticadoProvider;
         _avaliacaoRepository = avaliacaoRepository;
@@ -225,5 +228,12 @@ public class AvaliacaoController : ControllerBase
         {
             return StatusCode(500, new { erro = ex.Message });
         }
+    }
+
+    [HttpGet("usuario/{usuarioId}")]
+    public async Task<IActionResult> ObterPorUsuario(Guid usuarioId)
+    {
+        var result = await _obterAvaliacoesPorUsuarioUseCase.ExecutarAsync(usuarioId);
+        return Ok(result);
     }
 }
