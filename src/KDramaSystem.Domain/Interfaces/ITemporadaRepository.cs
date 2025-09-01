@@ -10,4 +10,5 @@ public interface ITemporadaRepository
     Task AtualizarAsync(Temporada temporada);
     Task ExcluirAsync(Guid id);
     Task<int> ContarEpisodiosAsync(Guid temporadaId);
+    Task<List<Temporada>> ObterPorNomeDoramaAsync(string nomeDorama);
 }

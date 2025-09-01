@@ -74,4 +74,17 @@ public class DoramaRepository : IDoramaRepository
                 .ThenInclude(da => da.Ator)
             .ToListAsync();
     }
+
+    public async Task<Dorama?> ObterPorTituloAsync(string titulo)
+    {
+        if (string.IsNullOrWhiteSpace(titulo))
+            throw new ArgumentException("Título deve ser informado.", nameof(titulo));
+
+        return await _context.Doramas
+            .Include(d => d.Generos)
+            .Include(d => d.Temporadas)
+            .Include(d => d.Atores)
+                .ThenInclude(da => da.Ator)
+            .FirstOrDefaultAsync(d => d.Titulo.ToLower() == titulo.Trim().ToLower());
+    }
 }

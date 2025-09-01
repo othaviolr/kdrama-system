@@ -10,4 +10,5 @@ public interface IDoramaRepository
     Task AtualizarAsync(Dorama dorama);
     Task ExcluirAsync(Guid id);
     Task<List<Dorama>> ObterTodosAsync();
+    Task<Dorama?> ObterPorTituloAsync(string titulo);
 }

@@ -94,6 +94,7 @@ public static class DependencyInjection
         services.AddScoped<EditarTemporadaUseCase>();
         services.AddScoped<ExcluirTemporadaUseCase>();
         services.AddScoped<ObterTemporadaPorIdUseCase>();
+        services.AddScoped<ObterTemporadasPorNomeDoramaUseCase>();
 
         // ProgressoTemporada
         services.AddScoped<AtualizarProgressoTemporadaUseCase>();
