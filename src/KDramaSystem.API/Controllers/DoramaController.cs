@@ -148,5 +148,13 @@ namespace KDramaSystem.API.Controllers
             var doramas = await _obterTodosDoramasCompletosUseCase.ExecutarAsync();
             return Ok(doramas);
         }
+
+        [HttpGet("titulo/{titulo}")]
+        public async Task<IActionResult> ObterPorTitulo(string titulo)
+        {
+            var dorama = await _obterDoramaUseCase.ExecutarPorTituloAsync(titulo);
+            if (dorama == null) return NotFound();
+            return Ok(dorama);
+        }
     }
 }

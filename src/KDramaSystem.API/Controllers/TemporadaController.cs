@@ -13,18 +13,21 @@ public class TemporadaController : ControllerBase
     private readonly CriarTemporadaUseCase _criarUseCase;
     private readonly EditarTemporadaUseCase _editarUseCase;
     private readonly ExcluirTemporadaUseCase _excluirUseCase;
-    private readonly ObterTemporadaPorIdUseCase _obterUseCase;
+    private readonly ObterTemporadaPorIdUseCase _obterPorIdUseCase;
+    private readonly ObterTemporadasPorNomeDoramaUseCase _obterPorNomeDoramaUseCase;
 
     public TemporadaController(
         CriarTemporadaUseCase criarUseCase,
         EditarTemporadaUseCase editarUseCase,
         ExcluirTemporadaUseCase excluirUseCase,
-        ObterTemporadaPorIdUseCase obterUseCase)
+        ObterTemporadaPorIdUseCase obterPorIdUseCase,
+        ObterTemporadasPorNomeDoramaUseCase obterPorNomeDoramaUseCase)
     {
         _criarUseCase = criarUseCase;
         _editarUseCase = editarUseCase;
         _excluirUseCase = excluirUseCase;
-        _obterUseCase = obterUseCase;
+        _obterPorIdUseCase = obterPorIdUseCase;
+        _obterPorNomeDoramaUseCase = obterPorNomeDoramaUseCase;
     }
 
     [HttpPost]
@@ -54,11 +57,22 @@ public class TemporadaController : ControllerBase
     public async Task<IActionResult> ObterPorId(Guid id)
     {
         var request = new ObterTemporadaPorIdRequest { Id = id };
-        var temporadaDto = await _obterUseCase.ExecutarAsync(request);
+        var temporadaDto = await _obterPorIdUseCase.ExecutarAsync(request);
 
         if (temporadaDto == null)
             return NotFound();
 
         return Ok(temporadaDto);
+    }
+
+    [HttpGet("dorama/{nomeDorama}")]
+    public async Task<IActionResult> ObterPorNomeDorama(string nomeDorama)
+    {
+        var temporadas = await _obterPorNomeDoramaUseCase.ExecutarAsync(nomeDorama);
+
+        if (temporadas == null || !temporadas.Any())
+            return NotFound();
+
+        return Ok(temporadas);
     }
 }

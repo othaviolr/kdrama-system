@@ -77,4 +77,12 @@ public class TemporadaRepository : ITemporadaRepository
     {
         return await _context.Episodios.CountAsync(e => e.TemporadaId == temporadaId);
     }
+
+    public async Task<List<Temporada>> ObterPorNomeDoramaAsync(string nomeDorama)
+    {
+        return await _context.Temporadas
+            .Include(t => t.Dorama)
+            .Where(t => t.Dorama.Titulo.ToLower() == nomeDorama.ToLower())
+            .ToListAsync();
+    }
 }

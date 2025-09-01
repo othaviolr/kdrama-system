@@ -43,4 +43,26 @@ public class ObterDoramaUseCase
                 }).ToList()
         };
     }
+
+    public async Task<ObterDoramaDto?> ExecutarPorTituloAsync(string titulo)
+    {
+        var dorama = await _doramaRepository.ObterPorTituloAsync(titulo);
+        if (dorama == null)
+            return null;
+
+        return new ObterDoramaDto
+        {
+            DoramaId = dorama.Id,
+            Titulo = dorama.Titulo,
+            TituloOriginal = dorama.TituloOriginal,
+            Sinopse = dorama.Sinopse,
+            CapaUrl = dorama.ImagemCapaUrl,
+            AnoLancamento = dorama.AnoLancamento,
+            PaisOrigem = dorama.PaisOrigem,
+            EmExibicao = dorama.EmExibicao,
+            Plataforma = dorama.Plataforma,
+            Generos = new List<ObterDoramaDto.GeneroDto>(),
+            Atores = new List<ObterDoramaDto.AtorDto>()     
+        };
+    }
 }
