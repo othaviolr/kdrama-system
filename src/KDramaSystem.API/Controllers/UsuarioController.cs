@@ -92,7 +92,8 @@ namespace KDramaSystem.API.Controllers
 
             if (User.Identity?.IsAuthenticated == true)
             {
-                var claimSub = User.FindFirst("sub")?.Value;
+                var claimSub = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                               ?? User.FindFirst("sub")?.Value;
 
                 if (!string.IsNullOrWhiteSpace(claimSub) && Guid.TryParse(claimSub, out var guid))
                 {
