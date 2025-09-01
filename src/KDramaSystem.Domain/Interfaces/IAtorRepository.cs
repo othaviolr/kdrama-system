@@ -11,4 +11,5 @@ public interface IAtorRepository
     Task ExcluirAsync(Guid id);
     Task<bool> ExisteComNomeAsync(string nome);
     Task<List<Ator>> ObterPorIdsAsync(IEnumerable<Guid> ids);
+    Task<Ator?> ObterPorNomeAsync(string nome);
 }

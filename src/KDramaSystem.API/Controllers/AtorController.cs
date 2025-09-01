@@ -57,4 +57,12 @@ public class AtorController : ControllerBase
         var ator = await _obterUseCase.ExecutarAsync(request);
         return Ok(ator);
     }
+
+    [HttpGet("nome/{nome}")]
+    public async Task<IActionResult> ObterPorNome(string nome)
+    {
+        var ator = await _obterUseCase.ExecutarPorNomeAsync(nome);
+        if (ator == null) return NotFound();
+        return Ok(ator);
+    }
 }

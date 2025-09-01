@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using KDramaSystem.Domain.Interfaces;
+using static KDramaSystem.Application.DTOs.Dorama.ObterDoramaDto;
 
 namespace KDramaSystem.Application.UseCases.Ator.Obter;
 
@@ -25,5 +26,18 @@ public class ObterAtorUseCase
             throw new Exception("Ator não encontrado.");
 
         return ator;
+    }
+
+    public async Task<AtorDto?> ExecutarPorNomeAsync(string nome)
+    {
+        var ator = await _atorRepository.ObterPorNomeAsync(nome);
+        if (ator == null) return null;
+
+        return new AtorDto
+        {
+            Id = ator.Id,
+            Nome = ator.Nome,
+            FotoUrl = ator.FotoUrl
+        };
     }
 }
