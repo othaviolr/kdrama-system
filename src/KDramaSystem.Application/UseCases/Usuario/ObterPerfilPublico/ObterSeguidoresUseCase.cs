@@ -19,6 +19,7 @@ public class ObterSeguidoresUseCase
         return seguidores.Select(s => new UsuarioResumoDto
         {
             UsuarioId = s.Id,
+            NomeUsuario = s.NomeUsuario,
             Nome = s.Nome,
             FotoPerfilUrl = s.FotoUrl
         }).ToList();
