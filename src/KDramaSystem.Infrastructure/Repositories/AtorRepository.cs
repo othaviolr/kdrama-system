@@ -78,4 +78,14 @@ public class AtorRepository : IAtorRepository
             .Where(a => ids.Contains(a.Id))
             .ToListAsync();
     }
+
+    public async Task<Ator?> ObterPorNomeAsync(string nome)
+    {
+        if (string.IsNullOrWhiteSpace(nome))
+            throw new ArgumentException("Nome deve ser informado.", nameof(nome));
+
+        return await _context.Atores
+            .Include(a => a.Doramas)
+            .FirstOrDefaultAsync(a => a.Nome.ToLower() == nome.Trim().ToLower());
+    }
 }
