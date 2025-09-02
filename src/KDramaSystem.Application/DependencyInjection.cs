@@ -87,6 +87,7 @@ public static class DependencyInjection
         services.AddScoped<CriarGeneroUseCase>();
         services.AddScoped<EditarGeneroUseCase>();
         services.AddScoped<ExcluirGeneroUseCase>();
+        services.AddScoped<ObterGenerosUseCase>();
         services.AddScoped<ObterGeneroPorIdUseCase>();
 
         // Temporada

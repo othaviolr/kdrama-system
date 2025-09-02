@@ -65,4 +65,18 @@ public class AtorController : ControllerBase
         if (ator == null) return NotFound();
         return Ok(ator);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> ObterTodos()
+    {
+        var atores = await _obterUseCase.ExecutarTodosAsync();
+        var atoresResumo = atores.Select(a => new
+        {
+            a.Id,
+            a.Nome,
+            a.FotoUrl
+        }).ToList();
+
+        return Ok(atoresResumo);
+    }
 }

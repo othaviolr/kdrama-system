@@ -11,5 +11,6 @@ namespace KDramaSystem.Domain.Interfaces
         Task<List<Genero>> ListarAsync();
         Task<bool> ExisteComNomeAsync(string nome);
         Task<List<Genero>> ObterPorIdsAsync(IEnumerable<Guid> ids);
+        Task<List<Genero>> ObterTodosAsync();
     }
 }

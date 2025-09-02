@@ -76,4 +76,9 @@ public class GeneroRepository : IGeneroRepository
             .Where(g => ids.Contains(g.Id))
             .ToListAsync();
     }
+
+    public async Task<List<Genero>> ObterTodosAsync()
+    {
+        return await _context.Generos.ToListAsync();
+    }
 }
