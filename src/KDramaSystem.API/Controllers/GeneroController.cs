@@ -14,16 +14,19 @@ public class GeneroController : ControllerBase
     private readonly EditarGeneroUseCase _editarUseCase;
     private readonly ExcluirGeneroUseCase _excluirUseCase;
     private readonly ObterGeneroPorIdUseCase _obterPorIdUseCase;
+    private readonly ObterGenerosUseCase _obterTodosUseCase;
 
     public GeneroController(
         CriarGeneroUseCase criarUseCase,
         EditarGeneroUseCase editarUseCase,
         ExcluirGeneroUseCase excluirUseCase,
+        ObterGenerosUseCase obterTodosUseCase,
         ObterGeneroPorIdUseCase obterPorIdUseCase)
     {
         _criarUseCase = criarUseCase;
         _editarUseCase = editarUseCase;
         _excluirUseCase = excluirUseCase;
+        _obterTodosUseCase = obterTodosUseCase;
         _obterPorIdUseCase = obterPorIdUseCase;
     }
 
@@ -58,5 +61,12 @@ public class GeneroController : ControllerBase
             return NotFound();
 
         return Ok(genero);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> ObterTodos()
+    {
+        var generos = await _obterTodosUseCase.ExecutarAsync();
+        return Ok(generos);
     }
 }

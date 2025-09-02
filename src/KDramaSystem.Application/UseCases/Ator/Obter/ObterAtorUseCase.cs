@@ -40,4 +40,15 @@ public class ObterAtorUseCase
             FotoUrl = ator.FotoUrl
         };
     }
+
+    public async Task<List<AtorDto>> ExecutarTodosAsync()
+    {
+        var atores = await _atorRepository.ObterTodosAsync();
+        return atores.Select(a => new AtorDto
+        {
+            Id = a.Id,
+            Nome = a.Nome,
+            FotoUrl = a.FotoUrl
+        }).ToList();
+    }
 }
