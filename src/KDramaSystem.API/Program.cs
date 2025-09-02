@@ -24,6 +24,9 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddApplication();
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? builder.Configuration.GetConnectionString("KDramaDb");
+
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddAuthentication(options =>
@@ -83,9 +86,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseCors("AllowFrontend");
-
 app.UseMiddleware<WebApi.Middlewares.ExceptionHandlingMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
