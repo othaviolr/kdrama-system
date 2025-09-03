@@ -19,7 +19,6 @@ services:
     networks:
       - kdrama-network
 
-  # Nginx reverse proxy (opcional)
   nginx:
     image: nginx:alpine
     ports:

@@ -20,7 +20,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens de Solução", "{380A7511-A354-6D7A-0CC0-8FA1F1BA7B6C}"
 	ProjectSection(SolutionItems) = preProject
 		.env = .env
-		.env.example = .env.example
 		deploy.sh = deploy.sh
 		docker-compose.yml = docker-compose.yml
 		Dockerfile.txt = Dockerfile.txt
