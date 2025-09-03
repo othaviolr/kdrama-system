@@ -84,7 +84,7 @@ namespace KDramaSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Atores");
+                    b.ToTable("Atores", (string)null);
                 });
 
             modelBuilder.Entity("KDramaSystem.Domain.Entities.Avaliacao", b =>
@@ -113,7 +113,7 @@ namespace KDramaSystem.Infrastructure.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("Avaliacoes");
+                    b.ToTable("Avaliacoes", (string)null);
                 });
 
             modelBuilder.Entity("KDramaSystem.Domain.Entities.Comentario", b =>
@@ -138,7 +138,7 @@ namespace KDramaSystem.Infrastructure.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("Comentarios");
+                    b.ToTable("Comentarios", (string)null);
                 });
 
             modelBuilder.Entity("KDramaSystem.Domain.Entities.Dorama", b =>
@@ -179,7 +179,7 @@ namespace KDramaSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Doramas");
+                    b.ToTable("Doramas", (string)null);
                 });
 
             modelBuilder.Entity("KDramaSystem.Domain.Entities.DoramaAtor", b =>
@@ -250,7 +250,7 @@ namespace KDramaSystem.Infrastructure.Migrations
 
                     b.HasIndex("TemporadaId");
 
-                    b.ToTable("Episodios");
+                    b.ToTable("Episodios", (string)null);
                 });
 
             modelBuilder.Entity("KDramaSystem.Domain.Entities.Genero", b =>
@@ -271,7 +271,7 @@ namespace KDramaSystem.Infrastructure.Migrations
 
                     b.HasIndex("DoramaId");
 
-                    b.ToTable("Generos");
+                    b.ToTable("Generos", (string)null);
                 });
 
             modelBuilder.Entity("KDramaSystem.Domain.Entities.ListaPrateleira", b =>
@@ -338,7 +338,7 @@ namespace KDramaSystem.Infrastructure.Migrations
                     b.HasIndex("UsuarioId", "TemporadaId")
                         .IsUnique();
 
-                    b.ToTable("ProgressoTemporadas");
+                    b.ToTable("ProgressoTemporadas", (string)null);
                 });
 
             modelBuilder.Entity("KDramaSystem.Domain.Entities.Temporada", b =>
@@ -371,7 +371,7 @@ namespace KDramaSystem.Infrastructure.Migrations
 
                     b.HasIndex("DoramaId");
 
-                    b.ToTable("Temporadas");
+                    b.ToTable("Temporadas", (string)null);
                 });
 
             modelBuilder.Entity("KDramaSystem.Domain.Entities.Usuario", b =>
@@ -400,7 +400,7 @@ namespace KDramaSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Usuarios");
+                    b.ToTable("Usuarios", (string)null);
                 });
 
             modelBuilder.Entity("KDramaSystem.Domain.Entities.UsuarioAutenticacao", b =>
@@ -447,7 +447,7 @@ namespace KDramaSystem.Infrastructure.Migrations
                     b.HasIndex("SeguidorId", "SeguindoId")
                         .IsUnique();
 
-                    b.ToTable("UsuarioRelacionamentos");
+                    b.ToTable("UsuarioRelacionamentos", (string)null);
                 });
 
             modelBuilder.Entity("KDramaSystem.Domain.Entities.Atividade", b =>
@@ -471,7 +471,7 @@ namespace KDramaSystem.Infrastructure.Migrations
 
                             b1.HasIndex("Valor");
 
-                            b1.ToTable("Atividades");
+                            b1.ToTable("Atividades", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("AtividadeId");
@@ -502,7 +502,7 @@ namespace KDramaSystem.Infrastructure.Migrations
 
                             b1.HasKey("AvaliacaoId");
 
-                            b1.ToTable("Avaliacoes");
+                            b1.ToTable("Avaliacoes", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("AvaliacaoId");
@@ -519,7 +519,7 @@ namespace KDramaSystem.Infrastructure.Migrations
 
                             b1.HasKey("AvaliacaoId");
 
-                            b1.ToTable("Avaliacoes");
+                            b1.ToTable("Avaliacoes", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("AvaliacaoId");
@@ -552,7 +552,7 @@ namespace KDramaSystem.Infrastructure.Migrations
 
                             b1.HasKey("ComentarioId");
 
-                            b1.ToTable("Comentarios");
+                            b1.ToTable("Comentarios", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("ComentarioId");
@@ -642,7 +642,7 @@ namespace KDramaSystem.Infrastructure.Migrations
 
                             b1.HasKey("ProgressoTemporadaId");
 
-                            b1.ToTable("ProgressoTemporadas");
+                            b1.ToTable("ProgressoTemporadas", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("ProgressoTemporadaId");
