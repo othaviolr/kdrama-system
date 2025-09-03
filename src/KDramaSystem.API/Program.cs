@@ -95,7 +95,16 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<KDramaSystem.Infrastructure.Persistence.KDramaDbContext>();
-    db.Database.Migrate();
+
+    if (!app.Environment.IsProduction())
+    {
+        // apenas em dev/staging
+        db.Database.Migrate();
+    }
+    else
+    {
+        
+    }
 }
 
 app.Run();
