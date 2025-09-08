@@ -22,6 +22,7 @@ public class KDramaDbContext : DbContext
     public DbSet<DoramaLista> DoramasLista { get; set; }
     public DbSet<ProgressoTemporada> ProgressoTemporadas { get; set; }
     public DbSet<Atividade> Atividades { get; set; }
+    public DbSet<BadgeConquista> BadgesConquistadas { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
