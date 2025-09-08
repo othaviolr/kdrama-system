@@ -57,4 +57,45 @@ public class ProgressoTemporadaRepository : IProgressoTemporadaRepository
                 .ThenInclude(t => t.Dorama)
             .ToListAsync();
     }
+
+    public async Task<int> ContarDoramasConcluidosAsync(Guid usuarioId)
+    {
+        var progressoUsuario = await ObterPorUsuarioAsync(usuarioId);
+
+        var progressoPorDorama = progressoUsuario
+            .GroupBy(p => p.Temporada.DoramaId);
+
+        int doramasConcluidos = 0;
+
+        foreach (var grupo in progressoPorDorama)
+        {
+            bool doramaFinalizado = true;
+
+            foreach (var progressoTemporada in grupo)
+            {
+                var temporada = progressoTemporada.Temporada;
+                var totalEpisodios = temporada?.Episodios.Count ?? 0;
+
+                if (totalEpisodios == 0 || grupo.Count(p => p.TemporadaId == temporada.Id) < totalEpisodios)
+                {
+                    doramaFinalizado = false;
+                    break;
+                }
+            }
+
+            if (doramaFinalizado)
+                doramasConcluidos++;
+        }
+
+        return doramasConcluidos;
+    }
+
+    public async Task<int> SomarTempoAssistidoAsync(Guid usuarioId)
+    {
+        var progressoUsuario = await ObterPorUsuarioAsync(usuarioId);
+
+        return progressoUsuario
+            .SelectMany(p => p.Temporada?.Episodios ?? new List<Episodio>())
+            .Count();
+    }
 }

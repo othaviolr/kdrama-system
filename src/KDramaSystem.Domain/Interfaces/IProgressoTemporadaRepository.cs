@@ -10,4 +10,6 @@ public interface IProgressoTemporadaRepository
     Task ExcluirAsync (Guid progressoId);
     Task<IEnumerable<ProgressoTemporada>> ObterPorUsuarioAsync(Guid usuarioId);
     Task<IEnumerable<ProgressoTemporada>> ObterTodosAsync();
+    Task<int> ContarDoramasConcluidosAsync(Guid usuarioId);
+    Task<int> SomarTempoAssistidoAsync(Guid usuarioId);
 }

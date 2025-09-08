@@ -66,4 +66,10 @@ public class AvaliacaoRepository : IAvaliacaoRepository
             .AsNoTracking()
             .ToListAsync();
     }
+
+    public async Task<int> ContarAvaliacoesAsync(Guid usuarioId)
+    {
+        return await _context.Avaliacoes
+            .CountAsync(a => a.UsuarioId == usuarioId);
+    }
 }
