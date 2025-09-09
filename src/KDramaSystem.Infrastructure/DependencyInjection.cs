@@ -38,6 +38,8 @@ public static class DependencyInjection
         services.AddScoped<IListaPrateleiraRepository, ListaPrateleiraRepository>();
         services.AddScoped<IDoramaListaRepository, DoramaListaRepository>();
         services.AddScoped<IAtividadeRepository, AtividadeRepository>();
+        services.AddScoped<IBadgeUsuarioRepository, BadgeUsuarioRepository>();
+        services.AddScoped<IBadgeConquistaRepository, BadgeConquistaRepository>();
 
         // Unit of Work
         services.AddScoped<IUnitOfWork, UnitOfWork>();

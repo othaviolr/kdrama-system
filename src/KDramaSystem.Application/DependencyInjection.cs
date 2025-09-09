@@ -127,6 +127,12 @@ public static class DependencyInjection
         // Atividade
         services.AddScoped<IAtividadeService, AtividadeService>();
 
+        // Estatísticas
+        services.AddScoped<EstatisticasService>();
+
+        // Badges
+        services.AddScoped<BadgeService>();
+
         services.AddValidatorsFromAssemblyContaining<CriarAtorValidator>();
 
         return services;
