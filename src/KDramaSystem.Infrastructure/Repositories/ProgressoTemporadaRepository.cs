@@ -46,6 +46,8 @@ public class ProgressoTemporadaRepository : IProgressoTemporadaRepository
         return await _context.ProgressoTemporadas
             .Include(p => p.Temporada)
                 .ThenInclude(t => t.Dorama)
+            .Include(p => p.Temporada)
+                .ThenInclude(t => t.Episodios)
             .Where(p => p.UsuarioId == usuarioId)
             .ToListAsync();
     }
@@ -69,24 +71,10 @@ public class ProgressoTemporadaRepository : IProgressoTemporadaRepository
 
         foreach (var grupo in progressoPorDorama)
         {
-            bool doramaFinalizado = true;
+            bool doramaFinalizado = grupo.All(p => p.Status != null && p.Status.Valor == Domain.Enums.StatusDoramaEnum.Concluido);
 
-            foreach (var progressoTemporada in grupo)
-            {
-                var temporada = progressoTemporada.Temporada;
-                var totalEpisodios = temporada?.Episodios.Count ?? 0;
-
-                if (totalEpisodios == 0 || grupo.Count(p => p.TemporadaId == temporada.Id) < totalEpisodios)
-                {
-                    doramaFinalizado = false;
-                    break;
-                }
-            }
-
-            if (doramaFinalizado)
-                doramasConcluidos++;
+            if (doramaFinalizado) doramasConcluidos++;
         }
-
         return doramasConcluidos;
     }
 
@@ -94,8 +82,18 @@ public class ProgressoTemporadaRepository : IProgressoTemporadaRepository
     {
         var progressoUsuario = await ObterPorUsuarioAsync(usuarioId);
 
-        return progressoUsuario
-            .SelectMany(p => p.Temporada?.Episodios ?? new List<Episodio>())
-            .Count();
+        int minutosTotais = 0;
+
+        foreach (var progresso in progressoUsuario)
+        {
+            if (progresso.Temporada?.Episodios == null || progresso.Temporada.Episodios.Count == 0)
+                continue;
+
+            var episodiosAssistidos = progresso.Temporada.Episodios
+                .OrderBy(e => e.Numero).Take(progresso.EpisodiosAssistidos);
+
+            minutosTotais += episodiosAssistidos.Sum(e => e.DuracaoMinutos);
+        }
+        return minutosTotais;
     }
 }
