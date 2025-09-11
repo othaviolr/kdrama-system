@@ -1,10 +1,11 @@
 ﻿using KDramaSystem.Domain.Entities;
 using KDramaSystem.Domain.Interfaces;
 using KDramaSystem.Domain.Enums;
+using KDramaSystem.Domain.Services;
 
 namespace KDramaSystem.Application.Services;
 
-public class BadgeService
+public class BadgeService : IBadgeService
 {
     private readonly IProgressoTemporadaRepository _progressoRepository;
     private readonly IBadgeUsuarioRepository _badgeUsuarioRepository;

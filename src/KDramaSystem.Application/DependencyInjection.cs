@@ -43,6 +43,7 @@ using KDramaSystem.Application.UseCases.Usuario.Login;
 using KDramaSystem.Application.UseCases.Usuario.ObterPerfilCompleto;
 using KDramaSystem.Application.UseCases.Usuario.ObterPerfilPublico;
 using KDramaSystem.Application.UseCases.Usuario.Registrar;
+using KDramaSystem.Domain.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace KDramaSystem.Application;
@@ -131,7 +132,7 @@ public static class DependencyInjection
         services.AddScoped<EstatisticasService>();
 
         // Badges
-        services.AddScoped<BadgeService>();
+        services.AddScoped<IBadgeService, BadgeService>();
 
         services.AddValidatorsFromAssemblyContaining<CriarAtorValidator>();
 
