@@ -13,4 +13,6 @@ public interface IAvaliacaoRepository
     Task<IEnumerable<Avaliacao>> ObterTodasAsync();
     Task<IEnumerable<Avaliacao>> ObterPorDoramaAsync(Guid doramaId);
     Task<int> ContarAvaliacoesAsync(Guid usuarioId);
+    Task<int> ContarAsync();
+    Task<IEnumerable<Avaliacao>> ObterTodosPaginadoAsync(int pagina, int tamanhoPagina);
 }

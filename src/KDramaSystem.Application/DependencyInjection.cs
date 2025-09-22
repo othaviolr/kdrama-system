@@ -112,6 +112,7 @@ public static class DependencyInjection
         services.AddScoped<ObterAvaliacaoUseCase>();
         services.AddScoped<ObterAvaliacoesPorDoramaUseCase>();
         services.AddScoped<ObterAvaliacoesPorUsuarioUseCase>();
+        services.AddScoped<ObterAvaliacoesUseCase>();
 
         // Lista Prateleira
         services.AddScoped<CriarListaPrateleiraUseCase>();

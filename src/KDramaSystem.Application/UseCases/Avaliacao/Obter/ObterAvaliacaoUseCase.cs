@@ -28,7 +28,12 @@ public class ObterAvaliacaoUseCase
         return new ObterAvaliacaoDto
         {
             Id = avaliacao.Id,
+            UsuarioId = avaliacao.UsuarioId,
+            UsuarioNome = avaliacao.Usuario?.Nome,
             TemporadaId = avaliacao.TemporadaId,
+            TemporadaNome = avaliacao.Temporada?.Nome,
+            DoramaId = avaliacao.Temporada?.DoramaId ?? Guid.Empty,
+            DoramaTitulo = avaliacao.Temporada?.Dorama?.Titulo,
             Nota = avaliacao.Nota.Valor,
             Comentario = avaliacao.Comentario?.Texto,
             RecomendadoPorUsuarioId = avaliacao.RecomendadoPorUsuarioId,
