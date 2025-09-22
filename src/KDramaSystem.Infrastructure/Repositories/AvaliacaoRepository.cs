@@ -72,4 +72,22 @@ public class AvaliacaoRepository : IAvaliacaoRepository
         return await _context.Avaliacoes
             .CountAsync(a => a.UsuarioId == usuarioId);
     }
+
+    public async Task<int> ContarAsync()
+    {
+        return await _context.Avaliacoes.CountAsync();
+    }
+
+    public async Task<IEnumerable<Avaliacao>> ObterTodosPaginadoAsync(int pagina, int tamanhoPagina)
+    {
+        return await _context.Avaliacoes
+            .AsNoTracking()
+            .Include(a => a.Usuario)
+            .Include(a => a.Temporada)
+                .ThenInclude(t => t.Dorama)
+            .OrderByDescending(a => a.DataAvaliacao)
+            .Skip((pagina - 1) * tamanhoPagina)
+            .Take(tamanhoPagina)
+            .ToListAsync();
+    }
 }

@@ -22,6 +22,7 @@ public class AvaliacaoController : ControllerBase
     private readonly ObterAvaliacoesPorUsuarioUseCase _obterAvaliacoesPorUsuarioUseCase;
     private readonly IAvaliacaoRepository _avaliacaoRepository;
     private readonly IUsuarioAutenticadoProvider _usuarioAutenticadoProvider;
+    private readonly ObterAvaliacoesUseCase _obterAvaliacoesUseCase;
 
     public AvaliacaoController(CriarAvaliacaoUseCase criarAvaliacaoUseCase,
         EditarAvaliacaoUseCase editarAvaliacaoUseCase,
@@ -29,6 +30,7 @@ public class AvaliacaoController : ControllerBase
         ObterAvaliacoesPorUsuarioUseCase obterAvaliacoesPorUsuarioUseCase,
         ObterAvaliacaoUseCase obterAvaliacaoUseCase,
         IAvaliacaoRepository avaliacaoRepository,
+        ObterAvaliacoesUseCase obterAvaliacoesUseCase,
         IUsuarioAutenticadoProvider usuarioAutenticadoProvider)
     {
         _criarAvaliacaoUseCase = criarAvaliacaoUseCase;
@@ -38,6 +40,7 @@ public class AvaliacaoController : ControllerBase
         _obterAvaliacaoUseCase = obterAvaliacaoUseCase;
         _usuarioAutenticadoProvider = usuarioAutenticadoProvider;
         _avaliacaoRepository = avaliacaoRepository;
+        _obterAvaliacoesUseCase = obterAvaliacoesUseCase;
     }
 
     [HttpPost]
@@ -235,5 +238,12 @@ public class AvaliacaoController : ControllerBase
     {
         var result = await _obterAvaliacoesPorUsuarioUseCase.ExecutarAsync(usuarioId);
         return Ok(result);
+    }
+
+    [HttpGet("todas")]
+    public async Task<IActionResult> ObterTodasAvaliacoes()
+    {
+        var avaliacoes = await _obterAvaliacoesUseCase.ExecutarAsync();
+        return Ok(avaliacoes);
     }
 }
