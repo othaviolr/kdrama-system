@@ -63,8 +63,8 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "KDrama System API",
-        Version = "v1",
+        Title = "Hanlyu Drama",
+        Version = "v2",
         Description = "API do Sistema de Gerenciamento de K-Dramas"
     });
 
@@ -102,7 +102,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "KDrama System API V1");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Hanlyu Drama API");
         c.RoutePrefix = "swagger";
     });
 }
