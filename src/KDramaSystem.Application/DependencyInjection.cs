@@ -27,6 +27,7 @@ using KDramaSystem.Application.UseCases.ListaPrateleira.Criar;
 using KDramaSystem.Application.UseCases.ListaPrateleira.Editar;
 using KDramaSystem.Application.UseCases.ListaPrateleira.Excluir;
 using KDramaSystem.Application.UseCases.ListaPrateleira.Obter;
+using KDramaSystem.Application.UseCases.Playlist;
 using KDramaSystem.Application.UseCases.ProgressoTemporada.AtualizarProgresso;
 using KDramaSystem.Application.UseCases.ProgressoTemporada.AtualizarStatus;
 using KDramaSystem.Application.UseCases.ProgressoTemporada.ExcluirProgresso;
@@ -134,6 +135,10 @@ public static class DependencyInjection
 
         // Badges
         services.AddScoped<IBadgeService, BadgeService>();
+
+        // Playlists
+        services.AddScoped<AtribuirPlaylistAoDoramaUseCase>();
+        services.AddScoped<ObterPlaylistsPorDoramaUseCase>();
 
         services.AddValidatorsFromAssemblyContaining<CriarAtorValidator>();
 
