@@ -42,6 +42,7 @@ public static class DependencyInjection
         services.AddScoped<IBadgeUsuarioRepository, BadgeUsuarioRepository>();
         services.AddScoped<IBadgeConquistaRepository, BadgeConquistaRepository>();
         services.AddScoped<IPlaylistRepository, PlaylistRepository>();
+        services.AddSingleton<SpotifyService>();
 
         // Unit of Work
         services.AddScoped<IUnitOfWork, UnitOfWork>();
