@@ -1,4 +1,5 @@
-﻿using KDramaSystem.Domain.Entities;
+﻿using KDramaSystem.Application.UseCases.Usuario.ObterPerfilPublico;
+using KDramaSystem.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace KDramaSystem.Infrastructure.Persistence;
@@ -23,6 +24,7 @@ public class KDramaDbContext : DbContext
     public DbSet<ProgressoTemporada> ProgressoTemporadas { get; set; }
     public DbSet<Atividade> Atividades { get; set; }
     public DbSet<BadgeConquista> BadgesConquistadas { get; set; }
+    public DbSet<Playlist> Playlists { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

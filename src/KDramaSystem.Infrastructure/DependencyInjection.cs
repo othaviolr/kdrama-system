@@ -9,6 +9,7 @@ using KDramaSystem.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using KDramaSystem.Application.Interfaces.Services;
 
 public static class DependencyInjection
 {
@@ -40,6 +41,7 @@ public static class DependencyInjection
         services.AddScoped<IAtividadeRepository, AtividadeRepository>();
         services.AddScoped<IBadgeUsuarioRepository, BadgeUsuarioRepository>();
         services.AddScoped<IBadgeConquistaRepository, BadgeConquistaRepository>();
+        services.AddScoped<IPlaylistRepository, PlaylistRepository>();
 
         // Unit of Work
         services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -47,6 +49,7 @@ public static class DependencyInjection
         // Serviços
         services.AddScoped<ICriptografiaService, CriptografiaService>();
         services.AddScoped<ITokenService, TokenService>();
+        services.AddHttpClient<SpotifyService>();
         services.AddScoped<IUsuarioAutenticadoProvider, UsuarioAutenticadoProvider>();
 
         // HTTP Context
