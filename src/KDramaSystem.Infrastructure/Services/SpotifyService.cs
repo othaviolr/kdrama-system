@@ -1,51 +1,76 @@
-﻿using KDramaSystem.Application.DTOs.Playlist;
+﻿using KDramaSystem.Application.Interfaces.Services;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Text.Json;
 
-namespace KDramaSystem.Infrastructure.Services
+public class SpotifyService : ISpotifyService
 {
-    public class SpotifyService
+    private readonly HttpClient _httpClient;
+    private string? _accessToken;
+    private DateTime _expiration;
+
+    private const string CLIENT_ID = "98493d06ed644ea2a0dac44a50bb25d1";
+    private const string CLIENT_SECRET = "314c70d303334b6abd535a5eca2d608d";
+
+    public SpotifyService(HttpClient httpClient)
     {
-        private readonly HttpClient _httpClient;
-        private readonly string _token;
+        _httpClient = httpClient;
+    }
 
-        public SpotifyService(HttpClient httpClient, string token)
+    private async Task<string> GetAccessTokenAsync()
+    {
+        if (_accessToken != null && _expiration > DateTime.UtcNow.AddMinutes(1))
+            return _accessToken;
+
+        var authToken = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{CLIENT_ID}:{CLIENT_SECRET}"));
+        var request = new HttpRequestMessage(HttpMethod.Post, "https://accounts.spotify.com/api/token");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Basic", authToken);
+        request.Content = new FormUrlEncodedContent(new Dictionary<string, string>
         {
-            _httpClient = httpClient;
-            _token = token;
-        }
+            { "grant_type", "client_credentials" }
+        });
 
-        public async Task<IEnumerable<ObterPlaylistsPorDoramaDto>> BuscarPlaylistsPorNomeAsync(string nomeDorama)
+        var response = await _httpClient.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+
+        var json = await response.Content.ReadAsStringAsync();
+        var doc = JsonDocument.Parse(json);
+
+        _accessToken = doc.RootElement.GetProperty("access_token").GetString();
+        var expiresIn = doc.RootElement.GetProperty("expires_in").GetInt32();
+        _expiration = DateTime.UtcNow.AddSeconds(expiresIn);
+
+        return _accessToken!;
+    }
+
+    public async Task<IEnumerable<SpotifyPlaylistSearchResultDto>> BuscarPlaylistsAsync(string query)
+    {
+        var accessToken = await GetAccessTokenAsync();
+
+        var url = $"https://api.spotify.com/v1/search?q={Uri.EscapeDataString(query)}&type=playlist&limit=5";
+        var request = new HttpRequestMessage(HttpMethod.Get, url);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+        var response = await _httpClient.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+
+        var json = await response.Content.ReadAsStringAsync();
+        var doc = JsonDocument.Parse(json);
+
+        var playlists = new List<SpotifyPlaylistSearchResultDto>();
+        foreach (var item in doc.RootElement.GetProperty("playlists").GetProperty("items").EnumerateArray())
         {
-            var url = $"https://api.spotify.com/v1/search?q={Uri.EscapeDataString(nomeDorama)}&type=playlist&limit=5";
-
-            using var request = new HttpRequestMessage(HttpMethod.Get, url);
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
-
-            using var response = await _httpClient.SendAsync(request);
-
-            if (!response.IsSuccessStatusCode)
-                throw new Exception("Erro ao buscar playlists no Spotify.");
-
-            var json = await response.Content.ReadAsStringAsync();
-            using var doc = JsonDocument.Parse(json);
-
-            var playlists = new List<ObterPlaylistsPorDoramaDto>();
-
-            foreach (var item in doc.RootElement.GetProperty("playlists").GetProperty("items").EnumerateArray())
+            playlists.Add(new SpotifyPlaylistSearchResultDto
             {
-                playlists.Add(new ObterPlaylistsPorDoramaDto(
-                    item.GetProperty("id").GetString(),
-                    item.GetProperty("id").GetString(),
-                    item.GetProperty("name").GetString(),
-                    item.GetProperty("external_urls").GetProperty("spotify").GetString(),
-                    item.GetProperty("images")[0].GetProperty("url").GetString(),
-                    item.GetProperty("owner").GetProperty("display_name").GetString(),
-                    item.GetProperty("tracks").GetProperty("total").GetInt32()
-                ));
-            }
-
-            return playlists;
+                SpotifyPlaylistId = item.GetProperty("id").GetString()!,
+                Nome = item.GetProperty("name").GetString()!,
+                Url = item.GetProperty("external_urls").GetProperty("spotify").GetString()!,
+                ImagemUrl = item.GetProperty("images")[0].GetProperty("url").GetString()!,
+                Dono = item.GetProperty("owner").GetProperty("display_name").GetString()!,
+                TotalMusicas = item.GetProperty("tracks").GetProperty("total").GetInt32()
+            });
         }
+
+        return playlists;
     }
 }

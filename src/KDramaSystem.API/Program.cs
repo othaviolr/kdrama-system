@@ -1,9 +1,11 @@
-using System.Text;
 using KDramaSystem.Application;
+using KDramaSystem.Application.Interfaces.Services;
+using KDramaSystem.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +35,8 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+
+builder.Services.AddHttpClient<ISpotifyService, SpotifyService>();
 
 builder.Services.AddAuthentication(options =>
 {
