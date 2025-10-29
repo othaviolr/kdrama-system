@@ -1,12 +1,25 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using KDramaSystem.Application.DTOs.Playlist;
+using KDramaSystem.Infrastructure.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace KDramaSystem.API.Controllers
 {
-    public class SpotifyController : Controller
+    [ApiController]
+    [Route("api/spotify")]
+    public class SpotifyController : ControllerBase
     {
-        public IActionResult Index()
+        private readonly SpotifyService _spotifyService;
+
+        public SpotifyController(SpotifyService spotifyService)
         {
-            return View();
+            _spotifyService = spotifyService;
+        }
+
+        [HttpGet("playlists")]
+        public async Task<ActionResult<IEnumerable<ObterPlaylistsPorDoramaDto>>> BuscarPlaylists([FromQuery] string nomeDorama)
+        {
+            var playlists = await _spotifyService.BuscarPlaylistsPorNomeAsync(nomeDorama);
+            return Ok(playlists);
         }
     }
 }
