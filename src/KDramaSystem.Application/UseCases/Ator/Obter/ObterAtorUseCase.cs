@@ -1,39 +1,81 @@
-﻿using FluentValidation;
+﻿using KDramaSystem.Application.Common;
 using KDramaSystem.Domain.Interfaces;
-using static KDramaSystem.Application.DTOs.Dorama.ObterDoramaDto;
 
 namespace KDramaSystem.Application.UseCases.Ator.Obter;
 
 public class ObterAtorUseCase
 {
-    private readonly IAtorRepository _atorRepository;
-    private readonly IValidator<ObterAtorRequest> _validator;
+    private readonly IAtorRepository _repository;
 
-    public ObterAtorUseCase(IAtorRepository atorRepository, IValidator<ObterAtorRequest> validator)
+    public ObterAtorUseCase(IAtorRepository repository)
     {
-        _atorRepository = atorRepository;
-        _validator = validator;
+        _repository = repository;
     }
 
-    public async Task<Domain.Entities.Ator> ExecutarAsync(ObterAtorRequest request)
+    public async Task<AtorResponse> ExecutarAsync(ObterAtorRequest request)
     {
-        var validationResult = await _validator.ValidateAsync(request);
-        if (!validationResult.IsValid)
-            throw new Exception(string.Join("; ", validationResult.Errors.Select(e => e.ErrorMessage)));
-
-        var ator = await _atorRepository.ObterPorIdAsync(request.Id);
+        var ator = await _repository.ObterPorIdAsync(request.Id);
         if (ator == null)
-            throw new Exception("Ator não encontrado.");
+            throw new KeyNotFoundException("Ator não encontrado");
 
-        return ator;
+        return MapearParaResponse(ator);
     }
 
-    public async Task<AtorDto?> ExecutarPorNomeAsync(string nome)
+    public async Task<AtorResponse?> ExecutarPorNomeAsync(string nome)
     {
-        var ator = await _atorRepository.ObterPorNomeAsync(nome);
+        var ator = await _repository.ObterPorNomeAsync(nome);
         if (ator == null) return null;
 
-        return new AtorDto
+        return MapearParaResponse(ator);
+    }
+
+    public async Task<PaginacaoResponse<AtorResumoResponse>> ExecutarPaginadoAsync(PaginacaoRequest paginacao)
+    {
+        var totalItens = await _repository.ContarAsync();
+        var atores = await _repository.ObterPaginadoAsync(paginacao.Skip, paginacao.TamanhoPagina);
+
+        return new PaginacaoResponse<AtorResumoResponse>
+        {
+            Itens = atores.Select(MapearParaResumo).ToList(),
+            PaginaAtual = paginacao.Pagina,
+            TamanhoPagina = paginacao.TamanhoPagina,
+            TotalItens = totalItens
+        };
+    }
+
+    public async Task<PaginacaoResponse<AtorResponse>> ExecutarPaginadoCompletoAsync(PaginacaoRequest paginacao)
+    {
+        var totalItens = await _repository.ContarAsync();
+        var atores = await _repository.ObterPaginadoAsync(paginacao.Skip, paginacao.TamanhoPagina);
+
+        return new PaginacaoResponse<AtorResponse>
+        {
+            Itens = atores.Select(MapearParaResponse).ToList(),
+            PaginaAtual = paginacao.Pagina,
+            TamanhoPagina = paginacao.TamanhoPagina,
+            TotalItens = totalItens
+        };
+    }
+
+    private AtorResponse MapearParaResponse(Domain.Entities.Ator ator)
+    {
+        return new AtorResponse
+        {
+            Id = ator.Id,
+            Nome = ator.Nome,
+            NomeCompleto = ator.NomeCompleto,
+            AnoNascimento = ator.AnoNascimento,
+            Altura = ator.Altura,
+            Pais = ator.Pais,
+            Biografia = ator.Biografia,
+            FotoUrl = ator.FotoUrl,
+            Instagram = ator.Instagram
+        };
+    }
+
+    private AtorResumoResponse MapearParaResumo(Domain.Entities.Ator ator)
+    {
+        return new AtorResumoResponse
         {
             Id = ator.Id,
             Nome = ator.Nome,
@@ -41,14 +83,8 @@ public class ObterAtorUseCase
         };
     }
 
-    public async Task<List<AtorDto>> ExecutarTodosAsync()
+    public async Task<List<Domain.Entities.Ator>> ExecutarTodosAsync()
     {
-        var atores = await _atorRepository.ObterTodosAsync();
-        return atores.Select(a => new AtorDto
-        {
-            Id = a.Id,
-            Nome = a.Nome,
-            FotoUrl = a.FotoUrl
-        }).ToList();
+        return await _repository.ObterTodosAsync();
     }
 }

@@ -88,4 +88,25 @@ public class AtorRepository : IAtorRepository
             .Include(a => a.Doramas)
             .FirstOrDefaultAsync(a => a.Nome.ToLower() == nome.Trim().ToLower());
     }
+
+    public async Task<int> ContarAsync()
+    {
+        return await _context.Atores.CountAsync();
+    }
+
+    public async Task<List<Ator>> ObterPaginadoAsync(int skip, int take)
+    {
+        if (skip < 0)
+            throw new ArgumentException("Skip não pode ser negativo.", nameof(skip));
+
+        if (take <= 0)
+            throw new ArgumentException("Take deve ser maior que zero.", nameof(take));
+
+        return await _context.Atores
+            .OrderBy(a => a.Nome)
+            .Skip(skip)
+            .Take(take)
+            .AsNoTracking()
+            .ToListAsync();
+    }
 }
