@@ -12,4 +12,6 @@ public interface IAtorRepository
     Task<bool> ExisteComNomeAsync(string nome);
     Task<List<Ator>> ObterPorIdsAsync(IEnumerable<Guid> ids);
     Task<Ator?> ObterPorNomeAsync(string nome);
+    Task<int> ContarAsync();
+    Task<List<Ator>> ObterPaginadoAsync(int skip, int take);
 }

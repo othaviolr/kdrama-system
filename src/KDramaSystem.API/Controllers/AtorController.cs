@@ -1,4 +1,5 @@
-﻿using KDramaSystem.Application.UseCases.Ator.Criar;
+﻿using KDramaSystem.Application.Common;
+using KDramaSystem.Application.UseCases.Ator.Criar;
 using KDramaSystem.Application.UseCases.Ator.Editar;
 using KDramaSystem.Application.UseCases.Ator.Excluir;
 using KDramaSystem.Application.UseCases.Ator.Obter;
@@ -67,16 +68,26 @@ public class AtorController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> ObterTodos()
+    public async Task<IActionResult> ObterTodos(
+        [FromQuery] int pagina = 1,
+        [FromQuery] int tamanhoPagina = 20,
+        [FromQuery] bool completo = true)
     {
-        var atores = await _obterUseCase.ExecutarTodosAsync();
-        var atoresResumo = atores.Select(a => new
+        var paginacao = new PaginacaoRequest
         {
-            a.Id,
-            a.Nome,
-            a.FotoUrl
-        }).ToList();
+            Pagina = pagina,
+            TamanhoPagina = tamanhoPagina
+        };
 
-        return Ok(atoresResumo);
+        if (completo)
+        {
+            var resultadoCompleto = await _obterUseCase.ExecutarPaginadoCompletoAsync(paginacao);
+            return Ok(resultadoCompleto);
+        }
+        else
+        {
+            var resultadoResumo = await _obterUseCase.ExecutarPaginadoAsync(paginacao);
+            return Ok(resultadoResumo);
+        }
     }
 }
