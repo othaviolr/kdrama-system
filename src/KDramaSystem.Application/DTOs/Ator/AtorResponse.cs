@@ -1,4 +1,6 @@
-﻿namespace KDramaSystem.Application.UseCases.Ator.Obter;
+﻿using KDramaSystem.Application.DTOs.Dorama;
+
+namespace KDramaSystem.Application.UseCases.Ator.Obter;
 
 public class AtorResponse
 {
@@ -11,6 +13,7 @@ public class AtorResponse
     public string? Biografia { get; set; }
     public string? FotoUrl { get; set; }
     public string? Instagram { get; set; }
+    public List<DoramaResumoDto> Doramas { get; set; } = new();
 }
 
 public class AtorResumoResponse

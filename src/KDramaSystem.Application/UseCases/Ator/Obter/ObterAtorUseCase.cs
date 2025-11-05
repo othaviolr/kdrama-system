@@ -1,4 +1,5 @@
 ﻿using KDramaSystem.Application.Common;
+using KDramaSystem.Application.DTOs.Dorama;
 using KDramaSystem.Domain.Interfaces;
 
 namespace KDramaSystem.Application.UseCases.Ator.Obter;
@@ -69,7 +70,19 @@ public class ObterAtorUseCase
             Pais = ator.Pais,
             Biografia = ator.Biografia,
             FotoUrl = ator.FotoUrl,
-            Instagram = ator.Instagram
+            Instagram = ator.Instagram,
+            Doramas = ator.Doramas
+                .Where(da => da.Dorama != null)
+                .Select(da => new DoramaResumoDto
+                {
+                    DoramaId = da.Dorama.Id,
+                    Titulo = da.Dorama.Titulo,
+                    TituloOriginal = da.Dorama.TituloOriginal,
+                    CapaUrl = da.Dorama.ImagemCapaUrl,
+                    AnoLancamento = da.Dorama.AnoLancamento
+                })
+                .OrderByDescending(d => d.AnoLancamento)
+                .ToList()
         };
     }
 
