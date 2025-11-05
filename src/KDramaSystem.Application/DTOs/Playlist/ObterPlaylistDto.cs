@@ -2,7 +2,7 @@
 
 public class ObterPlaylistDto
 {
-    public string Id { get; set; } = null!;
+    public Guid Id { get; set; }
     public string SpotifyPlaylistId { get; set; } = null!;
     public string Nome { get; set; } = null!;
     public string Url { get; set; } = null!;

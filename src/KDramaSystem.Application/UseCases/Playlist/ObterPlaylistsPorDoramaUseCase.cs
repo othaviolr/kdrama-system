@@ -15,10 +15,9 @@ public class ObterPlaylistsPorDoramaUseCase
     public async Task<IEnumerable<ObterPlaylistDto>> Execute(Guid doramaId)
     {
         var playlists = await _playlistRepository.ObterPorDoramaIdAsync(doramaId);
-
         return playlists.Select(p => new ObterPlaylistDto
         {
-            Id = p.Id.ToString(),   
+            Id = p.Id,                          
             SpotifyPlaylistId = p.SpotifyPlaylistId,
             Nome = p.Nome,
             Url = p.Url,
