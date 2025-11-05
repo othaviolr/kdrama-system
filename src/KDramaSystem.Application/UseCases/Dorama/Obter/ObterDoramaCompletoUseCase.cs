@@ -2,6 +2,8 @@
 using KDramaSystem.Application.DTOs.Dorama;
 using KDramaSystem.Application.DTOs.Episodio;
 using KDramaSystem.Application.DTOs.Genero;
+using KDramaSystem.Application.DTOs.Playlist;
+using KDramaSystem.Application.Interfaces;
 using KDramaSystem.Domain.Interfaces;
 
 public class ObterDoramaCompletoUseCase
@@ -9,15 +11,18 @@ public class ObterDoramaCompletoUseCase
     private readonly IDoramaRepository _doramaRepository;
     private readonly ITemporadaRepository _temporadaRepository;
     private readonly IEpisodioRepository _episodioRepository;
+    private readonly IPlaylistRepository _playlistRepository;
 
     public ObterDoramaCompletoUseCase(
         IDoramaRepository doramaRepository,
         ITemporadaRepository temporadaRepository,
-        IEpisodioRepository episodioRepository)
+        IEpisodioRepository episodioRepository,
+        IPlaylistRepository playlistRepository) 
     {
         _doramaRepository = doramaRepository;
         _temporadaRepository = temporadaRepository;
         _episodioRepository = episodioRepository;
+        _playlistRepository = playlistRepository; 
     }
 
     public async Task<DoramaCompletoDto?> ExecutarAsync(Guid doramaId)
@@ -27,13 +32,11 @@ public class ObterDoramaCompletoUseCase
             return null;
 
         var temporadas = await _temporadaRepository.ObterPorDoramaIdAsync(doramaId);
-
         var temporadasDto = new List<DoramaCompletoDto.TemporadaCompletaDto>();
 
         foreach (var temporada in temporadas)
         {
             var episodios = await _episodioRepository.ListarPorTemporadaAsync(temporada.Id);
-
             var episodiosDto = episodios.Select(e => new ObterEpisodioDto
             {
                 Id = e.Id,
@@ -57,6 +60,18 @@ public class ObterDoramaCompletoUseCase
             });
         }
 
+        var playlists = await _playlistRepository.ObterPorDoramaIdAsync(doramaId);
+        var playlistsDto = playlists.Select(p => new ObterPlaylistDto
+        {
+            Id = p.Id,
+            SpotifyPlaylistId = p.SpotifyPlaylistId.ToString(),
+            Nome = p.Nome,
+            Url = p.Url,
+            ImagemUrl = p.ImagemUrl,
+            Dono = p.Dono,
+            TotalMusicas = p.TotalMusicas
+        }).ToList();
+
         return new DoramaCompletoDto
         {
             DoramaId = dorama.Id,
@@ -73,22 +88,22 @@ public class ObterDoramaCompletoUseCase
                 Id = g.Id,
                 Nome = g.Nome
             }).ToList(),
-
             Atores = dorama.Atores
-    .Where(da => da.Ator != null)
-    .Select(da => new ObterAtorDto
-    {
-        Id = da.Ator.Id,
-        Nome = da.Ator.Nome,
-        NomeCompleto = da.Ator.NomeCompleto,
-        AnoNascimento = da.Ator.AnoNascimento,
-        Altura = da.Ator.Altura,
-        Pais = da.Ator.Pais,
-        Biografia = da.Ator.Biografia,
-        FotoUrl = da.Ator.FotoUrl,
-        Instagram = da.Ator.Instagram
-    }).ToList(),
-            Temporadas = temporadasDto
+                .Where(da => da.Ator != null)
+                .Select(da => new ObterAtorDto
+                {
+                    Id = da.Ator.Id,
+                    Nome = da.Ator.Nome,
+                    NomeCompleto = da.Ator.NomeCompleto,
+                    AnoNascimento = da.Ator.AnoNascimento,
+                    Altura = da.Ator.Altura,
+                    Pais = da.Ator.Pais,
+                    Biografia = da.Ator.Biografia,
+                    FotoUrl = da.Ator.FotoUrl,
+                    Instagram = da.Ator.Instagram
+                }).ToList(),
+            Temporadas = temporadasDto,
+            Playlists = playlistsDto 
         };
     }
 }

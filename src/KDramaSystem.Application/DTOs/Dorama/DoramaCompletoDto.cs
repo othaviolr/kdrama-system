@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
-using KDramaSystem.Application.DTOs.Ator;
+﻿using KDramaSystem.Application.DTOs.Ator;
 using KDramaSystem.Application.DTOs.Episodio;
 using KDramaSystem.Application.DTOs.Genero;
+using KDramaSystem.Application.DTOs.Playlist;
 using KDramaSystem.Application.DTOs.Temporada;
 using KDramaSystem.Domain.Enums;
+using System.Collections.Generic;
 using static KDramaSystem.Application.DTOs.Dorama.ObterDoramaDto;
 
 namespace KDramaSystem.Application.DTOs.Dorama;
@@ -24,6 +25,7 @@ public class DoramaCompletoDto
     public List<ObterAtorDto> Atores { get; set; } = new();
 
     public List<TemporadaCompletaDto> Temporadas { get; set; } = new();
+    public List<ObterPlaylistDto> Playlists { get; set; } = new();
 
     public class TemporadaCompletaDto : ObterTemporadaDto
     {

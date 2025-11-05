@@ -2,6 +2,8 @@
 using KDramaSystem.Application.DTOs.Dorama;
 using KDramaSystem.Application.DTOs.Episodio;
 using KDramaSystem.Application.DTOs.Genero;
+using KDramaSystem.Application.DTOs.Playlist; 
+using KDramaSystem.Application.Interfaces;     
 using KDramaSystem.Domain.Interfaces;
 
 namespace KDramaSystem.Application.UseCases.Dorama.Obter;
@@ -11,15 +13,18 @@ public class ObterTodosDoramasCompletosUseCase
     private readonly IDoramaRepository _doramaRepository;
     private readonly ITemporadaRepository _temporadaRepository;
     private readonly IEpisodioRepository _episodioRepository;
+    private readonly IPlaylistRepository _playlistRepository;
 
     public ObterTodosDoramasCompletosUseCase(
         IDoramaRepository doramaRepository,
         ITemporadaRepository temporadaRepository,
-        IEpisodioRepository episodioRepository)
+        IEpisodioRepository episodioRepository,
+        IPlaylistRepository playlistRepository)
     {
         _doramaRepository = doramaRepository;
         _temporadaRepository = temporadaRepository;
         _episodioRepository = episodioRepository;
+        _playlistRepository = playlistRepository;
     }
 
     public async Task<List<DoramaCompletoDto>> ExecutarAsync()
@@ -30,13 +35,11 @@ public class ObterTodosDoramasCompletosUseCase
         foreach (var dorama in doramas)
         {
             var temporadas = await _temporadaRepository.ObterPorDoramaIdAsync(dorama.Id);
-
             var temporadasDto = new List<DoramaCompletoDto.TemporadaCompletaDto>();
 
             foreach (var temporada in temporadas)
             {
                 var episodios = await _episodioRepository.ListarPorTemporadaAsync(temporada.Id);
-
                 var episodiosDto = episodios.Select(e => new ObterEpisodioDto
                 {
                     Id = e.Id,
@@ -59,6 +62,19 @@ public class ObterTodosDoramasCompletosUseCase
                     NumeroEpisodios = episodiosDto.Count
                 });
             }
+
+            var playlists = await _playlistRepository.ObterPorDoramaIdAsync(dorama.Id);
+
+            var playlistsDto = playlists.Select(p => new ObterPlaylistDto
+            {
+                Id = p.Id,
+                SpotifyPlaylistId = p.SpotifyPlaylistId,
+                Nome = p.Nome,
+                Url = p.Url,
+                ImagemUrl = p.ImagemUrl,
+                Dono = p.Dono,
+                TotalMusicas = p.TotalMusicas
+            }).ToList();
 
             listaCompleta.Add(new DoramaCompletoDto
             {
@@ -90,7 +106,8 @@ public class ObterTodosDoramasCompletosUseCase
                         FotoUrl = da.Ator.FotoUrl,
                         Instagram = da.Ator.Instagram
                     }).ToList(),
-                Temporadas = temporadasDto
+                Temporadas = temporadasDto,
+                Playlists = playlistsDto
             });
         }
 

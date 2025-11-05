@@ -20,7 +20,7 @@ public class PlaylistRepository : IPlaylistRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Playlist>> ObterPorDoramaIdAsync(Guid doramaId)
+    public async Task<List<Playlist>> ObterPorDoramaIdAsync(Guid doramaId)
     {
         return await _context.Playlists
             .Where(p => p.DoramaId == doramaId)
