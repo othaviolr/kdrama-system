@@ -30,6 +30,7 @@ public class AtorRepository : IAtorRepository
 
         return await _context.Atores
             .Include(a => a.Doramas)
+                .ThenInclude(da => da.Dorama)
             .FirstOrDefaultAsync(a => a.Id == id);
     }
 
@@ -86,6 +87,7 @@ public class AtorRepository : IAtorRepository
 
         return await _context.Atores
             .Include(a => a.Doramas)
+                .ThenInclude(da => da.Dorama)
             .FirstOrDefaultAsync(a => a.Nome.ToLower() == nome.Trim().ToLower());
     }
 
@@ -103,6 +105,8 @@ public class AtorRepository : IAtorRepository
             throw new ArgumentException("Take deve ser maior que zero.", nameof(take));
 
         return await _context.Atores
+            .Include(a => a.Doramas)              
+                .ThenInclude(da => da.Dorama)   
             .OrderBy(a => a.Nome)
             .Skip(skip)
             .Take(take)
