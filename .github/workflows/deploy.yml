@@ -1,0 +1,37 @@
+name: Deploy API to AWS
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Deploy via SSH
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.AWS_HOST }}
+        username: ${{ secrets.AWS_USER }}
+        key: ${{ secrets.AWS_SSH_KEY }}
+        script: |
+          cd ~/kdrama-system
+          
+          echo "Baixando atualizacoes do repositorio..."
+          git pull origin master
+          
+          echo "Atualizando variaveis de ambiente..."
+          cat > .env << EOF
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          EOF
+          
+          echo "Executando deploy..."
+          docker compose down
+          docker compose up -d --build
+          
+          echo "Deploy concluido!"
+          echo "Containers rodando:"
+          docker ps
