@@ -8,7 +8,6 @@ public class SpotifyService : ISpotifyService
     private readonly HttpClient _httpClient;
     private string? _accessToken;
     private DateTime _expiration;
-
     private const string CLIENT_ID = "98493d06ed644ea2a0dac44a50bb25d1";
     private const string CLIENT_SECRET = "314c70d303334b6abd535a5eca2d608d";
 
@@ -46,8 +45,8 @@ public class SpotifyService : ISpotifyService
     public async Task<IEnumerable<SpotifyPlaylistSearchResultDto>> BuscarPlaylistsAsync(string query)
     {
         var accessToken = await GetAccessTokenAsync();
-
         var url = $"https://api.spotify.com/v1/search?q={Uri.EscapeDataString(query)}&type=playlist&limit=5";
+
         var request = new HttpRequestMessage(HttpMethod.Get, url);
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
@@ -58,15 +57,29 @@ public class SpotifyService : ISpotifyService
         var doc = JsonDocument.Parse(json);
 
         var playlists = new List<SpotifyPlaylistSearchResultDto>();
+
         foreach (var item in doc.RootElement.GetProperty("playlists").GetProperty("items").EnumerateArray())
         {
+            string? imagemUrl = null;
+            if (item.TryGetProperty("images", out var images) && images.GetArrayLength() > 0)
+            {
+                imagemUrl = images[0].GetProperty("url").GetString();
+            }
+
+            string? displayName = null;
+            if (item.TryGetProperty("owner", out var owner))
+            {
+                owner.TryGetProperty("display_name", out var displayNameProp);
+                displayName = displayNameProp.GetString();
+            }
+
             playlists.Add(new SpotifyPlaylistSearchResultDto
             {
                 SpotifyPlaylistId = item.GetProperty("id").GetString()!,
                 Nome = item.GetProperty("name").GetString()!,
                 Url = item.GetProperty("external_urls").GetProperty("spotify").GetString()!,
-                ImagemUrl = item.GetProperty("images")[0].GetProperty("url").GetString()!,
-                Dono = item.GetProperty("owner").GetProperty("display_name").GetString()!,
+                ImagemUrl = imagemUrl ?? "https://via.placeholder.com/300?text=No+Image", 
+                Dono = displayName ?? "Desconhecido", 
                 TotalMusicas = item.GetProperty("tracks").GetProperty("total").GetInt32()
             });
         }
