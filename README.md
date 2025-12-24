@@ -79,6 +79,7 @@ Facilitar a vida de quem assiste doramas:
 | **Listas** | Organização personalizada |
 | **Comentários** | Interações em avaliações ou temporadas |
 | **Social** | Feed, curtidas, recomendações sociais |
+| **Playlist** | Playlist, OST e Músicas dos KDramas |
 
 ---
 
