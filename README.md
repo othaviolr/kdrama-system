@@ -60,7 +60,6 @@ Facilitar a vida de quem assiste doramas:
     - Ex: “Assista 5 doramas históricos em 1 mês”
     - Com progresso e compartilhamento de conquistas 
 
-
 ### 🗞️ Notícias, Bastidores e Fofocas
 
 - Página de **notícias sobre doramas, atores, bastidores**
@@ -99,7 +98,6 @@ Facilitar a vida de quem assiste doramas:
 - Testes de integração com banco de dados e mocks
 
 ---
-
 
 ## 📸 Telas
 
