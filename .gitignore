@@ -3,7 +3,11 @@
 
 # Visual Studio (>=2015) project-specific, machine local files
 .vs/
+
+# Environment variables
 .env
+.env.local
+.env.*.local
 
 # User-specific files
 *.suo
