@@ -101,7 +101,21 @@ Facilitar a vida de quem assiste doramas:
 
 ## 📸 Telas
 
-> Protótipos e screenshots em desenvolvimento...
+> Home
+<img width="1905" height="911" alt="1" src="https://github.com/user-attachments/assets/e4e24edc-fe21-4dfb-bdfb-c99c726c3bba" />
+<img width="1905" height="911" alt="2" src="https://github.com/user-attachments/assets/27c5db15-2191-419b-9135-c3ffe81fbd95" />
+<img width="1905" height="911" alt="3" src="https://github.com/user-attachments/assets/71b00824-9b27-47ac-9178-02dae70f9e44" />
+<img width="1905" height="911" alt="4" src="https://github.com/user-attachments/assets/c9e73ee4-62f0-47b6-8d64-38ca0f1475bb" />
+<img width="1905" height="911" alt="5" src="https://github.com/user-attachments/assets/f5a0a599-5044-4660-9db7-e87afcdb566c" />
+<img width="1905" height="911" alt="6" src="https://github.com/user-attachments/assets/a929843d-b196-4113-bf05-db2564c54b0c" />
+
+> Catalogo
+<img width="1905" height="911" alt="1" src="https://github.com/user-attachments/assets/689a371b-d0fe-4bf1-89c8-58139a354511" />
+![2](https://github.com/user-attachments/assets/ae723728-19a1-41b2-a477-bc1b2ec6a6f5)
+
+> Review
+<img width="1905" height="912" alt="rALQnW3DHg" src="https://github.com/user-attachments/assets/618a2b37-45b7-4484-86d4-3578b9626c11" />
+
 
 ---
 
