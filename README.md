@@ -111,7 +111,6 @@ Facilitar a vida de quem assiste doramas:
 
 > Catalogo
 <img width="1905" height="911" alt="1" src="https://github.com/user-attachments/assets/689a371b-d0fe-4bf1-89c8-58139a354511" />
-![2](https://github.com/user-attachments/assets/ae723728-19a1-41b2-a477-bc1b2ec6a6f5)
 
 > Review
 <img width="1905" height="912" alt="rALQnW3DHg" src="https://github.com/user-attachments/assets/618a2b37-45b7-4484-86d4-3578b9626c11" />
