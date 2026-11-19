@@ -1,4 +1,4 @@
-# 📺 KDramaSystem
+# KDramaSystem
 
 **KDramaSystem** é uma plataforma completa para amantes de doramas. Com funcionalidades inspiradas no Skoob e redes sociais modernas, o sistema permite organizar, acompanhar, avaliar e descobrir doramas de forma personalizada e social.
 
