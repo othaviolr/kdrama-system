@@ -6,7 +6,7 @@
 
 ---
 
-## 🧠 Propósito
+## Propósito
 
 Facilitar a vida de quem assiste doramas:
 
