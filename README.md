@@ -17,7 +17,7 @@ Facilitar a vida de quem assiste doramas:
 
 ---
 
-## 🎯 Funcionalidades
+## Funcionalidades
 
 ### 🎬 Organização & Acompanhamento
 
